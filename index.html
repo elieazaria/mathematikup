@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matematikup</title>
+    <link rel="icon" type="image/png" href="Logo_Matematikup.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mateBlue: "#0d2b56",
+              mateOrange: "#ffa300",
+              mateOrangeLight: "#ffd966",
+            },
+            fontFamily: {
+              sans: ["Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* Styles pour l'animation d'apparition */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Effet subtil de fond mathématique (simulation) */
+      .math-bg {
+        background-color: #0d2b56;
+        background-image: radial-gradient(#1a3c6e 1px, transparent 1px);
+        background-size: 30px 30px;
+      }
+    </style>
+  </head>
+  <body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
+    
+    <!-- NAVIGATION PRINCIPALE -->
+    <nav
+      class="bg-mateBlue text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md"
+    >
+      <div class="flex items-center gap-2">
+         <img src="Logo_Matematikup.png" alt="Logo Matematikup" class="h-10 w-auto"/>
+        <div class="font-bold text-2xl tracking-wider">
+          MATEMATIKUP
+        </div>
+      </div>
+
+      <!-- Ajout de 'items-center' pour l'alignement vertical parfait -->
+      <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+        <a href="#" class="text-mateOrange border-b-2 border-mateOrange pb-1"
+          >Accueil</a
+        >
+        <a href="program.html" class="hover:text-mateOrange transition">Nos programmes</a>
+        <a href="examens.html" class="hover:text-mateOrange transition"
+          >Examen & concours</a
+        >
+        <a href="#apropos" class="hover:text-mateOrange transition">A propos</a>
+      
+        <!-- PARTIE COMPTE -->
+        <div class="relative">
+          <button id="accountBtn" class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ff9d00] hover:text-[#0b2239] transition duration-300">
+            <i class="fas fa-user-circle text-lg"></i>
+            <span>Compte</span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50 transform origin-top-right transition-all">
+            <button onclick="openModal('login')" class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2">
+                <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
+            </button>
+            <button onclick="openModal('register')" class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2">
+                <i class="fas fa-user-plus text-[#0b2239]"></i> S'inscrire
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="md:hidden text-white text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <div class="min-h-screen flex flex-col font-sans">
+      <header
+        class="relative flex-grow flex flex-col bg-[#0b2239] overflow-hidden"
+      >
+        <nav
+          class="relative z-20 flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full"
+        >
+          <div class="flex items-center gap-1">
+            <span class="text-white font-bold text-2xl tracking-tighter"
+              >MATEMATIKUP</span
+            >
+            <div
+              class="bg-orange-500 rounded-full w-6 h-6 flex items-center justify-center text-[10px] text-white font-bold"
+            >
+              π
+            </div>
+          </div>
+
+          <div class="hidden md:flex gap-8 text-white/90 text-sm font-medium">
+            <a
+              href="#"
+              class="text-orange-400 border-b-2 border-orange-400 pb-1"
+              >Accueil</a
+            >
+            <a href="#" class="hover:text-orange-400 transition"
+              >Nos programmes</a
+            >
+            <a href="#" class="hover:text-orange-400 transition"
+              >Examen & concours</a
+            >
+            <a href="" class="hover:text-orange-400 transition">A propos</a>
+          </div>
+        </nav>
+
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
+          <div
+            class="absolute top-20 left-10 text-white text-4xl transform -rotate-12 border border-dashed border-white p-4 rounded-full"
+          ></div>
+          <div class="absolute bottom-1/4 left-8 text-white text-8xl">
+            <svg
+              width="100"
+              height="100"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M10 90 L90 90 L90 10 Z" stroke-width="2" />
+            </svg>
+          </div>
+          <div class="absolute top-1/2 right-10 text-white text-4xl">
+            x = ax + b
+          </div>
+          <div
+            class="absolute bottom-10 right-20 text-white text-7xl font-serif"
+          >
+            π
+          </div>
+          <div
+            class="absolute bottom-20 left-1/3 text-white text-3xl font-mono"
+          >
+            √ac = 1/2
+          </div>
+        </div>
+
+        <div
+          class="relative z-10 flex-grow flex flex-col items-center justify-center px-4 text-center pt-16 md:pt-0"
+        >
+          <h3
+            class="text-white text-2xl md:text-5xl font-extrabold leading-tight max-w-5xl"
+          >
+            Avancez à votre propre rythme, développez<br />
+            votre confiance, atteignez vos objectifs et...<br />
+            <span class="text-[#f5a623] tracking-wide"
+              >apprendre en s'amusant
+            </span>
+            avec
+            <span class="text-[#f5a623] tracking-wide">MATEMATIKUP!!! </span>
+          </h3>
+
+          <div class="mt-12 w-full max-w-3xl relative">
+            <input
+              type="text"
+              placeholder="Tapez un chapitre, leçon..."
+              class="w-full py-5 px-10 rounded-full text-lg focus:outline-none shadow-2xl text-gray-700"
+            />
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#f5a623] p-4 rounded-full w-16 h-14 flex items-center justify-center hover:bg-orange-500 transition shadow-inner"
+            >
+              <i class="fas fa-search text-white text-xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="relative z-10 bg-[#f5a623] py-4 w-full">
+          <p class="text-center text-[#0b2239] font-bold text-lg">
+            Besoin plus d'entrainement?
+            <a href="kfc.html" class="underline ml-1 hover:text-white transition"
+              >Accédez à la version premium</a
+            >
+          </p>
+        </div>
+      </header>
+    </div>
+
+    <section class="py-20 bg-gray-50 px-6" id="apropos">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div class="reveal flex flex-col items-center">
+            <div
+              class="w-24 h-24 bg-mateOrange rounded-xl flex items-center justify-center mb-4 shadow-lg"
+            >
+              <i class="fas fa-book-open text-mateBlue text-4xl"></i>
+            </div>
+            <p class="font-bold text-gray-800">
+              + de 500 cours<br />contextualisés
+            </p>
+          </div>
+
+          <div
+            class="reveal flex flex-col items-center"
+            style="transition-delay: 100ms"
+          >
+            <div
+              class="w-24 h-24 bg-mateOrangeLight rounded-xl flex items-center justify-center mb-4 shadow-lg"
+            >
+              <i class="fas fa-gamepad text-mateBlue text-4xl"></i>
+            </div>
+            <p class="font-bold text-gray-800">
+              Des contenus contextualisés,<br />interactifs et ludiques
+            </p>
+          </div>
+
+          <div
+            class="reveal flex flex-col items-center"
+            style="transition-delay: 200ms"
+          >
+            <div
+              class="w-24 h-24 bg-orange-100 rounded-xl flex items-center justify-center mb-4 shadow-lg border-2 border-gray-200"
+            >
+              <i class="fas fa-chart-line text-blue-500 text-4xl"></i>
+            </div>
+            <p class="font-bold text-gray-800">
+              Tableau de bord,<br />planning de travail...
+            </p>
+          </div>
+
+          <div
+            class="reveal flex flex-col items-center"
+            style="transition-delay: 300ms"
+          >
+            <div
+              class="w-24 h-24 bg-yellow-100 rounded-xl flex items-center justify-center mb-4 shadow-lg border-2 border-yellow-200"
+            >
+              <i class="fas fa-robot text-mateBlue text-4xl"></i>
+            </div>
+            <p class="font-bold text-gray-800">
+              Suivi individuel +<br />Assistant IA personnalisé
+            </p>
+          </div>
+        </div>
+
+        <div class="text-center mt-12 reveal">
+          <button
+            class="bg-mateOrange hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-md transition transform hover:scale-105"
+          >
+            <a href="test.html"> Démarrer maintenant </a>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-[#0b2239] mb-12 text-center">
+          Nos Conseils Pédagogiques
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div
+            class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 flex flex-col"
+          >
+            <div class="h-48 bg-[#0b2239] flex items-center justify-center">
+              <i class="fas fa-brain text-6xl text-[#ff9d00]"></i>
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-bold text-[#0b2239] mb-3">
+                Mémoire & Mathématiques
+              </h3>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                Avoir une bonne mémoire en mathématiques ne se limite pas à
+                retenir des formules par cœur...
+              </p>
+              <a
+                href="article.html?id=1"
+                class="mt-auto text-[#ff9d00] font-bold hover:underline"
+              >
+                Lire plus <i class="fas fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 flex flex-col"
+          >
+            <div class="h-48 bg-[#0b2239] flex items-center justify-center">
+              <i class="fas fa-pen-fancy text-6xl text-[#ff9d00]"></i>
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-bold text-[#0b2239] mb-3">
+                Rédiger une fiche de résumé
+              </h3>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                Rédiger une fiche de résumé efficace est un excellent moyen
+                d’organiser ses connaissances...
+              </p>
+              <a
+                href="article.html?id=2"
+                class="mt-auto text-[#ff9d00] font-bold hover:underline"
+              >
+                Lire plus <i class="fas fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 flex flex-col"
+          >
+            <div class="h-48 bg-[#0b2239] flex items-center justify-center">
+              <i class="fas fa-flask text-6xl text-[#ff9d00]"></i>
+            </div>
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-bold text-[#0b2239] mb-3">
+                Apprendre les sciences
+              </h3>
+              <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                Apprendre les matières scientifiques demande de la rigueur, de
+                la méthode et de la pratique...
+              </p>
+              <a
+                href="article.html?id=3"
+                class="mt-auto text-[#ff9d00] font-bold hover:underline"
+              >
+                Lire plus <i class="fas fa-arrow-right ml-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER MIS À JOUR -->
+    <footer class="bg-mateBlue text-white py-12 px-6 border-t border-blue-900">
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end"
+      >
+        <div class="mb-6 md:mb-0">
+          <h4 class="font-bold text-2xl mb-4">Suivez-nous sur:</h4>
+          <div class="flex space-x-4">
+            <!-- Facebook -->
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <!-- Instagram (Ajouté) -->
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <!-- TikTok (Ajouté) -->
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-tiktok"></i
+            ></a>
+            <!-- LinkedIn -->
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
+          <p class="text-gray-300 mb-8">cours@matematikup.mg</p>
+
+          <div class="text-gray-500 text-sm relative">
+            <p>© 2025 Matematikup</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL POUR CONNEXION ET INSCRIPTION -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative overflow-hidden transform transition-all">
+            
+            <!-- Bouton Fermer -->
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">&times;</button>
+
+            <!-- Formulaire de Connexion -->
+            <div id="loginForm" class="p-8">
+                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">Se connecter</h2>
+                <form onsubmit="event.preventDefault(); alert('Tentative de connexion...');">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2" for="login-identifier">Email ou Numéro mobile</label>
+                        <input id="login-identifier" type="text" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre email ou numéro">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2" for="login-password">Mot de passe</label>
+                        <input id="login-password" type="password" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre mot de passe">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-mateOrange hover:bg-orange-500 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-200" type="submit">
+                            Se connecter
+                        </button>
+                    </div>
+                </form>
+                <p class="text-center text-gray-500 text-xs mt-6">
+                    Pas encore de compte? 
+                    <button onclick="switchForm('register')" class="text-mateOrange font-bold hover:underline">S'inscrire</button>
+                </p>
+            </div>
+
+            <!-- Formulaire d'Inscription -->
+            <div id="registerForm" class="p-8 hidden">
+                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">S'inscrire</h2>
+                <form onsubmit="event.preventDefault(); alert('Tentative d\'inscription...');">
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Nom complet</label>
+                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre nom complet">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+                        <input type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre email">
+                    </div>
+                     <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Numéro mobile</label>
+                        <input type="tel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre numéro">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
+                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Créer un mot de passe">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
+                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Retapez le mot de passe">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-mateBlue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-200" type="submit">
+                            S'inscrire
+                        </button>
+                    </div>
+                </form>
+                <p class="text-center text-gray-500 text-xs mt-6">
+                    Déjà un compte? 
+                    <button onclick="switchForm('login')" class="text-mateOrange font-bold hover:underline">Se connecter</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      // 1. Gestion du Dropdown du compte
+      const accountBtn = document.getElementById('accountBtn');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      accountBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('hidden');
+      });
+
+      window.addEventListener('click', (e) => {
+          if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target)) {
+              dropdownMenu.classList.add('hidden');
+          }
+      });
+
+      // 2. Gestion des Modals
+      const authModal = document.getElementById('authModal');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+
+      function openModal(type) {
+          dropdownMenu.classList.add('hidden');
+          authModal.classList.remove('hidden');
+          
+          if (type === 'login') {
+              loginForm.classList.remove('hidden');
+              registerForm.classList.add('hidden');
+          } else if (type === 'register') {
+              loginForm.classList.add('hidden');
+              registerForm.classList.remove('hidden');
+          }
+      }
+
+      function closeModal() {
+          authModal.classList.add('hidden');
+      }
+
+      function switchForm(type) {
+          if (type === 'login') {
+              loginForm.classList.remove('hidden');
+              registerForm.classList.add('hidden');
+          } else {
+              loginForm.classList.add('hidden');
+              registerForm.classList.remove('hidden');
+          }
+      }
+
+      authModal.addEventListener('click', (e) => {
+          if (e.target === authModal) {
+              closeModal();
+          }
+      });
+
+      // 3. Animation au scroll
+      function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+
+        for (var i = 0; i < reveals.length; i++) {
+          var windowHeight = window.innerHeight;
+          var elementTop = reveals[i].getBoundingClientRect().top;
+          var elementVisible = 100; 
+
+          if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+          }
+        }
+      }
+
+      window.addEventListener("scroll", reveal);
+      reveal();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet KFC : Suites Numériques - 1ère S</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kfcRed: '#ed1c24',
+                        kfcDark: '#b91c1c',
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'fade-in': 'fadeIn 1s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ed1c24; /* Fond rouge KFC */
+            color: #333;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        /* Styles spécifiques pour les inputs */
+        input, select, textarea {
+            border: 2px solid #ed1c24;
+            color: #b91c1c;
+            font-weight: bold;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.3);
+        }
+
+        /* Feedback visuel */
+        .correct { border: 3px solid #22c55e !important; background-color: #dcfce7 !important; color: #166534 !important; }
+        .incorrect { border: 3px solid #b91c1c !important; background-color: #fee2e2 !important; color: #b91c1c !important; }
+
+        /* Style façon ticket de caisse ou carte menu */
+        .card-panel {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            border-bottom: 6px solid #b91c1c;
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="w-full bg-white animate-fade-in mb-6 border-b-8 border-kfcDark shadow-lg">
+        <div class="max-w-4xl mx-auto flex items-center justify-between p-4 gap-4">
+            
+            <div class="flex items-center gap-3 w-1/3">
+                <img src="KFC_logo.png" alt="Logo KFC" class="w-12 md:w-16 object-contain drop-shadow-md">
+                <div>
+                    <div class="font-black text-2xl md:text-5xl tracking-tighter text-kfcRed italic">KFC</div>
+                    <div class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest hidden md:block">Bucket & Maths</div>
+                </div>
+            </div>
+            
+            <div class="w-1/3 text-center">
+                <h1 class="text-base md:text-2xl font-extrabold text-kfcRed uppercase leading-tight">
+                    Rendez-vous <br class="md:hidden">au KFC !!!
+                </h1>
+                <p class="text-[10px] md:text-sm font-bold text-gray-600 mt-1">Problème de financement - 1ère S</p>
+            </div>
+
+            <div class="w-1/3 flex justify-end">
+                <img src="KFC.jpg" alt="Menu KFC" class="w-16 md:w-28 h-16 md:h-28 rounded-lg shadow-sm border-2 border-kfcRed object-cover">
+            </div>
+            
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-4 space-y-8">
+
+        <div class="bg-yellow-50 border-l-8 border-yellow-400 p-4 rounded shadow-sm flex items-start gap-4">
+            <div class="text-3xl">💡</div>
+            <div>
+                <h3 class="font-bold text-yellow-700 uppercase text-sm">Le Saviez-vous ?</h3>
+                <p class="text-sm text-yellow-800 font-medium">
+                    Le sigle <strong>KFC</strong> signifie <em>Kentucky Fried Chicken</em>. Cette chaîne de restauration rapide est originaire des <strong>États-Unis</strong> 🇺🇸. Elle a été fondée au milieu du XXe siècle par le Colonel Harland Sanders, célèbre pour sa recette secrète aux 11 herbes et aromates !
+                </p>
+            </div>
+        </div>
+        
+        <div class="card-panel p-6 text-justify relative overflow-hidden">
+            <div class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-10 -translate-y-5">
+                 <svg width="200" height="200" viewBox="0 0 24 24" fill="#ed1c24"><path d="M20.8 7c-.6-1.1-1.7-1.9-3-2.2L12 2 6.2 4.8C4.9 5.1 3.8 5.9 3.2 7c-.6 1.1-.6 2.4-.1 3.5l3.5 7.6c.5 1.1 1.6 1.9 2.9 1.9h5c1.3 0 2.4-.8 2.9-1.9l3.5-7.6c.5-1.1.5-2.4-.1-3.5zM12 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+            </div>
+
+            <h2 class="font-bold text-2xl mb-4 text-kfcRed underline decoration-yellow-400 decoration-4">Le Contexte</h2>
+            <p class="mb-3">À chaque vacance, les élèves de la classe de première S organisent un grand goûter. Pour Pâques, direction le <strong>KFC</strong> !</p>
+            <p class="mb-3">Vu les tarifs, les chefs de classe lancent une cotisation mensuelle à la caisse d'épargne. La cotisation initiale en Janvier est de <strong>20 000 Ar</strong>.</p>
+            <p class="font-bold mb-2">Deux options d'augmentation sont proposées pour les mois suivants :</p>
+            <ul class="list-none space-y-2 mb-4 bg-red-50 p-4 rounded border border-red-200">
+                <li class="flex items-center"><span class="bg-kfcRed text-white px-2 py-1 rounded mr-2 font-bold text-xs">A</span> <strong>Proposition A :</strong> Augmentation fixe de 1 500 Ar par mois.</li>
+                <li class="flex items-center"><span class="bg-kfcRed text-white px-2 py-1 rounded mr-2 font-bold text-xs">B</span> <strong>Proposition B :</strong> Augmentation de 15 % par mois.</li>
+            </ul>
+        </div>
+
+        <div class="card-panel p-6">
+            <h2 class="font-bold text-xl mb-4 text-kfcRed flex items-center">
+                <span class="bg-kfcRed text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm">1</span> 
+                Calcul des cotisations
+            </h2>
+            <p class="text-sm text-gray-500 mb-4 italic">Calculez les montants pour Février, Mars et Avril (arrondir à l'entier le plus proche pour la prop B).</p>
+            
+            <form id="formTable" onsubmit="event.preventDefault(); checkTable();">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-center border-collapse">
+                        <thead>
+                            <tr class="bg-kfcRed text-white">
+                                <th class="p-3 border-2 border-white rounded-tl-lg">Mois</th>
+                                <th class="p-3 border-2 border-white">Proposition A<br><span class="text-xs font-normal">(+1500 Ar)</span></th>
+                                <th class="p-3 border-2 border-white rounded-tr-lg">Proposition B<br><span class="text-xs font-normal">(+15%)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="font-bold text-gray-700">
+                            <tr class="bg-gray-100">
+                                <td class="p-3 border-b-2 border-gray-200">Janvier (Initial)</td>
+                                <td class="p-3 border-b-2 border-gray-200 text-kfcRed">20 000</td>
+                                <td class="p-3 border-b-2 border-gray-200 text-kfcRed">20 000</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">Février</td>
+                                <td class="p-2"><input type="number" id="val_A_fev" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                                <td class="p-2"><input type="number" id="val_B_fev" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-b border-gray-200">Mars</td>
+                                <td class="p-2"><input type="number" id="val_A_mars" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                                <td class="p-2"><input type="number" id="val_B_mars" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">Avril</td>
+                                <td class="p-2"><input type="number" id="val_A_avril" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                                <td class="p-2"><input type="number" id="val_B_avril" class="w-full p-2 rounded text-center" placeholder="?"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 text-center">
+                    <button type="submit" class="bg-kfcRed hover:bg-red-800 text-white font-bold py-2 px-8 rounded-full shadow-lg transition transform active:scale-95">
+                        Vérifier mes calculs
+                    </button>
+                    <div id="tableFeedback" class="mt-2 hidden font-bold"></div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-panel p-6">
+            <h2 class="font-bold text-xl mb-4 text-kfcRed flex items-center">
+                <span class="bg-kfcRed text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm">2</span> 
+                Observation & Comparaison
+            </h2>
+            
+            <form id="formAnalysis" onsubmit="event.preventDefault(); checkAnalysis();">
+                <div class="mb-6 bg-red-50 p-4 rounded border border-red-100">
+                    <h3 class="font-bold text-lg mb-2 text-kfcDark">2. Mode d'évolution</h3>
+                    
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold mb-1">Pour la Proposition A, on passe d'un mois à l'autre par une...</label>
+                        <select id="q2_evolA" class="w-full p-2 rounded">
+                            <option value="">-- Choisir --</option>
+                            <option value="add">Addition (Suite Arithmétique)</option>
+                            <option value="mult">Multiplication (Suite Géométrique)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="block text-sm font-bold mb-1">Pour la Proposition B, on passe d'un mois à l'autre par une...</label>
+                        <select id="q2_evolB" class="w-full p-2 rounded">
+                            <option value="">-- Choisir --</option>
+                            <option value="add">Addition (Suite Arithmétique)</option>
+                            <option value="mult">Multiplication (Suite Géométrique)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-2 text-kfcDark">3. Le choix stratégique</h3>
+                    <p class="text-sm mb-2">Regardez les montants au bout de 4 mois. Si les élèves arrêtent de cotiser <strong>avant 4 mois</strong> (court terme), quelle proposition leur coûte le moins cher (montants plus faibles) ?</p>
+                    <div class="flex gap-4 justify-center">
+                        <label class="flex items-center space-x-2 bg-gray-100 p-3 rounded cursor-pointer border border-gray-300 hover:border-kfcRed transition">
+                            <input type="radio" name="strategy" value="A" class="form-radio text-kfcRed w-5 h-5">
+                            <span class="font-bold">Proposition A</span>
+                        </label>
+                        <label class="flex items-center space-x-2 bg-gray-100 p-3 rounded cursor-pointer border border-gray-300 hover:border-kfcRed transition">
+                            <input type="radio" name="strategy" value="B" class="form-radio text-kfcRed w-5 h-5">
+                            <span class="font-bold">Proposition B</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-kfcRed text-white px-6 py-3 rounded-lg font-bold hover:bg-red-800 shadow-md">Valider l'analyse</button>
+                <div id="analysisFeedback" class="mt-4 hidden text-center font-bold"></div>
+            </form>
+        </div>
+
+        <div class="bg-gray-800 text-white p-6 rounded-lg shadow-md mb-8 border-4 border-yellow-400 relative">
+            <div class="absolute -top-3 -right-3 bg-yellow-400 text-black font-bold px-3 py-1 rounded shadow transform rotate-12">Niveau Expert</div>
+            
+            <h2 class="font-bold text-xl mb-4 text-yellow-400">4. Prévision long terme (10 mois)</h2>
+            <p class="mb-4 text-sm text-gray-300">Peut-on prévoir la cotisation du 10ème mois sans tout calculer ?</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block font-bold mb-1 text-sm">Quelle formule utiliseriez-vous pour la Proposition A (Arithmétique) ?</label>
+                    <select id="q4_formula" class="w-full p-2 rounded text-black border-none">
+                        <option value="">-- Choisir la formule --</option>
+                        <option value="geo">Un = U0 * q^n</option>
+                        <option value="ari">Un = U0 + n * r</option>
+                        <option value="sum">S = (n+1) * (U0+Un)/2</option>
+                    </select>
+                </div>
+                
+                <button onclick="checkBonus()" class="bg-yellow-400 text-black font-bold py-2 px-6 rounded hover:bg-yellow-300 transition w-full">Vérifier le concept</button>
+                <div id="bonusFeedback" class="mt-2 text-center text-sm hidden"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DONNEES ---
+        // Janvier = mois 0 pour le calcul, ou index 0
+        const startAmount = 20000;
+        
+        // --- 1. VERIFICATION TABLEAU ---
+        function checkTable() {
+            let correct = true;
+
+            // Logique Proposition A (+1500)
+            if(!validateInput('val_A_fev', 21500)) correct = false;
+            if(!validateInput('val_A_mars', 23000)) correct = false;
+            if(!validateInput('val_A_avril', 24500)) correct = false;
+
+            // Logique Proposition B (+15% ou *1.15)
+            if(!validateInput('val_B_fev', 23000)) correct = false;
+            if(!validateInput('val_B_mars', 26450)) correct = false;
+            
+            // Pour Avril B, gestion de l'arrondi
+            const valBAvril = parseInt(document.getElementById('val_B_avril').value);
+            const elBAvril = document.getElementById('val_B_avril');
+            if(valBAvril >= 30417 && valBAvril <= 30418) {
+                elBAvril.classList.add('correct');
+                elBAvril.classList.remove('incorrect');
+            } else {
+                elBAvril.classList.add('incorrect');
+                elBAvril.classList.remove('correct');
+                correct = false;
+            }
+
+            const fb = document.getElementById('tableFeedback');
+            fb.classList.remove('hidden');
+            if(correct) {
+                fb.innerText = "Parfait ! Les calculs sont exacts. On voit déjà une différence se creuser...";
+                fb.className = "mt-2 font-bold text-green-600 bg-green-100 p-2 rounded";
+            } else {
+                fb.innerText = "Il y a des erreurs. Vérifiez : A (+1500) et B (x1.15).";
+                fb.className = "mt-2 font-bold text-red-600 bg-red-100 p-2 rounded";
+            }
+        }
+
+        function validateInput(id, expected) {
+            const el = document.getElementById(id);
+            // On nettoie l'entrée (espaces, etc)
+            let val = parseInt(el.value.replace(/\s/g, ''));
+            
+            if(val === expected) {
+                el.classList.add('correct');
+                el.classList.remove('incorrect');
+                return true;
+            } else {
+                el.classList.add('incorrect');
+                el.classList.remove('correct');
+                return false;
+            }
+        }
+
+        // --- 2. ANALYSE ---
+        function checkAnalysis() {
+            let allGood = true;
+            
+            // Q2 A
+            const q2a = document.getElementById('q2_evolA');
+            if(q2a.value === "add") { q2a.classList.add('correct'); q2a.classList.remove('incorrect'); }
+            else { q2a.classList.add('incorrect'); allGood = false; }
+
+            // Q2 B
+            const q2b = document.getElementById('q2_evolB');
+            if(q2b.value === "mult") { q2b.classList.add('correct'); q2b.classList.remove('incorrect'); }
+            else { q2b.classList.add('incorrect'); allGood = false; }
+
+            // Q3 Strategy
+            const radios = document.getElementsByName('strategy');
+            let stratVal = "";
+            for(let r of radios) if(r.checked) stratVal = r.value;
+
+            const fb = document.getElementById('analysisFeedback');
+            fb.classList.remove('hidden');
+
+            if(allGood && stratVal === "A") {
+                fb.innerHTML = "Excellent ! <br>Proposition A est une suite <strong>Arithmétique</strong> (addition).<br>Proposition B est une suite <strong>Géométrique</strong> (multiplication).<br>Sur le court terme, la A monte moins vite !";
+                fb.className = "mt-4 font-bold text-green-700 bg-green-100 p-3 rounded border border-green-500 block";
+            } else if (stratVal === "B") {
+                fb.innerText = "Attention à la stratégie : Regardez les chiffres. La proposition B monte beaucoup plus vite (exponentielle). Pour payer moins cher au début, il vaut mieux choisir la A.";
+                fb.className = "mt-4 font-bold text-red-700 bg-red-100 p-3 rounded border border-red-500 block";
+            } else {
+                fb.innerText = "Vérifiez vos réponses sur le type d'évolution (Addition vs Multiplication).";
+                fb.className = "mt-4 font-bold text-red-700 bg-red-100 p-3 rounded block";
+            }
+        }
+
+        // --- 3. BONUS ---
+        function checkBonus() {
+            const sel = document.getElementById('q4_formula');
+            const fb = document.getElementById('bonusFeedback');
+            fb.classList.remove('hidden');
+
+            if(sel.value === "ari") {
+                fb.innerText = "Exactement ! Pour une suite Arithmétique : Un = U0 + n*r.";
+                fb.className = "mt-2 text-center text-sm font-bold text-green-400";
+            } else {
+                fb.innerText = "Pas tout à fait. La proposition A ajoute une constante, c'est une suite Arithmétique.";
+                fb.className = "mt-2 text-center text-sm font-bold text-red-400";
+            }
+        }
+    </script>
+</body>
+</html>

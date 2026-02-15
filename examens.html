@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercices Dénombrement - Matematikup</title>
+    <link rel="icon" type="image/png" href="Logo_Matematikup.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mateBlue: "#0d2b56",
+              mateOrange: "#ffa300",
+              mateOrangeLight: "#ffd966",
+            },
+            fontFamily: {
+              sans: ["Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap");
+
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
+
+      .exercise-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+
+      .exercise-card:hover {
+        border-left-color: #ffa300;
+        background-color: rgba(255, 163, 0, 0.05);
+        transform: translateX(5px);
+      }
+
+      .chapter-sidebar {
+        transition: all 0.3s ease;
+      }
+
+      .chapter-sidebar:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(13, 43, 86, 0.2);
+      }
+
+      .difficulty-badge {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 9999px;
+      }
+
+      .difficulty-easy {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+
+      .difficulty-medium {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
+
+      .difficulty-hard {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+
+      .floating-icon {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+  <body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
+    <!-- NAVIGATION PRINCIPALE -->
+    <nav
+      class="bg-mateBlue text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md"
+    >
+      <a href="index.html" class="flex items-center gap-2">
+        <img
+          src="Logo_Matematikup.png"
+          alt="Logo Matematikup"
+          class="h-10 w-auto"
+        />
+        <div class="font-bold text-2xl tracking-wider">MATEMATIKUP</div>
+      </a>
+
+      <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+        <a href="index.html" class="hover:text-mateOrange transition"
+          >Accueil</a
+        >
+        <a href="programmes.html" class="hover:text-mateOrange transition"
+          >Nos programmes</a
+        >
+        <a
+          href="examens.html"
+          class="text-mateOrange border-b-2 border-mateOrange pb-1"
+          >Examen & concours</a
+        >
+        <a href="#" class="hover:text-mateOrange transition">A propos</a>
+
+        <div class="relative">
+          <button
+            id="accountBtn"
+            class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ff9d00] hover:text-[#0b2239] transition duration-300"
+          >
+            <i class="fas fa-user-circle text-lg"></i>
+            <span>Compte</span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+
+          <div
+            id="dropdownMenu"
+            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50"
+          >
+            <button
+              onclick="openModal('login')"
+              class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2"
+            >
+              <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
+            </button>
+            <button
+              onclick="openModal('register')"
+              class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2"
+            >
+              <i class="fas fa-user-plus text-[#0b2239]"></i> S'inscrire
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="md:hidden text-white text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="pt-24 pb-16 min-h-screen">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Colonne principale - Exercices -->
+          <div class="lg:col-span-2">
+            <!-- En-tête du thème -->
+            <div
+              class="bg-mateBlue rounded-2xl overflow-hidden shadow-2xl mb-8"
+            >
+              <div class="p-8">
+                <div class="flex items-center gap-4 mb-6">
+                  <div
+                    class="w-16 h-16 bg-mateOrange rounded-xl flex items-center justify-center floating-icon"
+                  >
+                    <i class="fas fa-calculator text-white text-2xl"></i>
+                  </div>
+                  <div>
+                    <p
+                      class="text-mateOrange text-sm font-semibold uppercase tracking-wide"
+                    >
+                      Exercices types
+                    </p>
+                    <h1 class="text-white text-3xl font-bold">DÉNOMBREMENT</h1>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4">
+                  <a
+                    href="#"
+                    class="inline-flex items-center gap-3 bg-mateOrange text-mateBlue font-bold px-6 py-3 rounded-xl hover:bg-orange-400 transition-all duration-300 hover:scale-105 shadow-lg"
+                  >
+                    <i class="fas fa-play-circle text-xl"></i>
+                    <span>Commencer les exercices</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="inline-flex items-center gap-3 bg-white/10 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/20 transition-all duration-300"
+                  >
+                    <i class="fas fa-download text-xl"></i>
+                    <span>Télécharger le PDF</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Stats -->
+              <div
+                class="bg-mateBlue/50 px-8 py-4 grid grid-cols-3 gap-4 text-center"
+              >
+                <div>
+                  <p class="text-white text-2xl font-bold">15</p>
+                  <p class="text-white/60 text-sm">Exercices</p>
+                </div>
+                <div>
+                  <p class="text-white text-2xl font-bold">3</p>
+                  <p class="text-white/60 text-sm">Niveaux</p>
+                </div>
+                <div>
+                  <p class="text-white text-2xl font-bold">45</p>
+                  <p class="text-white/60 text-sm">Minutes estimées</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Liste des exercices -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div
+                class="p-6 border-b border-gray-100 flex items-center justify-between"
+              >
+                <h2
+                  class="text-xl font-bold text-mateBlue flex items-center gap-3"
+                >
+                  <i class="fas fa-list-ol text-mateOrange"></i>
+                  Liste des exercices
+                </h2>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-gray-500">Filtrer:</span>
+                  <select
+                    class="text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-mateOrange"
+                  >
+                    <option>Tous les niveaux</option>
+                    <option>Facile</option>
+                    <option>Moyen</option>
+                    <option>Difficile</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="divide-y divide-gray-100">
+                <!-- Exercice 1 -->
+                <a
+                  href="mode.html"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">1</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Factorielles et permutations
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>5 min</span
+                        >
+                        <span class="difficulty-badge difficulty-easy"
+                          >Facile</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Calculer 5! et 7!</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 2 -->
+                <a
+                  href="coi.html"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">2</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Arrangements simples
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>8 min</span
+                        >
+                        <span class="difficulty-badge difficulty-easy"
+                          >Facile</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Tiercé dans l'ordre</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 3 -->
+                <a
+                  href="huit.html"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">3</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">Combinaisons</h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>10 min</span
+                        >
+                        <span class="difficulty-badge difficulty-medium"
+                          >Moyen</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Tirage sans remise</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 4 -->
+                <a
+                  href="exercice-detail.html?id=4"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">4</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Triangle de Pascal
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>12 min</span
+                        >
+                        <span class="difficulty-badge difficulty-medium"
+                          >Moyen</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Propriétés et applications</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 5 -->
+                <a
+                  href="exercice-detail.html?id=5"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">5</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Formule du binôme
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>15 min</span
+                        >
+                        <span class="difficulty-badge difficulty-medium"
+                          >Moyen</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Développement (a+b)ⁿ</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 6 -->
+                <a
+                  href="exercice-detail.html?id=6"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">6</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Problèmes de dénombrement
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>20 min</span
+                        >
+                        <span class="difficulty-badge difficulty-hard"
+                          >Difficile</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Mots et anagrammes</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+
+                <!-- Exercice 7 -->
+                <a
+                  href="exercice-detail.html?id=7"
+                  class="exercise-card block p-5 flex items-center justify-between"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateBlue rounded-lg flex items-center justify-center"
+                    >
+                      <span class="font-bold text-white text-lg">7</span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-800">
+                        Exercice de synthèse
+                      </h3>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-xs text-gray-500"
+                          ><i class="far fa-clock mr-1"></i>25 min</span
+                        >
+                        <span class="difficulty-badge difficulty-hard"
+                          >Difficile</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="hidden md:block text-sm text-gray-500"
+                      >Problème complet</span
+                    >
+                    <i class="fas fa-chevron-right text-mateOrange"></i>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Fiches méthode -->
+              <div class="p-6 bg-mateBlue/5 border-t border-gray-100">
+                <a
+                  href="#"
+                  class="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-12 h-12 bg-mateOrange rounded-xl flex items-center justify-center"
+                    >
+                      <i class="fas fa-lightbulb text-white text-xl"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-bold text-mateBlue">Fiches méthode</h3>
+                      <p class="text-sm text-gray-500">Formules et astuces</p>
+                    </div>
+                  </div>
+                  <i class="fas fa-arrow-right text-mateOrange text-xl"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Colonne latérale -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-28 space-y-4">
+              <h3
+                class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2"
+              >
+                <i class="fas fa-book text-mateOrange"></i>
+                Autres thèmes
+              </h3>
+
+              <!-- Probabilités -->
+              <a
+                href="probabilites.html"
+                class="chapter-sidebar block bg-white rounded-xl shadow-md overflow-hidden"
+              >
+                <div class="bg-mateBlue p-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-10 h-10 bg-mateOrange rounded-lg flex items-center justify-center"
+                    >
+                      <i class="fas fa-dice text-white"></i>
+                    </div>
+                    <h4 class="text-white font-bold">Probabilités</h4>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Fonctions -->
+              <a
+                href="exercices.html?theme=fonctions"
+                class="chapter-sidebar block bg-white rounded-xl shadow-md overflow-hidden"
+              >
+                <div class="bg-mateBlue p-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-10 h-10 bg-mateOrange rounded-lg flex items-center justify-center"
+                    >
+                      <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <h4 class="text-white font-bold">Fonctions</h4>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Suites -->
+              <a
+                href="suites.html"
+                class="chapter-sidebar block bg-white rounded-xl shadow-md overflow-hidden"
+              >
+                <div class="bg-mateBlue p-4">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-10 h-10 bg-mateOrange rounded-lg flex items-center justify-center"
+                    >
+                      <i class="fas fa-infinity text-white"></i>
+                    </div>
+                    <h4 class="text-white font-bold">Suites</h4>
+                  </div>
+                </div>
+              </a>
+
+              <!-- Bouton aide -->
+              <div class="mt-8">
+                <button
+                  class="w-full bg-mateBlue text-white p-4 rounded-xl shadow-lg hover:bg-mateOrange hover:text-mateBlue transition-all duration-300 flex items-center justify-center gap-3"
+                >
+                  <i class="fas fa-headset text-xl"></i>
+                  <span class="font-semibold">Demander de l'aide</span>
+                </button>
+              </div>
+
+              <!-- Info examens -->
+              <div class="bg-mateOrange/10 rounded-xl p-5 mt-6">
+                <h4
+                  class="font-bold text-mateBlue mb-2 flex items-center gap-2"
+                >
+                  <i class="fas fa-info-circle text-mateOrange"></i>
+                  À propos des examens
+                </h4>
+                <p class="text-sm text-gray-600">
+                  Ces exercices sont conçus pour vous préparer aux épreuves de
+                  type Bac. Pratiquez régulièrement pour maximiser vos chances
+                  de réussite.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-mateBlue text-white py-12 px-6 border-t border-blue-900">
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end"
+      >
+        <div class="mb-6 md:mb-0">
+          <h4 class="font-bold text-2xl mb-4">Suivez-nous sur:</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-tiktok"></i
+            ></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
+          <p class="text-gray-300 mb-8">cours@matematikup.mg</p>
+          <div class="text-gray-500 text-sm">
+            <p>© 2025 Matematikup</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div
+      id="authModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center"
+    >
+      <div
+        class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative overflow-hidden"
+      >
+        <button
+          onclick="closeModal()"
+          class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10"
+        >
+          &times;
+        </button>
+
+        <div id="loginForm" class="p-8">
+          <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">
+            Se connecter
+          </h2>
+          <form onsubmit="event.preventDefault()">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-semibold mb-2"
+                >Email ou Numéro mobile</label
+              >
+              <input
+                type="text"
+                class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-mateOrange"
+              />
+            </div>
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-semibold mb-2"
+                >Mot de passe</label
+              >
+              <input
+                type="password"
+                class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-mateOrange"
+              />
+            </div>
+            <button
+              class="bg-mateOrange hover:bg-orange-500 text-white font-bold py-3 px-4 rounded w-full transition"
+            >
+              Se connecter
+            </button>
+          </form>
+          <p class="text-center text-gray-500 text-xs mt-6">
+            Pas encore de compte?
+            <button
+              onclick="switchForm('register')"
+              class="text-mateOrange font-bold hover:underline"
+            >
+              S'inscrire
+            </button>
+          </p>
+        </div>
+
+        <div id="registerForm" class="p-8 hidden">
+          <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">
+            S'inscrire
+          </h2>
+          <form onsubmit="event.preventDefault()">
+            <div class="mb-3">
+              <label class="block text-gray-700 text-sm font-semibold mb-2"
+                >Nom complet</label
+              >
+              <input
+                type="text"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-mateOrange"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="block text-gray-700 text-sm font-semibold mb-2"
+                >Email</label
+              >
+              <input
+                type="email"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-mateOrange"
+              />
+            </div>
+            <button
+              class="bg-mateBlue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded w-full transition"
+            >
+              S'inscrire
+            </button>
+          </form>
+          <p class="text-center text-gray-500 text-xs mt-6">
+            Déjà un compte?
+            <button
+              onclick="switchForm('login')"
+              class="text-mateOrange font-bold hover:underline"
+            >
+              Se connecter
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Dropdown
+      const accountBtn = document.getElementById("accountBtn");
+      const dropdownMenu = document.getElementById("dropdownMenu");
+
+      accountBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+      });
+
+      window.addEventListener("click", (e) => {
+        if (
+          !dropdownMenu.contains(e.target) &&
+          !accountBtn.contains(e.target)
+        ) {
+          dropdownMenu.classList.add("hidden");
+        }
+      });
+
+      // Modal
+      const authModal = document.getElementById("authModal");
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+
+      function openModal(type) {
+        dropdownMenu.classList.add("hidden");
+        authModal.classList.remove("hidden");
+        if (type === "login") {
+          loginForm.classList.remove("hidden");
+          registerForm.classList.add("hidden");
+        } else {
+          loginForm.classList.add("hidden");
+          registerForm.classList.remove("hidden");
+        }
+      }
+
+      function closeModal() {
+        authModal.classList.add("hidden");
+      }
+
+      function switchForm(type) {
+        if (type === "login") {
+          loginForm.classList.remove("hidden");
+          registerForm.classList.add("hidden");
+        } else {
+          loginForm.classList.add("hidden");
+          registerForm.classList.remove("hidden");
+        }
+      }
+
+      authModal.addEventListener("click", (e) => {
+        if (e.target === authModal) closeModal();
+      });
+    </script>
+  </body>
+</html>

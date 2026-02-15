@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquête Yas : Le Mystère du 038</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        yasGreen: '#166534', // Vert Telma
+                        yasEarth: '#196420', // Fond demandé
+                        yasYellow: '#FFCC00',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #196420; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { background-color: white; color: #333; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .input-field { border: 2px solid #166534; border-radius: 0.5rem; padding: 0.5rem; width: 100%; color: #166534; font-weight: bold; }
+        .correct { border-color: #22c55e !important; background-color: #dcfce7 !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fee2e2 !important; }
+        .reasoning { display: none; margin-top: 1rem; padding: 1rem; background-color: #f0fdf4; border-left: 4px solid #166534; font-size: 0.9rem; color: #166534; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="max-w-4xl mx-auto mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="bg-white p-4 rounded-xl shadow-lg">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Telma_logo.svg/1200px-Telma_logo.svg.png" alt="Telma" class="h-12">
+        </div>
+        <div class="text-center md:text-right">
+            <h1 class="text-3xl font-black uppercase tracking-tighter text-yasYellow">Pourquoi le 038 ?</h1>
+            <p class="text-white font-bold italic">Aidez Jao à résoudre l'énigme mathématique</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-6">
+
+        <div class="card p-6 border-b-8 border-yasYellow">
+            <p class="text-lg leading-relaxed">
+                En 15 ans, la plage <strong>034</strong> a recensé plus de 9 millions d'abonnés. Aujourd'hui, Yas ouvre la plage <strong>038</strong>. 
+                Combien de numéros peut-on réellement créer ?
+            </p>
+        </div>
+
+        <div class="card p-6 space-y-8">
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="question-block">
+                    <label class="block font-bold mb-2">1. Nombre total de chiffres dans un numéro Yas ?</label>
+                    <input type="number" id="q1" class="input-field" placeholder="Réponse">
+                    <div id="res1" class="reasoning">
+                        <strong>Raisonnement :</strong> Un numéro complet est de la forme 038 XX XX XXX, soit <strong>10 chiffres</strong> au total.
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <label class="block font-bold mb-2">2. Variantes possibles avec un préfixe imposé (038) ?</label>
+                    <input type="number" id="q2" class="input-field" placeholder="Réponse">
+                    <div id="res2" class="reasoning">
+                        <strong>Raisonnement :</strong> Le préfixe "038" occupe 3 places. Il reste 7 chiffres à choisir ($10 - 3 = 7$). Chaque chiffre a 10 possibilités (0 à 9). 
+                        Calcul : $10^7 = \mathbf{10\,000\,000}$ de combinaisons.
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t pt-6">
+                <h3 class="font-black text-yasGreen mb-4">3. Sécurité : Suppression des numéros identiques</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-1">a) Combien de numéros sont interdits (ex: 038 0000000) ?</label>
+                        <input type="number" id="q3a" class="input-field">
+                        <div id="res3a" class="reasoning">
+                            <strong>Raisonnement :</strong> Il y a 10 chiffres possibles (0, 1, ..., 9). Donc <strong>10 numéros</strong> sont formés de 7 chiffres identiques.
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1">b) Combien de numéros restent disponibles ?</label>
+                        <input type="number" id="q3b" class="input-field">
+                        <div id="res3b" class="reasoning">
+                            <strong>Raisonnement :</strong> $10\,000\,000 - 10 = \mathbf{9\,999\,990}$.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t pt-6">
+                <h3 class="font-black text-yasGreen mb-4">4. Tests techniques (Réserve 038 000XXXX)</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-1">a) Combien de numéros sont réservés pour les tests ?</label>
+                        <input type="number" id="q4a" class="input-field">
+                        <div id="res4a" class="reasoning">
+                            <strong>Raisonnement :</strong> Le bloc est fixé sur les 3 chiffres après le préfixe (000). Il reste 4 chiffres variables ($10^4$). 
+                            Réponse : <strong>10 000</strong> numéros.
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-1">b) Restant pour les abonnés ?</label>
+                        <input type="number" id="q4b" class="input-field">
+                        <div id="res4b" class="reasoning">
+                            <strong>Raisonnement :</strong> $9\,999\,990 - 10\,000 = \mathbf{9\,989\,990}$.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="validateEnquete()" class="w-full bg-yasGreen hover:bg-green-800 text-white font-black py-4 rounded-xl transition transform active:scale-95 shadow-lg">
+                VALIDER L'ENQUÊTE ET AFFICHER LES RAISONNEMENTS
+            </button>
+        </div>
+
+        <div id="finalCard" class="card p-6 bg-yasYellow border-none hidden">
+            <h2 class="text-yasGreen font-black text-xl mb-2">5. Conclusion de l'enquête</h2>
+            <p class="text-yasGreen font-bold">
+                Pourquoi la plage 034 est devenue insuffisante ? 
+                <span class="block font-normal mt-2">
+                    Avec plus de 9 millions d'abonnés recensés en 15 ans, la plage 034 (qui offre environ 10 millions de combinaisons théoriques) a atteint son seuil de saturation technique, compte tenu des numéros réservés, expirés ou interdits. L'ouverture du 038 permet d'offrir 10 millions de nouveaux numéros pour accompagner la croissance de Yas.
+                </span>
+            </p>
+        </div>
+
+    </main>
+
+    <script>
+        function validateEnquete() {
+            const answers = {
+                q1: 10,
+                q2: 10000000,
+                q3a: 10,
+                q3b: 9999990,
+                q4a: 10000,
+                q4b: 9989990
+            };
+
+            let allValid = true;
+
+            for (let id in answers) {
+                const input = document.getElementById(id);
+                const val = parseInt(input.value);
+                const reasoning = document.getElementById('res' + id);
+
+                if (val === answers[id]) {
+                    input.classList.add('correct');
+                    input.classList.remove('incorrect');
+                } else {
+                    input.classList.add('incorrect');
+                    input.classList.remove('correct');
+                    allValid = false;
+                }
+                
+                // Affichage systématique du raisonnement après clic
+                reasoning.style.display = 'block';
+            }
+
+            document.getElementById('finalCard').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

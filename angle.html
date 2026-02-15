@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yas : Géométrie de la Roue</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        yasYellow: '#FFCC00',
+                        yasBlue: '#003399',
+                        yasRed: '#EF4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FFCC00; color: #003399; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* Structure Roue */
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 8px solid #003399;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
+            background: white;
+        }
+        .segment-label {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 2px; height: 50%;
+            transform-origin: bottom center;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+        }
+        .segment-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            color: white;
+            font-weight: 800;
+            font-size: 11px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            height: 110px;
+            padding-top: 15px;
+        }
+        
+        /* UI Elements */
+        .card { background-color: white; border-radius: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 2rem; }
+        .input-field { 
+            border: 2px solid #003399; 
+            padding: 0.5rem 1rem; 
+            border-radius: 0.5rem; 
+            width: 100%; 
+            font-weight: bold;
+            color: #003399;
+            margin-top: 0.5rem;
+        }
+        .input-short { width: 100px; text-align: center; }
+        
+        /* Feedbacks */
+        .correct { border-color: #22c55e !important; background-color: #f0fdf4 !important; color: #166534 !important; }
+        .incorrect { border-color: #ef4444 !important; background-color: #fef2f2 !important; color: #991b1b !important; }
+        .feedback-box {
+            display: none;
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-left: 5px solid #003399;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1e293b;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <header class="max-w-6xl mx-auto p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="bg-yasBlue text-white px-8 py-3 rounded-2xl font-black text-5xl italic shadow-xl transform -rotate-2">yas</div>
+        <div class="text-center md:text-right">
+            <h1 class="text-3xl font-black uppercase tracking-tighter">Vivez des moments excitants !</h1>
+            <p class="font-bold text-yasBlue bg-white/50 px-3 py-1 rounded-full inline-block mt-2">La Roue de la Fortune - Géométrie</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 mt-4">
+        
+        <div class="lg:col-span-4 flex flex-col items-center">
+            <div class="bg-white p-6 rounded-3xl shadow-lg border-2 border-yasBlue w-full mb-8 text-center">
+                <p class="text-sm text-justify mb-6 text-gray-700 font-medium">
+                    Lors du changement de nom de Telma en Yas, un jeu est organisé[cite: 2]. La flèche part de la position initiale (point I), tourne dans le sens inverse des aiguilles d'une montre de centre O et de rayon un mètre[cite: 2, 3].
+                </p>
+                <div class="relative inline-block">
+                    <div class="wheel-container" id="wheel"></div>
+                    <div class="absolute top-1/2 -right-10 -translate-y-1/2 flex items-center">
+                        <span class="font-black text-4xl mr-2 text-yasBlue">I</span>
+                        <div class="w-10 h-8 bg-yasBlue" style="clip-path: polygon(100% 50%, 0 0, 0 100%);"></div>
+                    </div>
+                </div>
+                <button onclick="spin()" class="mt-8 bg-yasBlue hover:bg-blue-900 text-white font-black py-4 px-12 rounded-2xl shadow-xl transition-all active:scale-95 w-full text-xl uppercase">
+                    Tourner la flèche
+                </button>
+            </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-6">
+            
+            <div class="card">
+                <h2 class="text-2xl font-black mb-6 text-yasBlue border-b-4 border-yasYellow pb-2">Questions Mathématiques</h2>
+                
+                <div class="mb-8">
+                    <label class="block font-bold text-lg">1. Quel est le périmètre de la roue ?</label>
+                    <input type="text" id="q1" class="input-field" placeholder="Votre réponse (ex: 2pi)">
+                    <div id="f1" class="feedback-box">
+                        <strong>Réponse :</strong> $$C = 2 \times R \times \pi = 2\pi$$ [cite: 18, 19]
+                    </div>
+                </div>
+
+                <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <div>
+                        <label class="block font-bold">2.a. La flèche fait un demi-tour exactement.</label>
+                        <input type="text" id="q2a_arc" class="input-field" placeholder="Longueur de l'arc (ex: pi)">
+                        <input type="number" id="q2a_ang" class="input-field mt-2" placeholder="Angle IOM en degrés">
+                        <div id="f2a" class="feedback-box bg-white">
+                            <strong>Réponse 2.a :</strong><br>
+                            Longueur d'arc (demi-tour) : $$ \frac{2\pi}{2} = \pi $$ [cite: 20]<br>
+                            Angle IOM : $$ \frac{360^\circ}{2} = 180^\circ $$ [cite: 21]
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold">2.b. Lorsque la flèche fait un quart de tour ?</label>
+                        <input type="text" id="q2b_arc" class="input-field" placeholder="Longueur de l'arc (ex: pi/2)">
+                        <input type="number" id="q2b_ang" class="input-field mt-2" placeholder="Angle IOM en degrés">
+                        <div id="f2b" class="feedback-box bg-white">
+                            <strong>Réponse 2.b :</strong><br>
+                            Longueur d'arc (quart de tour) : $$ \frac{2\pi}{4} = \frac{\pi}{2} $$ [cite: 22]<br>
+                            Angle IOM : $$ \frac{360^\circ}{4} = 90^\circ $$ [cite: 23]
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <label class="block font-bold mb-3">3. Recopier et compléter le tableau suivant en donnant les valeurs exactes.</label>
+                    <div class="overflow-x-auto rounded-xl border-2 border-yasBlue">
+                        <table class="w-full text-center">
+                            <thead class="bg-yasBlue text-white font-bold">
+                                <tr>
+                                    <th class="p-3 border-r border-blue-400">Mesure d'angle</th>
+                                    <th class="p-3">0°</th>
+                                    <th class="p-3">30°</th>
+                                    <th class="p-3">45°</th>
+                                    <th class="p-3">60°</th>
+                                    <th class="p-3">90°</th>
+                                    <th class="p-3">180°</th>
+                                    <th class="p-3">360°</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-gray-50 font-bold text-yasBlue">
+                                    <td class="p-3 border-r border-gray-300">Longueur d'arc</td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t0" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t30" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t45" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t60" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t90" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2 border-r border-gray-200"><input id="t180" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                    <td class="p-2"><input id="t360" type="text" class="w-full text-center bg-transparent border-b-2 border-yasYellow focus:outline-none"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="f3" class="feedback-box">
+                        <strong>Correction du Tableau :</strong> Les valeurs d'arc exactes sont respectivement \( 0 \), \( \frac{\pi}{6} \), \( \frac{\pi}{4} \), \( \frac{\pi}{3} \), \( \frac{\pi}{2} \), \( \pi \), \( 2\pi \)[cite: 25].
+                    </div>
+                </div>
+
+                <div class="mb-8 border-l-8 border-yasYellow pl-6">
+                    <label class="block font-bold text-lg mb-2">4. Si le bout de la flèche décrit un arc de longueur \( \frac{11\pi}{12} \), dans quelle zone se retrouve la flèche ? Quelle est l'angle IOM correspondant ?</label>
+                    <input type="text" id="q4_zone" class="input-field mb-2" placeholder="Nom de la zone (ex: 1 Go)">
+                    <input type="number" id="q4_angle" class="input-field" placeholder="Angle en degrés">
+                    <div id="f4" class="feedback-box">
+                        <strong>Réponse :</strong> L'angle correspondant est \( \frac{11\pi}{12} \times \frac{180^\circ}{\pi} = 165^\circ \). Pour un arc de longueur \( \frac{11\pi}{12} \), la flèche se retrouve dans la zone <strong>1 Go</strong>[cite: 26].
+                    </div>
+                </div>
+
+                <div class="mb-8 border-l-8 border-yasRed pl-6">
+                    <label class="block font-bold text-lg mb-2">5. Le bout de flèche s’est arrêté sur une frontière entre deux secteurs et a parcouru une longueur de \( \frac{7\pi}{3} \). Où s’est arrêtée la pointe de la flèche ?</label>
+                    <input type="text" id="q5" class="input-field" placeholder="Entre quels secteurs ?">
+                    <div id="f5" class="feedback-box">
+                        <strong>Réponse :</strong> Pour une longueur d’arc de \( \frac{7\pi}{3} \), la pointe de la flèche s’arrête <strong>entre Yellow 1000 et Oups ! en rouge</strong>[cite: 27, 28].
+                    </div>
+                </div>
+
+                <button onclick="checkAnswers()" class="w-full bg-yasYellow hover:bg-yellow-500 text-yasBlue font-black py-5 rounded-2xl shadow-xl text-2xl transition-all active:scale-95 uppercase tracking-wide border-2 border-yasBlue">
+                    Valider et afficher les corrections
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGIQUE ROUE ---
+        const segments = [
+            { label: "Oups !", color: "#EF4444" }, { label: "Yellow 1000", color: "#F97316" },
+            { label: "Yellow 2000", color: "#FACC15" }, { label: "Oups !", color: "#bef264" },
+            { label: "Mora 500", color: "#22c55e" }, { label: "Mora One", color: "#2dd4bf" },
+            { label: "Oups !", color: "#06b6d4" }, { label: "Fibre", color: "#3b82f6" },
+            { label: "ZTE", color: "#2563eb" }, { label: "Oups !", color: "#a855f7" },
+            { label: "1 Go", color: "#d946ef" }, { label: "500 Mo", color: "#ec4899" }
+        ];
+
+        const wheel = document.getElementById('wheel');
+        const anglePerSeg = 360 / segments.length;
+
+        segments.forEach((s, i) => {
+            const div = document.createElement('div');
+            div.className = 'segment-label';
+            div.style.transform = `rotate(${i * anglePerSeg + anglePerSeg/2}deg)`;
+            div.innerHTML = `<div class="segment-text">${s.label}</div>`;
+            wheel.appendChild(div);
+        });
+
+        wheel.style.background = `conic-gradient(${segments.map((s,i) => `${s.color} ${i*anglePerSeg}deg ${(i+1)*anglePerSeg}deg`).join(',')})`;
+        wheel.style.transform = "rotate(90deg)"; // Départ au point I (Est)
+
+        let rot = 90;
+        function spin() {
+            rot += 1440 + Math.random() * 360;
+            wheel.style.transform = `rotate(${rot}deg)`;
+        }
+
+        // --- VALIDATION INTERACTIVE ---
+        function checkAnswers() {
+            const validate = (id, targetArray) => {
+                const el = document.getElementById(id);
+                const val = el.value.toLowerCase().replace(/\s/g, '').replace(',', '.');
+                const isOk = targetArray.some(t => val.includes(t));
+                
+                el.classList.toggle('correct', isOk);
+                el.classList.toggle('incorrect', !isOk);
+            };
+
+            // Q1
+            validate('q1', ['2pi', '2π', '6.28']);
+            // Q2a & Q2b
+            validate('q2a_arc', ['pi', 'π']);
+            validate('q2a_ang', ['180']);
+            validate('q2b_arc', ['pi/2', 'π/2', '0.5pi', '1/2pi']);
+            validate('q2b_ang', ['90']);
+            // Tableau Q3
+            validate('t0', ['0']);
+            validate('t30', ['pi/6', 'π/6']);
+            validate('t45', ['pi/4', 'π/4']);
+            validate('t60', ['pi/3', 'π/3']);
+            validate('t90', ['pi/2', 'π/2']);
+            validate('t180', ['pi', 'π']);
+            validate('t360', ['2pi', '2π']);
+            // Q4
+            validate('q4_zone', ['1go']);
+            validate('q4_angle', ['165']);
+            // Q5 (Mots clés attendus selon le document source)
+            validate('q5', ['yellow1000etoups', 'oupsetyellow', 'yellow1000', 'rouge']);
+
+            // Révéler les encarts de correction
+            document.querySelectorAll('.feedback-box').forEach(f => f.style.display = 'block');
+            
+            // Re-rendre les mathématiques avec KaTeX (pour les blocs qui viennent d'apparaître)
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false}
+                ]
+            });
+            
+            // Défiler vers le bas pour voir les résultats
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

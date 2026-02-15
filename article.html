@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Article - Matematikup</title>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen flex flex-col">
+
+    <nav class="bg-[#0b2239] text-white p-4 shadow-md">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <span class="font-bold text-xl tracking-tighter">MATEMATIKUP <span class="text-[#ff9d00]">π</span></span>
+            <a href="index.html" class="text-sm hover:text-[#ff9d00]"><i class="fas fa-home"></i> Accueil</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-12 px-4">
+        <article class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+            
+            <div class="h-64 bg-gradient-to-r from-[#0b2239] to-[#1a3b5c] relative flex items-center justify-center">
+                <i id="article-icon" class="fas fa-book-open text-9xl text-white/10 absolute"></i>
+                <h1 id="article-title" class="relative z-10 text-3xl md:text-4xl font-bold text-white text-center px-6">
+                    Chargement...
+                </h1>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <div id="article-content" class="prose prose-lg text-gray-700 leading-relaxed text-justify">
+                    </div>
+
+                <div class="mt-12 pt-6 border-t border-gray-100">
+                    <a href="index.html" class="inline-flex items-center text-[#0b2239] font-bold hover:text-[#ff9d00] transition">
+                        <i class="fas fa-arrow-left mr-2"></i> Retour aux conseils
+                    </a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-[#0b2239] text-white text-center py-6 mt-auto">
+        <p>&copy; 2025 Matematikup. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // 1. Vos données (Textes fournis)
+        const articles = {
+            1: {
+                title: "Comment avoir une bonne mémoire pour les mathématiques ?",
+                icon: "fa-brain",
+                content: `
+                    <p class="mb-4"><strong class="text-[#ff9d00]">Avoir une bonne mémoire en mathématiques</strong> ne se limite pas à retenir des formules par cœur, mais surtout à comprendre les concepts sous-jacents. Pour cela, il est utile de revoir régulièrement ses cours et de refaire des exercices pour renforcer ses acquis.</p>
+                    <p class="mb-4">Utiliser des fiches de résumé où l’on note les formules clés, les propriétés et les exemples concrets permet de structurer sa mémoire.</p>
+                    <p class="mb-4">De plus, associer chaque notion mathématique à un schéma ou à une image mentale facilite la mémorisation.</p>
+                    <div class="bg-orange-50 p-4 border-l-4 border-[#ff9d00] my-6 italic">
+                        "Enfin, pratiquer la résolution de problèmes variés stimule la réflexion et ancre durablement les connaissances mathématiques."
+                    </div>
+                `
+            },
+            2: {
+                title: "Comment rédiger une fiche de résumé ?",
+                icon: "fa-pencil-alt",
+                content: `
+                    <p class="mb-4">Rédiger une fiche de résumé efficace est un excellent moyen d’organiser ses connaissances et de faciliter la révision.</p>
+                    <h3 class="text-xl font-bold text-[#0b2239] mt-6 mb-2">La méthode :</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><strong>Sélectionner l'essentiel :</strong> définitions, formules, concepts clés et exemples importants.</li>
+                        <li><strong>Être clair et concis :</strong> utilisez des phrases courtes et des mots simples.</li>
+                        <li><strong>Structurer :</strong> utilisez des titres, des sous-titres, et des listes à puces.</li>
+                    </ul>
+                    <p>Enfin, n’hésitez pas à utiliser des couleurs, des surligneurs ou des schémas pour rendre la fiche plus attractive et faciliter la mémorisation.</p>
+                `
+            },
+            3: {
+                title: "Comment apprendre les matières scientifiques ?",
+                icon: "fa-microscope",
+                content: `
+                    <p class="mb-4">Apprendre les matières scientifiques demande de la rigueur, de la méthode et de la pratique régulière.</p>
+                    <p class="mb-4">Il est important de bien comprendre les notions de base avant de passer à des concepts plus complexes. Prendre des notes claires et organiser ses cours sous forme de schémas ou de tableaux facilite la compréhension.</p>
+                    <p class="mb-4">Faire des exercices régulièrement permet de consolider les acquis et de mieux appréhender les applications concrètes des notions.</p>
+                    <p>Enfin, ne pas hésiter à poser des questions, à échanger avec ses enseignants ou ses camarades aide à lever les incompréhensions et à progresser efficacement.</p>
+                `
+            }
+        };
+
+        // 2. Récupération de l'ID dans l'URL (ex: article.html?id=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        // 3. Affichage du contenu
+        const article = articles[id];
+        
+        if (article) {
+            document.getElementById('article-title').textContent = article.title;
+            document.getElementById('article-content').innerHTML = article.content;
+            
+            // Changer l'icône dynamiquement
+            const iconElement = document.getElementById('article-icon');
+            iconElement.className = `fas ${article.icon} text-9xl text-white/10 absolute`;
+        } else {
+            // Si l'article n'existe pas
+            document.getElementById('article-title').textContent = "Article non trouvé";
+            document.getElementById('article-content').innerHTML = "<p class='text-center text-red-500'>Désolé, cet article n'est pas disponible.</p>";
+        }
+    </script>
+
+</body>
+</html>

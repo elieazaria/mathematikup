@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La combinatoire au service du style</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#faf8f5',
+            fg: '#1a1a1a',
+            muted: '#6b6b6b',
+            accent: '#c9a87c',
+            card: '#ffffff',
+            border: '#e5e0d8',
+            warm: '#f5f0e8',
+            deep: '#2d2a26',
+            brown: '#974826',
+            brownLight: '#b85a32',
+            brownDark: '#7a3a1e'
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'serif'],
+            body: ['DM Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --fg: #1a1a1a;
+      --muted: #6b6b6b;
+      --accent: #c9a87c;
+      --card: #ffffff;
+      --border: #e5e0d8;
+      --brown: #974826;
+      --brown-light: #b85a32;
+      --brown-dark: #7a3a1e;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .bg-pattern {
+      background-image: 
+        radial-gradient(ellipse at 30% 20%, rgba(201, 168, 124, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(151, 72, 38, 0.08) 0%, transparent 50%);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .animate-fade-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .animate-fade-left {
+      animation: fadeInLeft 0.8s ease-out forwards;
+    }
+
+    .animate-fade-right {
+      animation: fadeInRight 0.8s ease-out forwards;
+    }
+
+    .animate-shake {
+      animation: shake 0.5s ease-out;
+    }
+
+    .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+    .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+    .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+    .stagger-4 { animation-delay: 0.4s; opacity: 0; }
+    .stagger-5 { animation-delay: 0.5s; opacity: 0; }
+
+    .question-card {
+      background: linear-gradient(135deg, #ffffff 0%, #faf9f7 100%);
+      border: 1px solid var(--border);
+      transition: all 0.4s ease;
+    }
+
+    .question-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    .answer-input {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .answer-input:focus {
+      border-color: var(--brown);
+      box-shadow: 0 0 0 4px rgba(151, 72, 38, 0.1);
+      outline: none;
+    }
+
+    .answer-input.correct {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .answer-input.incorrect {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--brown) 0%, var(--brown-dark) 100%);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(151, 72, 38, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result-box {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .result-box.show {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .correct-box {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+
+    .incorrect-box {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+
+    .wardrobe-image-container {
+      position: relative;
+      background: linear-gradient(180deg, #e8e2da 0%, #d4cdc3 100%);
+      border-radius: 1.5rem;
+      overflow: hidden;
+    }
+
+    .wardrobe-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .wardrobe-image-container:hover .wardrobe-image {
+      transform: scale(1.02);
+    }
+
+    .info-panel {
+      background: linear-gradient(135deg, rgba(151, 72, 38, 0.95) 0%, rgba(122, 58, 30, 0.95) 100%);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: all 0.3s ease;
+    }
+
+    .stat-badge:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .deco-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brown), transparent);
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--brown);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+  </style>
+</head>
+<body class="bg-pattern min-h-screen">
+  
+  <!-- Header -->
+  <header class="pt-8 pb-6 px-6 lg:px-12">
+    <div class="max-w-6xl mx-auto">
+      <div class="animate-fade-up stagger-1">
+        <div class="deco-line mb-4"></div>
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-fg leading-tight">
+          La combinatoire au service du style
+        </h1>
+        <p class="mt-3 text-muted text-lg font-light">Mode et mathematiques : l'art des possibles</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-6 lg:px-12 pb-16">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        
+        <!-- Left Column - Text Content -->
+        <div class="space-y-8">
+          
+          <!-- Nina Introduction -->
+          <section class="animate-fade-left stagger-2">
+            <div class="flex items-start gap-5">
+              <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style="background: linear-gradient(135deg, #e8e4df 0%, #d9d4cd 100%);">
+                <svg class="w-8 h-8 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="font-display text-2xl font-semibold text-fg">Nina</h2>
+                <p class="text-accent font-medium text-sm tracking-wide uppercase">Passionnee de mode</p>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-card rounded-2xl shadow-sm border border-border">
+              <p class="text-fg leading-relaxed text-base">
+                Nina adore la mode et renouvele sa garde-robe selon les saisons. Voici ce qu'elle possede :
+              </p>
+              
+              <!-- Wardrobe Items Count -->
+              <div class="mt-6 grid grid-cols-3 gap-4">
+                <div class="text-center p-4 rounded-xl bg-warm">
+                  <div class="text-3xl font-display font-bold text-deep">4</div>
+                  <div class="text-sm text-muted mt-1">Pantalons</div>
+                  <svg class="w-8 h-8 mx-auto mt-2" style="color: #974826" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M6 4h12v4l-2 12h-3l-1-8-1 8H8L6 8V4z"/>
+                  </svg>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-warm">
+                  <div class="text-3xl font-display font-bold text-deep">5</div>
+                  <div class="text-sm text-muted mt-1">Chemises</div>
+                  <svg class="w-8 h-8 mx-auto mt-2" style="color: #974826" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L8 6H5v4l-1 10h16l-1-10V6h-3l-4-4z"/>
+                    <path d="M12 2v6"/>
+                  </svg>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-warm">
+                  <div class="text-3xl font-display font-bold text-deep">3</div>
+                  <div class="text-sm text-muted mt-1">Vestes</div>
+                  <svg class="w-8 h-8 mx-auto mt-2" style="color: #974826" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 6l4-2h8l4 2v14l-4 2v-4h-8v4l-4-2V6z"/>
+                    <path d="M12 4v10"/>
+                  </svg>
+                </div>
+              </div>
+              
+              <p class="mt-6 text-fg leading-relaxed text-base">
+                Chaque matin, Nina choisit <strong>un pantalon</strong>, <strong>une chemise</strong> et <strong>une veste</strong> pour composer une nouvelle tenue, sans jamais porter la meme combinaison deux fois.
+              </p>
+            </div>
+          </section>
+
+          <!-- Questions Section -->
+          <section class="space-y-6 animate-fade-left stagger-3">
+            
+            <!-- Question 1 -->
+            <article class="question-card rounded-2xl p-6" id="question1-card">
+              <div class="flex items-start gap-4">
+                <span class="flex-shrink-0 w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-semibold" style="background: #974826;">1</span>
+                <div class="flex-1">
+                  <h3 class="font-display text-lg font-semibold text-fg">
+                    Combien de tenues differentes Nina peut-elle composer ?
+                  </h3>
+                  
+                  <div class="mt-4">
+                    <label for="answer1" class="block text-sm text-muted mb-2">Votre reponse :</label>
+                    <div class="flex gap-3">
+                      <input 
+                        type="number" 
+                        id="answer1" 
+                        class="answer-input flex-1 px-4 py-3 rounded-xl text-lg font-semibold text-center"
+                        placeholder="?"
+                        min="1"
+                        aria-label="Entrez votre reponse pour la question 1"
+                      >
+                      <span class="flex items-center text-muted">tenues</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Result Box -->
+                  <div id="result1" class="result-box mt-4">
+                    <div class="rounded-xl p-5 text-white" id="result-box-1">
+                      <div class="flex items-center gap-3 mb-3">
+                        <div id="icon1" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        </div>
+                        <span class="font-semibold text-lg" id="result-text-1">Reponse</span>
+                      </div>
+                      <div class="text-3xl font-display font-bold mb-2" id="correct-answer-1"></div>
+                      <p class="text-white/90 text-sm" id="reasoning-1"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Question 2 -->
+            <article class="question-card rounded-2xl p-6" id="question2-card">
+              <div class="flex items-start gap-4">
+                <span class="flex-shrink-0 w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-semibold" style="background: #974826;">2</span>
+                <div class="flex-1">
+                  <h3 class="font-display text-lg font-semibold text-fg">
+                    Combien de facons existe-t-il d'ordonner ces 3 vetements ?
+                  </h3>
+                  
+                  <div class="mt-4">
+                    <label for="answer2" class="block text-sm text-muted mb-2">Votre reponse :</label>
+                    <div class="flex gap-3">
+                      <input 
+                        type="number" 
+                        id="answer2" 
+                        class="answer-input flex-1 px-4 py-3 rounded-xl text-lg font-semibold text-center"
+                        placeholder="?"
+                        min="1"
+                        aria-label="Entrez votre reponse pour la question 2"
+                      >
+                      <span class="flex items-center text-muted">facons</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Result Box -->
+                  <div id="result2" class="result-box mt-4">
+                    <div class="rounded-xl p-5 text-white" id="result-box-2">
+                      <div class="flex items-center gap-3 mb-3">
+                        <div id="icon2" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        </div>
+                        <span class="font-semibold text-lg" id="result-text-2">Reponse</span>
+                      </div>
+                      <div class="text-3xl font-display font-bold mb-2" id="correct-answer-2"></div>
+                      <p class="text-white/90 text-sm" id="reasoning-2"></p>
+                      <div id="arrangements-list" class="mt-3 hidden">
+                        <p class="text-white/80 text-xs mb-2">Les 6 ordres possibles :</p>
+                        <div class="grid grid-cols-3 gap-2 text-sm">
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">P-C-V</span>
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">P-V-C</span>
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">C-P-V</span>
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">C-V-P</span>
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">V-P-C</span>
+                          <span class="bg-white/10 px-2 py-1 rounded text-center">V-C-P</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <!-- Submit Button -->
+          <div class="animate-fade-left stagger-4">
+            <button 
+              id="submitBtn"
+              class="submit-btn w-full py-4 text-white rounded-xl font-semibold text-lg"
+              onclick="validateAnswers()"
+            >
+              Valider mes reponses
+            </button>
+            <p id="feedback" class="mt-3 text-center text-sm text-muted hidden"></p>
+          </div>
+        </div>
+
+        <!-- Right Column - Image Section -->
+        <div class="animate-fade-right stagger-4">
+          <div class="wardrobe-image-container shadow-xl">
+            <!-- Image visible a 100% -->
+            <img 
+              src="garde_robe.jpg" 
+              alt="Nina organise sa garde-robe devant un dressing rempli de vetements beiges et marrons, avec des accessoires et bottes ranges soigneusement"
+              class="wardrobe-image"
+            >
+          </div>
+
+          <!-- Info Panel below image -->
+          <div class="info-panel rounded-2xl p-6 mt-4 shadow-lg">
+            <h3 class="font-display text-xl font-bold text-white mb-4 text-center">La garde-robe de Nina</h3>
+            
+            <!-- Stat badges -->
+            <div class="flex justify-center gap-3 flex-wrap mb-5">
+              <div class="stat-badge rounded-xl px-4 py-2 text-center">
+                <div class="text-2xl font-display font-bold text-white">4</div>
+                <div class="text-white/70 text-xs">Pantalons</div>
+              </div>
+              <div class="stat-badge rounded-xl px-4 py-2 text-center">
+                <div class="text-2xl font-display font-bold text-white">5</div>
+                <div class="text-white/70 text-xs">Chemises</div>
+              </div>
+              <div class="stat-badge rounded-xl px-4 py-2 text-center">
+                <div class="text-2xl font-display font-bold text-white">3</div>
+                <div class="text-white/70 text-xs">Vestes</div>
+              </div>
+            </div>
+
+            <!-- Visual formula -->
+            <div class="stat-badge rounded-xl p-4">
+              <p class="text-white/60 text-xs mb-2 text-center">Formule a appliquer</p>
+              <div class="font-mono text-white text-lg text-center" id="formula-display">
+                <span class="text-white/70">4</span> x <span class="text-white/70">5</span> x <span class="text-white/70">3</span> = <span class="text-white/70">?</span>
+              </div>
+            </div>
+
+            <!-- Score display (hidden initially) -->
+            <div id="score-display" class="mt-4 hidden">
+              <div class="stat-badge rounded-xl p-4">
+                <p class="text-white/80 text-sm mb-1 text-center">Votre score</p>
+                <div class="text-4xl font-display font-bold text-white text-center" id="score-value">0/2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formula Section -->
+      <section class="mt-12 animate-fade-up stagger-5">
+        <div class="bg-card rounded-2xl p-8 border border-border shadow-sm">
+          <h3 class="font-display text-xl font-semibold text-fg mb-6 text-center">Formules de combinatoire</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="p-5 rounded-xl" style="background: #f5f0e8;">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: #974826;">
+                  <span class="text-white font-bold">x</span>
+                </div>
+                <h4 class="font-semibold text-fg">Principe multiplicatif</h4>
+              </div>
+              <p class="text-muted text-sm">Si on a <em>n</em> choix pour une premiere decision et <em>m</em> choix pour une seconde, le total est <strong>n x m</strong>.</p>
+              <div class="mt-3 p-3 bg-white rounded-lg text-center font-mono text-deep">
+                4 x 5 x 3 = 60
+              </div>
+            </div>
+            <div class="p-5 rounded-xl" style="background: #f5f0e8;">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-deep">
+                  <span class="text-white font-bold">n!</span>
+                </div>
+                <h4 class="font-semibold text-fg">Factorielle</h4>
+              </div>
+              <p class="text-muted text-sm">Le nombre de facons d'ordonner <em>n</em> objets est <strong>n!</strong> (n factorielle).</p>
+              <div class="mt-3 p-3 bg-white rounded-lg text-center font-mono text-deep">
+                3! = 3 x 2 x 1 = 6
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const answers = {
+      1: {
+        correct: 60,
+        reasoning: "Avec 4 pantalons, 5 chemises et 3 vestes, Nina peut composer 4 x 5 x 3 = 60 tenues differentes. Elle peut ainsi porter une tenue unique chaque jour pendant 2 mois !"
+      },
+      2: {
+        correct: 6,
+        reasoning: "Le nombre de facons d'ordonner 3 objets est 3! = 3 x 2 x 1 = 6. Ces 3 vetements peuvent etre arranges de 6 manieres differentes."
+      }
+    };
+
+    let validated = false;
+
+    function validateAnswers() {
+      if (validated) {
+        resetQuiz();
+        return;
+      }
+
+      const answer1 = document.getElementById('answer1').value;
+      const answer2 = document.getElementById('answer2').value;
+
+      if (!answer1 || !answer2) {
+        showFeedback("Veuillez repondre aux deux questions.", "error");
+        return;
+      }
+
+      validated = true;
+      let score = 0;
+
+      const isCorrect1 = parseInt(answer1) === answers[1].correct;
+      showResult(1, isCorrect1, parseInt(answer1));
+      if (isCorrect1) score++;
+
+      const isCorrect2 = parseInt(answer2) === answers[2].correct;
+      showResult(2, isCorrect2, parseInt(answer2));
+      if (isCorrect2) score++;
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.textContent = 'Reessayer';
+      submitBtn.style.background = 'linear-gradient(135deg, #6b6b6b 0%, #4a4a4a 100%)';
+
+      showScore(score, 2);
+      updateFormulaDisplay();
+
+      if (score === 2) {
+        showFeedback("Excellent ! Vous maitrisez la combinatoire !", "success");
+      } else if (score === 1) {
+        showFeedback("Bien ! Une reponse correcte. Relisez les explications.", "partial");
+      } else {
+        showFeedback("Courage ! Relisez les formules et reessayez.", "error");
+      }
+    }
+
+    function showResult(questionNum, isCorrect, userAnswer) {
+      const resultBox = document.getElementById('result' + questionNum);
+      const resultBoxInner = document.getElementById('result-box-' + questionNum);
+      const iconContainer = document.getElementById('icon' + questionNum);
+      const resultText = document.getElementById('result-text-' + questionNum);
+      const correctAnswer = document.getElementById('correct-answer-' + questionNum);
+      const reasoning = document.getElementById('reasoning-' + questionNum);
+      const input = document.getElementById('answer' + questionNum);
+
+      if (isCorrect) {
+        resultBoxInner.className = 'rounded-xl p-5 text-white correct-box';
+        iconContainer.innerHTML = '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        resultText.textContent = 'Correct !';
+        input.classList.add('correct');
+      } else {
+        resultBoxInner.className = 'rounded-xl p-5 text-white incorrect-box';
+        iconContainer.innerHTML = '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+        resultText.textContent = 'Incorrect';
+        input.classList.add('incorrect');
+        input.classList.add('animate-shake');
+        setTimeout(() => input.classList.remove('animate-shake'), 500);
+      }
+
+      correctAnswer.textContent = answers[questionNum].correct + (questionNum === 1 ? ' tenues' : ' facons');
+      reasoning.textContent = answers[questionNum].reasoning;
+
+      if (questionNum === 2) {
+        document.getElementById('arrangements-list').classList.remove('hidden');
+      }
+
+      resultBox.classList.add('show');
+    }
+
+    function showScore(score, total) {
+      const scoreDisplay = document.getElementById('score-display');
+      const scoreValue = document.getElementById('score-value');
+      scoreDisplay.classList.remove('hidden');
+      scoreValue.textContent = score + '/' + total;
+      scoreValue.style.animation = 'none';
+      setTimeout(() => {
+        scoreValue.style.animation = 'pulse 0.5s ease';
+      }, 10);
+    }
+
+    function updateFormulaDisplay() {
+      const formulaDisplay = document.getElementById('formula-display');
+      formulaDisplay.innerHTML = '<span class="text-white">4</span> x <span class="text-white">5</span> x <span class="text-white">3</span> = <span class="text-white font-bold">60</span>';
+    }
+
+    function showFeedback(message, type) {
+      const feedback = document.getElementById('feedback');
+      feedback.classList.remove('hidden');
+      feedback.textContent = message;
+      if (type === 'success') {
+        feedback.style.color = '#16a34a';
+      } else if (type === 'error') {
+        feedback.style.color = '#dc2626';
+      } else {
+        feedback.style.color = '#d97706';
+      }
+    }
+
+    function resetQuiz() {
+      validated = false;
+      ['answer1', 'answer2'].forEach(id => {
+        const input = document.getElementById(id);
+        input.value = '';
+        input.classList.remove('correct', 'incorrect');
+      });
+      ['result1', 'result2'].forEach(id => {
+        document.getElementById(id).classList.remove('show');
+      });
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.textContent = 'Valider mes reponses';
+      submitBtn.style.background = 'linear-gradient(135deg, #974826 0%, #7a3a1e 100%)';
+      document.getElementById('score-display').classList.add('hidden');
+      document.getElementById('feedback').classList.add('hidden');
+      document.getElementById('formula-display').innerHTML = '<span class="text-white/70">4</span> x <span class="text-white/70">5</span> x <span class="text-white/70">3</span> = <span class="text-white/70">?</span>';
+      document.getElementById('arrangements-list').classList.add('hidden');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !validated) {
+        validateAnswers();
+      }
+    });
+
+    document.querySelectorAll('.answer-input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.parentElement.querySelector('label').style.color = '#974826';
+      });
+      input.addEventListener('blur', function() {
+        this.parentElement.parentElement.querySelector('label').style.color = '';
+      });
+    });
+  </script>
+</body>
+</html>

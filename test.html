@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Roue de la Fortune de Yas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              yasYellow: "#FFCC00",
+              yasBlue: "#003399",
+            },
+            animation: {
+              "fade-in": "fadeIn 1s ease-out",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(-20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #ffcc00;
+        color: #003399;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      /* --- STYLES DE LA ROUE CSS --- */
+      .wheel-container {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        margin: 0 auto;
+        border-radius: 50%;
+        border: 6px solid white;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        background: white;
+      }
+
+      /* La flèche centrale (Aiguille) */
+      .needle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        width: 6px;
+        height: 110px;
+        background: black;
+        z-index: 20;
+        transform-origin: bottom center;
+      }
+      .needle::after {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: -7px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 20px solid black;
+      }
+      .center-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 24px;
+        height: 24px;
+        background: black;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 21;
+      }
+
+      /* Les labels (Textes sur la roue) */
+      .segment-label {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 1px;
+        height: 50%;
+        transform-origin: bottom center;
+        z-index: 10;
+      }
+
+      .segment-text {
+        position: absolute;
+        left: 0;
+        top: 15px; /* Distance du bord */
+        transform: translateX(-50%) rotate(180deg);
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        writing-mode: vertical-rl; /* Texte écrit le long du rayon */
+        text-orientation: mixed;
+        height: 100px; /* Zone de texte */
+      }
+
+      /* Classes de feedback */
+      .correct {
+        border: 3px solid #22c55e !important;
+        background-color: #dcfce7 !important;
+      }
+      .incorrect {
+        border: 3px solid #ef4444 !important;
+        background-color: #fee2e2 !important;
+      }
+
+      input,
+      select,
+      textarea {
+        color: #003399;
+        border: 2px solid #003399;
+      }
+
+      /* Suppression du style de barre jaune foncé : On garde le header clean */
+      header {
+        background-color: #ffcc00;
+      }
+    </style>
+  </head>
+  <body class="pb-20">
+    <header
+      class="w-full bg-yasYellow animate-slide-down mb-6 relative overflow-hidden"
+    >
+      <div class="max-w-4xl mx-auto flex items-center justify-between p-4">
+        <div class="w-1/3 md:w-1/4">
+          <img
+            src="yas_logo.png"
+            alt="Logo Yas"
+            class="w-full h-auto object-contain"
+            onerror="
+              this.src =
+                'https://via.placeholder.com/150x80/003399/FFFFFF?text=Logo+YAS'
+            "
+          />
+        </div>
+
+        <div class="w-2/3 pl-4 text-right">
+          <h1
+            class="text-xl md:text-3xl font-extrabold text-yasBlue uppercase tracking-tighter"
+          >
+            Vivez des moments excitants !
+          </h1>
+          <p class="text-sm md:text-base font-bold opacity-80">
+            La Roue de la Fortune : Chance ou Calcul ?
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-4">
+      <div
+        class="bg-white bg-opacity-90 p-6 rounded-xl text-yasBlue text-justify mb-8 border-2 border-yasBlue shadow-sm"
+      >
+        <p class="mb-2 font-medium">
+          Un jeu de "roue de la fortune" est proposé sur l'application Yas &
+          moi. Les utilisateurs disposent de deux tentatives par jour pour
+          gagner une offre SMS ou data. Pourtant, de nombreux joueurs constatent
+          qu'ils tombent très souvent sur la case "Oopss". Beaucoup de joueurs
+          se plaignent en disant 'Ce jeu est truqué !'.
+        </p>
+        <p class="font-bold">
+          Aujourd'hui, notre classe devient un bureau d'enquête. Notre mission :
+          répondre à une question que tout le monde se pose : la roue de Yas
+          est-elle vraiment 'truquée' ?
+        </p>
+      </div>
+
+      <div class="flex flex-col items-center justify-center mb-10">
+        <button
+          onclick="spinWheel()"
+          id="spinBtn"
+          class="bg-yasBlue hover:bg-blue-800 text-white font-bold py-3 px-10 rounded-full mb-8 shadow-xl transition transform active:scale-95 border-4 border-white text-xl z-30"
+        >
+          TOURNER
+        </button>
+
+        <div class="relative">
+          <div class="wheel-container" id="wheel"></div>
+
+          <div class="needle"></div>
+          <div class="center-dot"></div>
+        </div>
+
+        <div
+          id="resultMessage"
+          class="mt-6 font-bold text-2xl h-10 text-yasBlue"
+        ></div>
+      </div>
+
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+        <h2
+          class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+        >
+          Analyse de la Roue
+        </h2>
+
+        <form
+          id="quizPart1"
+          onsubmit="
+            event.preventDefault();
+            checkPart1();
+          "
+        >
+          <div class="mb-4">
+            <label class="block font-bold mb-1"
+              >1. Combien de secteurs y a-t-il au total sur cette roue ?</label
+            >
+            <input
+              type="number"
+              id="q1"
+              class="w-full p-2 rounded bg-yellow-50 focus:outline-none"
+              placeholder="Votre réponse..."
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="block font-bold mb-2">
+              2. Listez les résultats uniques possibles.
+            </label>
+
+            <select
+              id="q2"
+              class="w-full p-2 rounded bg-yellow-50"
+            > 
+              <option value="">-- Choisir --</option>
+              <option value="Yellow 100">Yellow 100 , Yellow 200, Yellow SMS, Oopss</option>
+
+              <!-- Faux choix -->
+              <option value="Wifi"> FibreHome</option>
+              
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block font-bold mb-1">
+              3. Nous allons nous intéresser à deux événements principaux
+              :</label
+            >
+            <ul class="list-disc ml-6 mb-2">
+              <li>Événement G : « Obtenir un Gain » (Yellow 100, 200, SMS)</li>
+              <li>Événement O : « Obtenir Oopss »</li>
+            </ul>
+          </div>
+
+          <div class="mb-4">
+            <p class="font-bold mb-2 bg-yellow-100 p-2 rounded inline-block">
+              4. Déterminer le nombre de secteurs :
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-bold">Gagnants (Gain) :</label>
+                <input
+                  type="number"
+                  id="q4_gain"
+                  class="w-full p-2 rounded bg-yellow-50"
+                />
+              </div>
+              <div>
+                <label class="text-sm font-bold">Perdants (Oopss) :</label>
+                <input
+                  type="number"
+                  id="q4_loss"
+                  class="w-full p-2 rounded bg-yellow-50"
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="bg-yasBlue text-white px-6 py-2 rounded hover:bg-blue-800 font-bold"
+          >
+            Vérifier
+          </button>
+        </form>
+      </div>
+
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+        <h2
+          class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+        >
+          5. Calcul des probabilités
+        </h2>
+
+        <form
+          id="quizPartProb"
+          onsubmit="
+            event.preventDefault();
+            checkProb();
+          "
+        >
+          <div class="mb-4">
+            <label class="block font-bold mb-1">
+              C : « Obtenir une offre FibreHome »
+            </label>
+            <select id="qc" class="w-full p-2 rounded bg-yellow-50">
+              <option value="">-- Choisir --</option>
+              <option value="0">0</option>
+              <option value="1/4">1/4</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block font-bold mb-1">
+              D : « Obtenir une offre Yellow ou Oopss »
+            </label>
+            <select id="qd" class="w-full p-2 rounded bg-yellow-50">
+              <option value="">-- Choisir --</option>
+              <option value="1">1</option>
+              <option value="3/4">3/4</option>
+              <option value="1/2">1/2</option>
+            </select>
+          </div>
+
+          <button class="bg-yasBlue text-white px-6 py-2 rounded font-bold">
+            Vérifier
+          </button>
+        </form>
+      </div>
+
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+        <h2
+          class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+        >
+          6. Complétez le tableau
+        </h2>
+
+        <form
+          id="quizPart2"
+          onsubmit="
+            event.preventDefault();
+            checkTable();
+          "
+        >
+          <div class="overflow-x-auto">
+            <table
+              class="w-full border-collapse border-4 border-yasBlue bg-yellow-100"
+            >
+              <thead>
+                <tr class="text-white bg-yasBlue">
+                  <th class="border-2 border-white p-3 text-left">Événement</th>
+                  <th class="border-2 border-white p-3">Nombre de secteurs</th>
+                  <th class="border-2 border-white p-3">
+                    Probabilité (Fraction)
+                  </th>
+                  <th class="border-2 border-white p-3">Pourcentage (%)</th>
+                </tr>
+              </thead>
+              <tbody class="text-yasBlue font-bold">
+                <tr>
+                  <td class="border-2 border-yasBlue p-2">Gain</td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="number"
+                      id="tab_gain_nb"
+                      oninput="calculateTotal()"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="text"
+                      id="tab_gain_prob"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="number"
+                      id="tab_gain_perc"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border-2 border-yasBlue p-2 text-red-600">
+                    Oopss
+                  </td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="number"
+                      id="tab_oops_nb"
+                      oninput="calculateTotal()"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="text"
+                      id="tab_oops_prob"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                  <td class="border-2 border-yasBlue p-2">
+                    <input
+                      type="number"
+                      id="tab_oops_perc"
+                      class="w-full bg-white p-2 rounded text-center"
+                    />
+                  </td>
+                </tr>
+                <tr class="bg-yasBlue text-white">
+                  <td class="border-2 border-white p-2">Total</td>
+                  <td class="border-2 border-white p-2">
+                    <input
+                      type="number"
+                      id="tab_total_nb"
+                      readonly
+                      class="w-full bg-gray-200 text-gray-800 p-2 rounded text-center font-bold"
+                    />
+                  </td>
+                  <td class="border-2 border-white p-2 text-center">1</td>
+                  <td class="border-2 border-white p-2 text-center">100%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button
+            type="submit"
+            class="mt-4 bg-yasBlue text-white px-6 py-2 rounded hover:bg-blue-800 font-bold"
+          >
+            Vérifier le Tableau
+          </button>
+        </form>
+      </div>
+
+      
+
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+        <h2
+          class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+        >
+          6. Simulateur Matematikup
+        </h2>
+        <div class="flex gap-2 mb-4 flex-wrap justify-center">
+          <button
+            onclick="simulate(20)"
+            class="bg-white border-2 border-yasBlue text-yasBlue px-4 py-2 rounded font-bold hover:bg-blue-50"
+          >
+            20 fois
+          </button>
+          <button
+            onclick="simulate(50)"
+            class="bg-white border-2 border-yasBlue text-yasBlue px-4 py-2 rounded font-bold hover:bg-blue-50"
+          >
+            50 fois
+          </button>
+          <button
+            onclick="simulate(100)"
+            class="bg-white border-2 border-yasBlue text-yasBlue px-4 py-2 rounded font-bold hover:bg-blue-50"
+          >
+            100 fois
+          </button>
+          <button
+            onclick="resetSim()"
+            class="bg-red-500 text-white px-4 py-2 rounded font-bold hover:bg-red-600"
+          >
+            Reset
+          </button>
+        </div>
+
+        <div
+          class="bg-gray-100 p-4 rounded border border-gray-300 grid grid-cols-1 md:grid-cols-3 gap-4 text-center"
+        >
+          <div>
+            Lancers :
+            <span id="simTotal" class="font-bold text-xl block">0</span>
+          </div>
+          <div>
+            "Oopss" :
+            <span id="simOops" class="font-bold text-xl text-red-600 block"
+              >0</span
+            >
+          </div>
+          <div>
+            Fréquence :
+            <span id="simFreq" class="font-bold text-xl text-yasBlue block"
+              >0%</span
+            >
+          </div>
+        </div>
+      </div>
+     
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+      <h2
+        class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+      >
+        7. Interprétation
+      </h2>
+
+      <form
+        id="quizInterpret"
+        onsubmit="
+          event.preventDefault();
+          checkInterpret();
+        "
+      >
+        <div class="mb-4">
+          <label class="block font-bold mb-2">
+            a. Quel événement a la probabilité la plus élevée ?
+          </label>
+          <select id="qa" class="w-full p-2 rounded bg-yellow-50">
+            <option value="">-- Choisir --</option>
+            <option value="G">Gain</option>
+            <option value="O">Oopss</option>
+            <option value="C">Wifiber</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-bold mb-2">
+            b. Peut-on dire que la probabilité de gagner est forte ?
+          </label>
+          <select id="qb" class="w-full p-2 rounded bg-yellow-50">
+            <option value="">-- Choisir --</option>
+            <option value="faible">Faible</option>
+            <option value="forte">Forte</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-bold mb-2">
+            c. Toutes les issues ont-elles la même chance ?
+          </label>
+          <select id="qc2" class="w-full p-2 rounded bg-yellow-50">
+            <option value="">-- Choisir --</option>
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+          </select>
+        </div>
+
+        <button class="bg-yasBlue text-white px-6 py-2 rounded font-bold">
+          Vérifier l’analyse
+        </button>
+      </form>
+      </div>
+      <div
+        class="bg-white p-6 rounded-lg shadow-md mb-8 border-l-8 border-yasBlue"
+      >
+        <h2
+          class="font-bold text-xl mb-4 text-yasBlue underline decoration-yasYellow decoration-4"
+        >
+          8. Analyse et Verdict
+        </h2>
+
+        <form
+          id="quizPart3"
+          onsubmit="
+            event.preventDefault();
+            checkAnalysis();
+          "
+        >
+          <div class="mb-4">
+            <label class="block font-bold mb-2"
+              >a. La fréquence expérimentale se rapproche-t-elle de la
+              probabilité théorique ?</label
+            >
+            <select id="q7a" class="w-full p-2 rounded bg-yellow-50">
+              <option value="">-- Choisir --</option>
+              <option value="oui">
+                Oui, elle se rapproche (Stabilisation)
+              </option>
+              <option value="non">Non, elle s'éloigne</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block font-bold mb-2"
+              >b. Expliquez pourquoi il est normal de tomber "très souvent" sur
+              la case "Oopss".</label
+            >
+            <select id="q8b" class="w-full p-2 rounded bg-yellow-50">
+              <option value="">-- Choisir --</option>
+              <option value="oui">
+                "Oopss" a le plus grand probabilité
+              </option>
+              <option value="non"> la probabilité de "Oopss" est plus proche de 0 </option>
+            </select>
+          </div>
+
+          <div class="mb-6 bg-yellow-100 p-4 rounded border border-yasYellow">
+            <label class="block font-bold mb-3 text-lg text-center"
+              >VERDICT FINAL : LE JEU EST-IL TRUQUÉ ?</label
+            >
+            <div class="flex justify-center gap-6">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="verdict"
+                  value="truque"
+                  class="w-6 h-6 text-yasBlue"
+                />
+                <span class="font-bold">OUI, Truqué</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="verdict"
+                  value="math"
+                  class="w-6 h-6 text-yasBlue"
+                />
+                <span class="font-bold">NON, Mathématique</span>
+              </label>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-yasBlue text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-900 shadow-lg text-lg"
+          >
+            Valider l'enquête
+          </button>
+          <div id="finalFeedback" class="mt-4 hidden text-center"></div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // --- 1. CONFIGURATION DE LA ROUE (12 segments de 30 deg) ---
+      // Ordre horaire partant de 12h
+      const segments = [
+        { label: "Oopss", color: "#FDE047", type: "loss" }, // Jaune
+        { label: "Yellow 100", color: "#F97316", type: "gain" }, // Orange
+        { label: "Oopss", color: "#EF4444", type: "loss" }, // Rouge
+        { label: "Oopss", color: "#EC4899", type: "loss" }, // Rose foncé
+        { label: "Oopss", color: "#F0ABFC", type: "loss" }, // Rose clair
+        { label: "Yellow SMS", color: "#A855F7", type: "gain" }, // Violet
+        { label: "Oopss", color: "#2563EB", type: "loss" }, // Bleu foncé
+        { label: "Oopss", color: "#67E8F9", type: "loss" }, // Cyan
+        { label: "Yellow 200", color: "#34D399", type: "gain" }, // Vert Menthe
+        { label: "Oopss", color: "#4ADE80", type: "loss" }, // Vert
+        { label: "Oopss", color: "#84CC16", type: "loss" }, // Lime
+        { label: "Oopss", color: "#FEF9C3", type: "loss" }, // Jaune pâle
+      ];
+
+      const wheel = document.getElementById("wheel");
+      const segmentAngle = 360 / segments.length;
+
+      // Génération du background Conic Gradient
+      let gradientStr = "";
+      segments.forEach((seg, index) => {
+        const start = index * segmentAngle;
+        const end = (index + 1) * segmentAngle;
+        gradientStr += `${seg.color} ${start}deg ${end}deg, `;
+      });
+      wheel.style.background = `conic-gradient(${gradientStr.slice(0, -2)})`;
+
+      // Génération des Labels
+      segments.forEach((seg, index) => {
+        const labelContainer = document.createElement("div");
+        labelContainer.className = "segment-label";
+        // Rotation du conteneur pour le placer au centre du segment
+        // index * 30 + 15 (moitié)
+        labelContainer.style.transform = `rotate(${index * segmentAngle + segmentAngle / 2}deg)`;
+
+        const textSpan = document.createElement("div");
+        textSpan.className = "segment-text";
+        textSpan.innerText = seg.label;
+
+        labelContainer.appendChild(textSpan);
+        wheel.appendChild(labelContainer);
+      });
+
+      // --- 2. LOGIQUE DE ROTATION ---
+      let currentRotation = 0;
+      let isSpinning = false;
+
+      function spinWheel() {
+        if (isSpinning) return;
+        isSpinning = true;
+        document.getElementById("resultMessage").innerText = "";
+
+        const randomDeg = Math.floor(Math.random() * 360);
+        const totalSpin = 1800 + randomDeg;
+        currentRotation += totalSpin;
+
+        wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+        setTimeout(() => {
+          isSpinning = false;
+          calculateResult(currentRotation);
+        }, 4000);
+      }
+
+      function calculateResult(rotation) {
+        const actualDeg = rotation % 360;
+        // La flèche est à 0 deg (Haut).
+        // L'index touché est calculé en inversant la rotation.
+        const index =
+          Math.floor((360 - actualDeg) / segmentAngle) % segments.length;
+
+        const result = segments[index];
+        const msgBox = document.getElementById("resultMessage");
+
+        if (result.type === "gain") {
+          msgBox.innerText = `BRAVO ! ${result.label}`;
+          msgBox.style.color = "#16a34a"; // Vert
+        } else {
+          msgBox.innerText = "Oopss... Perdu !";
+          msgBox.style.color = "#ea580c"; // Orange foncé
+        }
+      }
+
+      // --- 3. FONCTIONS UTILITAIRES ---
+      function calculateTotal() {
+        const g = parseInt(document.getElementById("tab_gain_nb").value) || 0;
+        const o = parseInt(document.getElementById("tab_oops_nb").value) || 0;
+        document.getElementById("tab_total_nb").value = g + o;
+      }
+
+      function validateInput(id, correctValue) {
+        const el = document.getElementById(id);
+        const val = el.value.toLowerCase().trim().replace("%", "");
+
+        // Fractions
+        if (val.includes("/")) {
+          const [n, d] = val.split("/");
+          if (Math.abs(n / d - correctValue) < 0.01) {
+            el.classList.add("correct");
+            el.classList.remove("incorrect");
+            return true;
+          }
+        }
+        // Valeur directe
+        if (
+          val == correctValue ||
+          (typeof correctValue === "string" && val.includes(correctValue))
+        ) {
+          el.classList.add("correct");
+          el.classList.remove("incorrect");
+          return true;
+        } else {
+          el.classList.add("incorrect");
+          el.classList.remove("correct");
+          return false;
+        }
+      }
+
+      // --- 4. VERIFICATIONS ---
+      function checkPart1() {
+        validateInput("q1", 12);
+
+        // Validation Question 2
+        const correctQ2 = ["yellow 100", "yellow 200", "yellow sms", "oopss"];
+        const selected = Array.from(
+          document.getElementById("q2").selectedOptions,
+        ).map((o) => o.value.toLowerCase());
+
+        let ok =
+          selected.length === correctQ2.length &&
+          correctQ2.every((v) => selected.includes(v));
+
+        if (ok) {
+          q2.classList.add("correct");
+          q2.classList.remove("incorrect");
+        } else {
+          q2.classList.add("incorrect");
+          q2.classList.remove("correct");
+        }
+
+        validateInput("q4_gain", 3);
+        validateInput("q4_loss", 9);
+      }
+
+      function checkTable() {
+        validateInput("tab_gain_nb", 3);
+        const p1 = document.getElementById("tab_gain_prob").value;
+        if (p1 == "0.25" || p1 == "1/4" || p1 == "3/12")
+          document.getElementById("tab_gain_prob").classList.add("correct");
+        else
+          document.getElementById("tab_gain_prob").classList.add("incorrect");
+        validateInput("tab_gain_perc", 25);
+
+        validateInput("tab_oops_nb", 9);
+        const p2 = document.getElementById("tab_oops_prob").value;
+        if (p2 == "0.75" || p2 == "3/4" || p2 == "9/12")
+          document.getElementById("tab_oops_prob").classList.add("correct");
+        else
+          document.getElementById("tab_oops_prob").classList.add("incorrect");
+        validateInput("tab_oops_perc", 75);
+
+        const t = document.getElementById("tab_total_nb");
+        if (t.value == 12) t.classList.add("correct");
+        else t.classList.add("incorrect");
+      }
+
+      function checkProb() {
+        validateInput("qc", "0");
+        validateInput("qd", "1");
+      }
+
+      function checkInterpret() {
+        validateInput("qa", "o");
+        validateInput("qb", "faible");
+        validateInput("qc2", "non");
+      }
+
+      function checkAnalysis() {
+  // On récupère les valeurs des menus déroulants
+  const q7a = document.getElementById("q7a").value;
+  const q8b = document.getElementById("q8b").value;
+
+  // On récupère la valeur du verdict (boutons radio)
+  const radios = document.getElementsByName("verdict");
+  let val = "";
+  for (let r of radios) {
+    if (r.checked) val = r.value;
+  }
+
+  const fb = document.getElementById("finalFeedback");
+  fb.classList.remove("hidden");
+
+  // Logique d'affichage du feedback final
+  if (val === "math" && q7a === "oui" && q8b === "oui") {
+    fb.innerText = "EXCELLENT ! C'est mathématique : Les secteurs Oopss sont plus nombreux (9 vs 3).";
+    fb.className = "mt-4 font-bold p-4 rounded bg-green-100 text-green-800 border-2 border-green-600 block text-center";
+  } else {
+    fb.innerText = "Analyse incomplète ou incorrecte. Relisez bien les probabilités : il y a 9 cases Oopss sur 12 au total.";
+    fb.className = "mt-4 font-bold p-4 rounded bg-red-100 text-red-800 border-2 border-red-600 block text-center";
+  }
+}
+
+      // --- 5. SIMULATION ---
+      let simTotal = 0;
+      let simOops = 0;
+      function simulate(n) {
+        for (let i = 0; i < n; i++) {
+          simTotal++;
+          if (Math.random() < 9 / 12) simOops++;
+        }
+        updateSim();
+      }
+      function resetSim() {
+        simTotal = 0;
+        simOops = 0;
+        updateSim();
+      }
+      function updateSim() {
+        document.getElementById("simTotal").innerText = simTotal;
+        document.getElementById("simOops").innerText = simOops;
+        const f = simTotal === 0 ? 0 : ((simOops / simTotal) * 100).toFixed(1);
+        document.getElementById("simFreq").innerText = f + "%";
+      }
+    </script>
+  </body>
+</html>

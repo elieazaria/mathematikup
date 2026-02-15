@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roue de la Fortune - Math & Probabilités</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.correct { border:3px solid #22c55e; background:#dcfce7;}
+.incorrect { border:3px solid #ef4444; background:#fee2e2;}
+</style>
+
+</head>
+<body class="bg-yellow-300 min-h-screen text-blue-900">
+
+<div class="max-w-4xl mx-auto p-4">
+
+<h1 class="text-3xl font-bold text-center mb-6">
+🎡 La Roue de la Fortune — Probabilités & Logique
+</h1>
+
+<!-- QUESTION 1 + 2 -->
+<div class="bg-white p-6 rounded shadow mb-6">
+<h2 class="text-xl font-bold mb-4">1 & 2. Analyse</h2>
+
+<div class="mb-4">
+<label class="font-bold">1. Combien de secteurs y a-t-il ?</label>
+<input id="q1" type="number" class="w-full p-2 rounded bg-yellow-50">
+</div>
+
+<div class="mb-4">
+<label class="font-bold">2. Résultats uniques possibles :</label>
+<select id="q2" multiple class="w-full p-3 rounded bg-yellow-50 h-36">
+
+<option value="Yellow 100">Yellow 100</option>
+<option value="Yellow 200">Yellow 200</option>
+<option value="Yellow SMS">Yellow SMS</option>
+<option value="Oopss">Oopss</option>
+
+<option value="Wifiber">Wifiber</option>
+<option value="Bonus">Bonus appels</option>
+<option value="Cashback">Cashback</option>
+<option value="Mega Pack">Mega Pack</option>
+
+</select>
+<small>Sélectionnez toutes les bonnes réponses.</small>
+</div>
+
+<button onclick="checkPart1()" class="bg-blue-900 text-white px-6 py-2 rounded font-bold">
+Vérifier
+</button>
+</div>
+
+<!-- QUESTION 6 -->
+<div class="bg-white p-6 rounded shadow mb-6">
+<h2 class="text-xl font-bold mb-4">6. Calcul des probabilités</h2>
+
+<div class="mb-4">
+<label class="font-bold">C : Obtenir Wifiber</label>
+<select id="qc" class="w-full p-2 bg-yellow-50 rounded">
+<option value="">-- Choisir --</option>
+<option value="0">0</option>
+<option value="1/4">1/4</option>
+<option value="1">1</option>
+</select>
+</div>
+
+<div class="mb-4">
+<label class="font-bold">D : Obtenir Yellow ou Oopss</label>
+<select id="qd" class="w-full p-2 bg-yellow-50 rounded">
+<option value="">-- Choisir --</option>
+<option value="1">1</option>
+<option value="3/4">3/4</option>
+<option value="1/2">1/2</option>
+</select>
+</div>
+
+<button onclick="checkProb()" class="bg-blue-900 text-white px-6 py-2 rounded font-bold">
+Vérifier
+</button>
+</div>
+
+<!-- QUESTION 7 -->
+<div class="bg-white p-6 rounded shadow mb-6">
+<h2 class="text-xl font-bold mb-4">7. Interprétation</h2>
+
+<div class="mb-4">
+<label class="font-bold">a. Événement le plus probable ?</label>
+<select id="qa" class="w-full p-2 bg-yellow-50 rounded">
+<option value="">-- Choisir --</option>
+<option value="G">Gain</option>
+<option value="O">Oopss</option>
+<option value="C">Wifiber</option>
+</select>
+</div>
+
+<div class="mb-4">
+<label class="font-bold">b. La probabilité de gagner est :</label>
+<select id="qb" class="w-full p-2 bg-yellow-50 rounded">
+<option value="">-- Choisir --</option>
+<option value="faible">Faible</option>
+<option value="forte">Forte</option>
+</select>
+</div>
+
+<div class="mb-4">
+<label class="font-bold">c. Toutes les issues ont-elles la même chance ?</label>
+<select id="qc2" class="w-full p-2 bg-yellow-50 rounded">
+<option value="">-- Choisir --</option>
+<option value="oui">Oui</option>
+<option value="non">Non</option>
+</select>
+</div>
+
+<button onclick="checkInterpret()" class="bg-blue-900 text-white px-6 py-2 rounded font-bold">
+Vérifier
+</button>
+</div>
+
+</div>
+
+<script>
+
+function validateInput(id, correct){
+const el = document.getElementById(id);
+if(el.value.toLowerCase() == correct){
+el.classList.add("correct");
+el.classList.remove("incorrect");
+}else{
+el.classList.add("incorrect");
+el.classList.remove("correct");
+}
+}
+
+function checkPart1(){
+
+validateInput("q1","12");
+
+const correct = ["yellow 100","yellow 200","yellow sms","oopss"];
+const selected = Array.from(q2.selectedOptions).map(o=>o.value.toLowerCase());
+
+let ok = selected.length === correct.length && correct.every(v=>selected.includes(v));
+
+if(ok){
+q2.classList.add("correct"); q2.classList.remove("incorrect");
+}else{
+q2.classList.add("incorrect"); q2.classList.remove("correct");
+}
+
+}
+
+function checkProb(){
+validateInput("qc","0");
+validateInput("qd","1");
+}
+
+function checkInterpret(){
+validateInput("qa","o");
+validateInput("qb","faible");
+validateInput("qc2","non");
+}
+
+</script>
+
+</body>
+</html>
