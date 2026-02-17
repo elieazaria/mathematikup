@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <!-- Ajout de 'items-center' pour l'alignement vertical parfait -->
+      <!-- Menu Desktop -->
       <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
         <a href="#" class="text-mateOrange border-b-2 border-mateOrange pb-1"
           >Accueil</a
@@ -81,7 +81,7 @@
             <i class="fas fa-chevron-down text-xs"></i>
           </button>
 
-          <!-- Dropdown Menu -->
+          <!-- Dropdown Menu Desktop -->
           <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50 transform origin-top-right transition-all">
             <button onclick="openModal('login')" class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2">
                 <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
@@ -93,10 +93,28 @@
         </div>
       </div>
 
-      <button class="md:hidden text-white text-2xl">
+      <!-- Bouton Hamburger Mobile -->
+      <button id="hamburgerBtn" class="md:hidden text-white text-2xl focus:outline-none">
         <i class="fas fa-bars"></i>
       </button>
     </nav>
+
+    <!-- MENU MOBILE OVERLAY -->
+    <div id="mobileMenu" class="fixed inset-0 bg-mateBlue z-[45] hidden flex-col pt-20 px-8 md:hidden">
+        <button id="closeMobileMenu" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+        
+        <div class="flex flex-col space-y-6 text-xl font-medium text-white">
+            <a href="#" class="border-b border-white/20 pb-2">Accueil</a>
+            <a href="program.html" class="border-b border-white/20 pb-2">Nos programmes</a>
+            <a href="examens.html" class="border-b border-white/20 pb-2">Examen & concours</a>
+            <a href="#apropos" class="border-b border-white/20 pb-2" onclick="closeMobileMenuFunc()">A propos</a>
+        </div>
+        
+        <div class="mt-10 flex flex-col gap-4">
+             <button onclick="openModal('login'); closeMobileMenuFunc();" class="bg-mateOrange text-white py-3 rounded-lg font-bold">Se connecter</button>
+             <button onclick="openModal('register'); closeMobileMenuFunc();" class="border border-white text-white py-3 rounded-lg font-bold hover:bg-white hover:text-mateBlue transition">S'inscrire</button>
+        </div>
+    </div>
 
     <!-- CONTENU PRINCIPAL -->
     <div class="min-h-screen flex flex-col font-sans">
@@ -106,7 +124,8 @@
         <nav
           class="relative z-20 flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full"
         >
-          <div class="flex items-center gap-1">
+          <!-- Nav Interne (Desktop) -->
+          <div class="hidden md:flex items-center gap-1">
             <span class="text-white font-bold text-2xl tracking-tighter"
               >MATEMATIKUP</span
             >
@@ -164,7 +183,7 @@
         </div>
 
         <div
-          class="relative z-10 flex-grow flex flex-col items-center justify-center px-4 text-center pt-16 md:pt-0"
+          class="relative z-10 flex-grow flex flex-col items-center justify-center px-4 text-center pt-20 md:pt-0"
         >
           <h3
             class="text-white text-2xl md:text-5xl font-extrabold leading-tight max-w-5xl"
@@ -203,8 +222,130 @@
       </header>
     </div>
 
+    <!-- SECTION A PROPOS MISE À JOUR -->
     <section class="py-20 bg-gray-50 px-6" id="apropos">
       <div class="max-w-6xl mx-auto">
+        
+        <!-- NOUVEAU CONTENU : Texte A Propos -->
+        <div class="mb-16">
+            <!-- Intro -->
+            <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-mateBlue mb-6">À propos de Matematikup</h2>
+                <p class="text-gray-600 text-lg leading-relaxed">
+                    Matematikup est une plateforme EdTech née d’une expérience de terrain dans l’enseignement des mathématiques à Madagascar.
+                    Elle a été créée pour répondre à un constat simple : <strong class="text-mateBlue">trop d’élèves perçoivent les mathématiques comme une matière inaccessible</strong> ou réservée à quelques-uns, alors qu’elles doivent être un apprentissage possible pour tous, filles comme garçons, quels que soient leur origine ou leur niveau de départ.
+                </p>
+            </div>
+
+            <!-- Mission & Vision (Grid) -->
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-mateOrange reveal">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-mateBlue text-white p-3 rounded-lg">
+                            <i class="fas fa-bullseye text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-mateBlue">Notre mission</h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Rendre l’apprentissage des mathématiques accessible, progressif et motivant pour tous les élèves, en particulier dans les contextes où l’accès à un soutien scolaire de qualité reste limité.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-mateBlue reveal" style="transition-delay: 100ms">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="bg-mateBlue text-white p-3 rounded-lg">
+                            <i class="fas fa-eye text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-mateBlue">Notre vision</h3>
+                    </div>
+                    <p class="text-gray-600">
+                        Contribuer à former une génération de jeunes capables d’utiliser les mathématiques comme un outil de compréhension du monde, de réussite scolaire et d’accès à de nouvelles opportunités.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Approche Pédagogique -->
+            <div class="bg-blue-50 p-8 rounded-xl mb-12 reveal border border-blue-100">
+                <h3 class="text-xl font-bold text-mateBlue mb-6 text-center">Notre approche pédagogique</h3>
+                <p class="text-center text-gray-600 mb-6">Nous proposons des contenus alignés au programme national, combinés à :</p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                        <span class="text-gray-700">Une contextualisation locale reliant les notions mathématiques à la vie quotidienne des élèves.</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                        <span class="text-gray-700">Des parcours progressifs adaptés au rythme de chacun.</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                        <span class="text-gray-700">Des outils numériques interactifs pour faciliter la compréhension des concepts abstraits.</span>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                        <span class="text-gray-700">Un accompagnement personnalisé pour renforcer la confiance et l’autonomie.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pourquoi Matematikup -->
+            <div class="mb-12 reveal">
+                <h3 class="text-xl font-bold text-mateBlue mb-4">Pourquoi Matematikup ?</h3>
+                <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-mateOrange">
+                    <p class="text-gray-600 mb-4">
+                        À Madagascar, une grande partie des élèves ne maîtrise pas les compétences fondamentales en mathématiques, ce qui limite leurs perspectives académiques et professionnelles.
+                    </p>
+                    <p class="text-gray-600 font-medium text-mateBlue">
+                        Matematikup vise à réduire ces inégalités en offrant une solution numérique accessible sur mobile, pensée pour favoriser l’inclusion, réduire les écarts de genre et améliorer durablement la qualité des apprentissages.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Notre Équipe -->
+            <div class="mb-12 reveal">
+                <h3 class="text-xl font-bold text-mateBlue mb-4">Notre équipe</h3>
+                <div class="flex flex-col md:flex-row gap-6 items-center bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex-shrink-0 bg-mateBlue text-white p-4 rounded-full">
+                        <i class="fas fa-user-tie text-3xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 mb-2">
+                            Matematikup est porté par une fondatrice issue du terrain éducatif, enseignante de mathématiques et spécialisée en sciences de l’éducation.
+                        </p>
+                        <p class="text-gray-600">
+                            Le projet s’appuie sur une approche à la fois pédagogique et technologique, développée en lien direct avec les besoins réels des élèves. Nous collaborons avec des enseignants, des élèves testeurs et des partenaires éducatifs afin d’améliorer continuellement la plateforme et garantir sa pertinence dans le contexte malgache.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notre Impact -->
+            <div class="reveal">
+                <h3 class="text-xl font-bold text-mateBlue mb-4">Notre impact</h3>
+                <p class="text-gray-600 mb-4">Matematikup vise à contribuer concrètement à l’amélioration de la qualité des apprentissages en mathématiques en :</p>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                        Renforçant les compétences fondamentales des élèves grâce à un apprentissage progressif et accessible.
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                        Réduisant l’anxiété et l’autocensure face aux filières scientifiques, notamment chez les filles.
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                        Élargissant l’accès à un accompagnement de qualité, indépendamment des ressources familiales.
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-700">
+                        <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                        Soutenant le développement de compétences essentielles pour la poursuite d’études et l’employabilité.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-16 border-gray-200">
+
+        <!-- Partie Stats Principale (Ancienne partie) -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
           <div class="reveal flex flex-col items-center">
             <div
@@ -263,7 +404,7 @@
         <!-- NOUVELLE PARTIE : Quiz Vie Réelle -->
         <div class="mt-20 pt-12 border-t border-gray-200">
           <h3 class="text-2xl md:text-3xl font-bold text-center text-mateBlue mb-10 reveal">
-            Extrait de quiz appliqués dans la vie réelle
+            Extrait des activités appliqués dans la vie réelle
           </h3>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -273,9 +414,8 @@
               <div class="mb-4">
                 <i class="fas fa-ruler-combined text-4xl text-mateBlue"></i>
               </div>
-              <h4 class="font-bold text-lg text-gray-800 mb-2" >
-                <a href="angle.html"> Trigonométrie</a></h4>
-              <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full">Exercice </span>
+              <h4 class="font-bold text-lg text-gray-800 mb-2">Trigonométrie</h4>
+              <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full">Exercice 1</span>
             </div>
 
             <!-- Card Dénombrements -->
@@ -283,9 +423,7 @@
               <div class="mb-4">
                 <i class="fas fa-sort-numeric-up text-4xl text-mateBlue"></i>
               </div>
-              <h4 class="font-bold text-lg text-gray-800 mb-2">
-                <a href="huit.html"> Dénombrements</a>
-                </h4>
+              <h4 class="font-bold text-lg text-gray-800 mb-2">Dénombrements</h4>
               <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full"> Exercice</span>
             </div>
 
@@ -294,8 +432,7 @@
               <div class="mb-4">
                 <i class="fas fa-list-ol text-4xl text-mateBlue"></i>
               </div>
-              <h4 class="font-bold text-lg text-gray-800 mb-2">
-                <a href="kfc.html"> Suites</a></h4>
+              <h4 class="font-bold text-lg text-gray-800 mb-2">Suites</h4>
               <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full"> Exercice</span>
             </div>
 
@@ -304,10 +441,8 @@
               <div class="mb-4">
                 <i class="fas fa-dice text-4xl text-mateBlue"></i>
               </div>
-              <h4 class="font-bold text-lg text-gray-800 mb-2">
-                <a href="test.html"> Probabilités</a>
-                </h4>
-              <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full">Exercice</span>
+              <h4 class="font-bold text-lg text-gray-800 mb-2">Probabilités</h4>
+              <span class="bg-mateBlue text-white text-xs font-bold px-3 py-1 rounded-full"> Exercice</span>
             </div>
 
           </div>
@@ -510,7 +645,7 @@
     </div>
 
     <script>
-      // 1. Gestion du Dropdown du compte
+      // 1. Gestion du Dropdown du compte (Desktop)
       const accountBtn = document.getElementById('accountBtn');
       const dropdownMenu = document.getElementById('dropdownMenu');
 
@@ -525,7 +660,26 @@
           }
       });
 
-      // 2. Gestion des Modals
+      // 2. Gestion Menu Mobile
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+
+      hamburgerBtn.addEventListener('click', () => {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+      });
+
+      function closeMobileMenuFunc() {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+      }
+      
+      if(closeMobileMenuBtn) {
+          closeMobileMenuBtn.addEventListener('click', closeMobileMenuFunc);
+      }
+
+      // 3. Gestion des Modals
       const authModal = document.getElementById('authModal');
       const loginForm = document.getElementById('loginForm');
       const registerForm = document.getElementById('registerForm');
@@ -563,7 +717,7 @@
           }
       });
 
-      // 3. Animation au scroll
+      // 4. Animation au scroll
       function reveal() {
         var reveals = document.querySelectorAll(".reveal");
 
