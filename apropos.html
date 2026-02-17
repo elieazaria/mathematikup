@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>À propos de Matematikup - Notre Histoire et Mission</title>
+    <meta name="description" content="Découvrez Matematikup, la plateforme EdTech dédiée à l'apprentissage des mathématiques à Madagascar. Notre mission, vision et approche pédagogique.">
+    
+    <link rel="icon" type="image/png" href="Logo_Matematikup.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mateBlue: "#0d2b56",
+              mateOrange: "#ffa300",
+              mateOrangeLight: "#ffd966",
+            },
+            fontFamily: {
+              sans: ["Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
+    
+    <!-- NAVIGATION PRINCIPALE -->
+    <nav
+      class="bg-mateBlue text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md"
+    >
+      <div class="flex items-center gap-2">
+         <img src="Logo_Matematikup.png" alt="Logo Matematikup" class="h-10 w-auto"/>
+        <a href="index.html" class="font-bold text-2xl tracking-wider hover:text-mateOrange transition">
+          MATEMATIKUP
+        </a>
+      </div>
+
+      <!-- Menu Desktop -->
+      <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+        <a href="index.html" class="hover:text-mateOrange transition">Accueil</a>
+        <a href="program.html" class="hover:text-mateOrange transition">Nos programmes</a>
+        <a href="examens.html" class="hover:text-mateOrange transition">Examen & concours</a>
+        <a href="apropos.html" class="text-mateOrange border-b-2 border-mateOrange pb-1">A propos</a>
+      
+        <!-- PARTIE COMPTE -->
+        <div class="relative">
+          <button id="accountBtn" class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ff9d00] hover:text-[#0b2239] transition duration-300">
+            <i class="fas fa-user-circle text-lg"></i>
+            <span>Compte</span>
+            <i class="fas fa-chevron-down text-xs"></i>
+          </button>
+
+          <!-- Dropdown Menu Desktop -->
+          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50 transform origin-top-right transition-all">
+            <button onclick="openModal('login')" class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2">
+                <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
+            </button>
+            <button onclick="openModal('register')" class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2">
+                <i class="fas fa-user-plus text-[#0b2239]"></i> S'inscrire
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton Hamburger Mobile -->
+      <button id="hamburgerBtn" class="md:hidden text-white text-2xl focus:outline-none">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <!-- MENU MOBILE OVERLAY -->
+    <div id="mobileMenu" class="fixed inset-0 bg-mateBlue z-[45] hidden flex-col pt-20 px-8 md:hidden">
+        <button id="closeMobileMenu" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+        
+        <div class="flex flex-col space-y-6 text-xl font-medium text-white">
+            <a href="index.html" class="border-b border-white/20 pb-2">Accueil</a>
+            <a href="program.html" class="border-b border-white/20 pb-2">Nos programmes</a>
+            <a href="examens.html" class="border-b border-white/20 pb-2">Examen & concours</a>
+            <a href="apropos.html" class="border-b border-white/20 pb-2 text-mateOrange">A propos</a>
+        </div>
+        
+        <div class="mt-10 flex flex-col gap-4">
+             <button onclick="openModal('login'); closeMobileMenuFunc();" class="bg-mateOrange text-white py-3 rounded-lg font-bold">Se connecter</button>
+             <button onclick="openModal('register'); closeMobileMenuFunc();" class="border border-white text-white py-3 rounded-lg font-bold hover:bg-white hover:text-mateBlue transition">S'inscrire</button>
+        </div>
+    </div>
+
+    <!-- HERO SIMPLE POUR LA PAGE A PROPOS -->
+    <header class="bg-mateBlue pt-32 pb-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        <div class="relative z-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">À propos de <span class="text-mateOrange">Matematikup</span></h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto px-4">Une solution pensée pour l'éducation mathématique à Madagascar.</p>
+        </div>
+    </header>
+
+    <!-- CONTENU PRINCIPAL A PROPOS -->
+    <section class="py-16 bg-gray-50 px-6">
+      <div class="max-w-6xl mx-auto">
+        
+        <!-- Intro -->
+        <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+            <p class="text-gray-600 text-lg leading-relaxed">
+                Matematikup est une plateforme EdTech née d’une expérience de terrain dans l’enseignement des mathématiques à Madagascar.
+                Elle a été créée pour répondre à un constat simple : <strong class="text-mateBlue">trop d’élèves perçoivent les mathématiques comme une matière inaccessible</strong> ou réservée à quelques-uns, alors qu’elles doivent être un apprentissage possible pour tous, filles comme garçons, quels que soient leur origine ou leur niveau de départ.
+            </p>
+        </div>
+
+        <!-- Mission & Vision (Grid) -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-mateOrange reveal">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-mateBlue text-white p-3 rounded-lg">
+                        <i class="fas fa-bullseye text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-mateBlue">Notre mission</h3>
+                </div>
+                <p class="text-gray-600">
+                    Rendre l’apprentissage des mathématiques accessible, progressif et motivant pour tous les élèves, en particulier dans les contextes où l’accès à un soutien scolaire de qualité reste limité.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-mateBlue reveal" style="transition-delay: 100ms">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-mateBlue text-white p-3 rounded-lg">
+                        <i class="fas fa-eye text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-mateBlue">Notre vision</h3>
+                </div>
+                <p class="text-gray-600">
+                    Contribuer à former une génération de jeunes capables d’utiliser les mathématiques comme un outil de compréhension du monde, de réussite scolaire et d’accès à de nouvelles opportunités.
+                </p>
+            </div>
+        </div>
+
+        <!-- Approche Pédagogique -->
+        <div class="bg-blue-50 p-8 rounded-xl mb-12 reveal border border-blue-100">
+            <h3 class="text-xl font-bold text-mateBlue mb-6 text-center">Notre approche pédagogique</h3>
+            <p class="text-center text-gray-600 mb-6">Nous proposons des contenus alignés au programme national, combinés à :</p>
+            <div class="grid sm:grid-cols-2 gap-4">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                    <span class="text-gray-700">Une contextualisation locale reliant les notions mathématiques à la vie quotidienne des élèves.</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                    <span class="text-gray-700">Des parcours progressifs adaptés au rythme de chacun.</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                    <span class="text-gray-700">Des outils numériques interactifs pour faciliter la compréhension des concepts abstraits.</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-check-circle text-mateOrange mt-1"></i>
+                    <span class="text-gray-700">Un accompagnement personnalisé pour renforcer la confiance et l’autonomie.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pourquoi Matematikup -->
+        <div class="mb-12 reveal">
+            <h3 class="text-xl font-bold text-mateBlue mb-4">Pourquoi Matematikup ?</h3>
+            <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-mateOrange">
+                <p class="text-gray-600 mb-4">
+                    À Madagascar, une grande partie des élèves ne maîtrise pas les compétences fondamentales en mathématiques, ce qui limite leurs perspectives académiques et professionnelles.
+                </p>
+                <p class="text-gray-600 font-medium text-mateBlue">
+                    Matematikup vise à réduire ces inégalités en offrant une solution numérique accessible sur mobile, pensée pour favoriser l’inclusion, réduire les écarts de genre et améliorer durablement la qualité des apprentissages.
+                </p>
+            </div>
+        </div>
+
+        <!-- Notre Équipe -->
+        <div class="mb-12 reveal">
+            <h3 class="text-xl font-bold text-mateBlue mb-4">Notre équipe</h3>
+            <div class="flex flex-col md:flex-row gap-6 items-center bg-white p-6 rounded-xl shadow-sm">
+                <div class="flex-shrink-0 bg-mateBlue text-white p-4 rounded-full">
+                    <i class="fas fa-user-tie text-3xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-600 mb-2">
+                        Matematikup est porté par une fondatrice issue du terrain éducatif, enseignante de mathématiques et spécialisée en sciences de l’éducation.
+                    </p>
+                    <p class="text-gray-600">
+                        Le projet s’appuie sur une approche à la fois pédagogique et technologique, développée en lien direct avec les besoins réels des élèves. Nous collaborons avec des enseignants, des élèves testeurs et des partenaires éducatifs afin d’améliorer continuellement la plateforme et garantir sa pertinence dans le contexte malgache.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notre Impact -->
+        <div class="reveal">
+            <h3 class="text-xl font-bold text-mateBlue mb-4">Notre impact</h3>
+            <p class="text-gray-600 mb-4">Matematikup vise à contribuer concrètement à l’amélioration de la qualité des apprentissages en mathématiques en :</p>
+            <ul class="space-y-3">
+                <li class="flex items-center gap-2 text-gray-700">
+                    <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                    Renforçant les compétences fondamentales des élèves grâce à un apprentissage progressif et accessible.
+                </li>
+                <li class="flex items-center gap-2 text-gray-700">
+                    <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                    Réduisant l’anxiété et l’autocensure face aux filières scientifiques, notamment chez les filles.
+                </li>
+                <li class="flex items-center gap-2 text-gray-700">
+                    <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                    Élargissant l’accès à un accompagnement de qualité, indépendamment des ressources familiales.
+                </li>
+                <li class="flex items-center gap-2 text-gray-700">
+                    <i class="fas fa-arrow-right text-mateOrange text-sm"></i>
+                    Soutenant le développement de compétences essentielles pour la poursuite d’études et l’employabilité.
+                </li>
+            </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-mateBlue text-white py-12 px-6 border-t border-blue-900">
+      <div
+        class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end"
+      >
+        <div class="mb-6 md:mb-0">
+          <h4 class="font-bold text-2xl mb-4">Suivez-nous sur:</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="text-3xl hover:text-mateOrange transition"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="text-3xl hover:text-mateOrange transition"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
+          <p class="text-gray-300 mb-8">cours@matematikup.mg</p>
+          <div class="text-gray-500 text-sm relative">
+            <p>© 2025 Matematikup</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL POUR CONNEXION ET INSCRIPTION -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative overflow-hidden transform transition-all">
+            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">&times;</button>
+
+            <!-- Formulaire de Connexion -->
+            <div id="loginForm" class="p-8">
+                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">Se connecter</h2>
+                <form onsubmit="event.preventDefault(); alert('Tentative de connexion...');">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2" for="login-identifier">Email ou Numéro mobile</label>
+                        <input id="login-identifier" type="text" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre email ou numéro">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2" for="login-password">Mot de passe</label>
+                        <input id="login-password" type="password" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre mot de passe">
+                    </div>
+                    <button class="bg-mateOrange hover:bg-orange-500 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-200" type="submit">
+                        Se connecter
+                    </button>
+                </form>
+                <p class="text-center text-gray-500 text-xs mt-6">
+                    Pas encore de compte? 
+                    <button onclick="switchForm('register')" class="text-mateOrange font-bold hover:underline">S'inscrire</button>
+                </p>
+            </div>
+
+            <!-- Formulaire d'Inscription -->
+            <div id="registerForm" class="p-8 hidden">
+                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">S'inscrire</h2>
+                <form onsubmit="event.preventDefault(); alert('Tentative d\'inscription...');">
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Nom complet</label>
+                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre nom complet">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+                        <input type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre email">
+                    </div>
+                     <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Numéro mobile</label>
+                        <input type="tel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre numéro">
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
+                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Créer un mot de passe">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
+                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Retapez le mot de passe">
+                    </div>
+                    <button class="bg-mateBlue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full transition duration-200" type="submit">
+                        S'inscrire
+                    </button>
+                </form>
+                <p class="text-center text-gray-500 text-xs mt-6">
+                    Déjà un compte? 
+                    <button onclick="switchForm('login')" class="text-mateOrange font-bold hover:underline">Se connecter</button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      // 1. Gestion du Dropdown du compte
+      const accountBtn = document.getElementById('accountBtn');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      accountBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('hidden');
+      });
+
+      window.addEventListener('click', (e) => {
+          if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target)) {
+              dropdownMenu.classList.add('hidden');
+          }
+      });
+
+      // 2. Gestion Menu Mobile
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+
+      hamburgerBtn.addEventListener('click', () => {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+      });
+
+      function closeMobileMenuFunc() {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+      }
+      
+      if(closeMobileMenuBtn) {
+          closeMobileMenuBtn.addEventListener('click', closeMobileMenuFunc);
+      }
+
+      // 3. Gestion des Modals
+      const authModal = document.getElementById('authModal');
+      const loginForm = document.getElementById('loginForm');
+      const registerForm = document.getElementById('registerForm');
+
+      function openModal(type) {
+          dropdownMenu.classList.add('hidden');
+          authModal.classList.remove('hidden');
+          
+          if (type === 'login') {
+              loginForm.classList.remove('hidden');
+              registerForm.classList.add('hidden');
+          } else if (type === 'register') {
+              loginForm.classList.add('hidden');
+              registerForm.classList.remove('hidden');
+          }
+      }
+
+      function closeModal() {
+          authModal.classList.add('hidden');
+      }
+
+      function switchForm(type) {
+          if (type === 'login') {
+              loginForm.classList.remove('hidden');
+              registerForm.classList.add('hidden');
+          } else {
+              loginForm.classList.add('hidden');
+              registerForm.classList.remove('hidden');
+          }
+      }
+
+      authModal.addEventListener('click', (e) => {
+          if (e.target === authModal) {
+              closeModal();
+          }
+      });
+
+      // 4. Animation au scroll
+      function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+          var windowHeight = window.innerHeight;
+          var elementTop = reveals[i].getBoundingClientRect().top;
+          var elementVisible = 100; 
+
+          if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+          }
+        }
+      }
+
+      window.addEventListener("scroll", reveal);
+      reveal();
+    </script>
+  </body>
+</html>
