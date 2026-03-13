@@ -88,163 +88,70 @@
     </style>
   </head>
   <body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
-    <!-- NAVIGATION PRINCIPALE -->
-    <nav
-      class="bg-mateBlue text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md"
-    >
-      <div class="flex items-center gap-2">
-        <img
-          src="Logo_Matematikup.png"
-          alt="Logo Matematikup"
-          class="h-10 w-auto"
-        />
-        <div class="font-bold text-2xl tracking-wider">MATEMATIKUP</div>
-      </div>
+    <!-- ═══════════════════════════════════════════════════
+         NAVBAR — injectée via matematikup-shared.js
+         ═══════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════════════
+     MATEMATIKUP — NAVBAR PARTAGÉE
+     Usage : <div id="navbar-placeholder"></div>
+             <script>loadNavbar('accueil')</script>  ← page active
+     ═══════════════════════════════════════════════════════ -->
+<nav class="bg-[#0d2b56] text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md" id="main-nav">
 
-      <!-- Menu Desktop -->
-      <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
-        <a href="#" class="text-mateOrange border-b-2 border-mateOrange pb-1"
-          >Accueil</a
-        >
-        <a href="program.html" class="hover:text-mateOrange transition"
-          >Nos programmes</a
-        >
-        <a href="examens.html" class="hover:text-mateOrange transition"
-          >Examen & concours</a
-        >
-        <a href="apropos.html" class="hover:text-mateOrange transition"
-          >A propos</a
-        >
+  <!-- Logo -->
+  <div class="flex items-center gap-2">
+    <img src="Logo_Matematikup.png" alt="Logo Matematikup" class="h-10 w-auto" />
+    <a href="index.html" class="font-bold text-2xl tracking-wider hover:text-[#ffa300] transition">MATEMATIKUP</a>
+  </div>
 
-        <!-- PARTIE COMPTE -->
-        <div class="relative">
-          <button
-            id="accountBtn"
-            class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ff9d00] hover:text-[#0b2239] transition duration-300"
-          >
-            <i class="fas fa-user-circle text-lg"></i>
-            <span>Compte</span>
-            <i class="fas fa-chevron-down text-xs"></i>
-          </button>
+  <!-- Menu Desktop -->
+  <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+    <a href="index.html"      data-page="accueil"    class="nav-link hover:text-[#ffa300] transition">Accueil</a>
+    <a href="program.html" data-page="programmes" class="nav-link hover:text-[#ffa300] transition">Nos programmes</a>
+    <a href="examens.html"    data-page="examens"    class="nav-link hover:text-[#ffa300] transition">Examen &amp; concours</a>
+    <a href="apropos.html"    data-page="apropos"    class="nav-link hover:text-[#ffa300] transition">A propos</a>
 
-          <!-- Dropdown Menu Desktop -->
-          <div
-            id="dropdownMenu"
-            class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50 transform origin-top-right transition-all"
-          >
-            <button
-              onclick="openModal('login')"
-              class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2"
-            >
-              <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
-            </button>
-            <button
-              onclick="openModal('register')"
-              class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2"
-            >
-              <i class="fas fa-user-plus text-[#0b2239]"></i> S'inscrire
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bouton Hamburger Mobile -->
-      <button
-        id="hamburgerBtn"
-        class="md:hidden text-white text-2xl focus:outline-none"
-      >
-        <i class="fas fa-bars"></i>
+    <!-- Compte Dropdown -->
+    <div class="relative">
+      <button id="accountBtn" class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ffa300] hover:text-[#0b2239] transition duration-300">
+        <i class="fas fa-user-circle text-lg"></i>
+        <span>Compte</span>
+        <i class="fas fa-chevron-down text-xs"></i>
       </button>
-    </nav>
-
-    <!-- MENU MOBILE OVERLAY -->
-    <div
-      id="mobileMenu"
-      class="fixed inset-0 bg-mateBlue z-[45] hidden flex-col pt-20 px-8 md:hidden"
-    >
-      <button
-        id="closeMobileMenu"
-        class="absolute top-6 right-6 text-white text-3xl"
-      >
-        &times;
-      </button>
-
-      <div class="flex flex-col space-y-6 text-xl font-medium text-white">
-        <a href="#" class="border-b border-white/20 pb-2">Accueil</a>
-        <a href="program.html" class="border-b border-white/20 pb-2"
-          >Nos programmes</a
-        >
-        <a href="examens.html" class="border-b border-white/20 pb-2"
-          >Examen & concours</a
-        >
-        <a
-          href="apropos.html"
-          class="border-b border-white/20 pb-2"
-          onclick="closeMobileMenuFunc()"
-          >A propos</a
-        >
-      </div>
-
-      <div class="mt-10 flex flex-col gap-4">
-        <button
-          onclick="
-            openModal('login');
-            closeMobileMenuFunc();
-          "
-          class="bg-mateOrange text-white py-3 rounded-lg font-bold"
-        >
-          Se connecter
-        </button>
-        <button
-          onclick="
-            openModal('register');
-            closeMobileMenuFunc();
-          "
-          class="border border-white text-white py-3 rounded-lg font-bold hover:bg-white hover:text-mateBlue transition"
-        >
-          S'inscrire
-        </button>
+      <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50">
+        <button onclick="openModal('login')"    class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-sign-in-alt text-[#ffa300]"></i> Se connecter</button>
+        <button onclick="openModal('register')" class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-user-plus text-[#0d2b56]"></i> S'inscrire</button>
       </div>
     </div>
+  </div>
 
-    <!-- CONTENU PRINCIPAL -->
+  <!-- Hamburger Mobile -->
+  <button id="hamburgerBtn" class="md:hidden text-white text-2xl focus:outline-none">
+    <i class="fas fa-bars"></i>
+  </button>
+</nav>
+
+<!-- Menu Mobile Overlay -->
+<div id="mobileMenu" class="fixed inset-0 bg-[#0d2b56] z-[45] hidden flex-col pt-20 px-8 md:hidden">
+  <button id="closeMobileMenu" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+  <div class="flex flex-col space-y-6 text-xl font-medium text-white">
+    <a href="index.html"      class="border-b border-white/20 pb-2">Accueil</a>
+    <a href="program.html" class="border-b border-white/20 pb-2">Nos programmes</a>
+    <a href="examens.html"    class="border-b border-white/20 pb-2">Examen &amp; concours</a>
+    <a href="apropos.html"    class="border-b border-white/20 pb-2">A propos</a>
+  </div>
+  <div class="mt-10 flex flex-col gap-4">
+    <button onclick="openModal('login');  closeMobileMenuFunc();" class="bg-[#ffa300] text-white py-3 rounded-lg font-bold">Se connecter</button>
+    <button onclick="openModal('register'); closeMobileMenuFunc();" class="border border-white text-white py-3 rounded-lg font-bold hover:bg-white hover:text-[#0d2b56] transition">S'inscrire</button>
+  </div>
+</div>
+
+    <!-- ═══════════════════════════════════════════════════
+         HERO PRINCIPAL
+         ═══════════════════════════════════════════════════ -->
     <div class="min-h-screen flex flex-col font-sans">
-      <header
-        class="relative flex-grow flex flex-col bg-[#0b2239] overflow-hidden"
-      >
-        <nav
-          class="relative z-20 flex justify-between items-center px-8 py-6 max-w-7xl mx-auto w-full"
-        >
-          <!-- Nav Interne (Desktop) -->
-          <div class="hidden md:flex items-center gap-1">
-            <span class="text-white font-bold text-2xl tracking-tighter"
-              >MATEMATIKUP</span
-            >
-            <div
-              class="bg-orange-500 rounded-full w-6 h-6 flex items-center justify-center text-[10px] text-white font-bold"
-            >
-              π
-            </div>
-          </div>
-
-          <div class="hidden md:flex gap-8 text-white/90 text-sm font-medium">
-            <a
-              href="#"
-              class="text-orange-400 border-b-2 border-orange-400 pb-1"
-              >Accueil</a
-            >
-            <a href="program.html" class="hover:text-orange-400 transition"
-              >Nos programmes</a
-            >
-            <a href="examens.html" class="hover:text-orange-400 transition"
-              >Examen & concours</a
-            >
-            <a href="apropos.html" class="hover:text-orange-400 transition"
-              >A propos</a
-            >
-          </div>
-        </nav>
-
+      <!-- ── Section Hero ── -->
+      <header class="relative flex-grow flex flex-col bg-[#0b2239] overflow-hidden">
         <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
           <div
             class="absolute top-20 left-10 text-white text-4xl transform -rotate-12 border border-dashed border-white p-4 rounded-full"
@@ -261,7 +168,7 @@
             </svg>
           </div>
           <div class="absolute top-1/2 right-10 text-white text-4xl">
-            x = ax + b
+            y = ax + b
           </div>
           <div
             class="absolute bottom-10 right-20 text-white text-7xl font-serif"
@@ -282,9 +189,9 @@
             class="text-white text-2xl md:text-5xl font-extrabold leading-tight max-w-5xl"
           >
             Avancez à votre propre rythme, développez<br />
-            votre confiance, atteignez vos objectifs et...<br />
+            
             <span class="text-[#f5a623] tracking-wide"
-              >apprendre en s'amusant
+              > et apprendre en s'amusant
             </span>
             avec
             <span class="text-[#f5a623] tracking-wide">MATEMATIKUP!!! </span>
@@ -574,7 +481,7 @@
 
         <div class="text-right">
           <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
-          <p class="text-gray-300 mb-8">cours@matematikup.mg</p>
+          <p class="text-gray-300 mb-8"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="05666a70777645686471606864716c6e70752b6862">[email&#160;protected]</a></p>
 
           <div class="text-gray-500 text-sm relative">
             <p>© 2025 Matematikup</p>
@@ -739,99 +646,97 @@
       </div>
     </div>
 
-    <script>
-      // 1. Gestion du Dropdown du compte (Desktop)
-      const accountBtn = document.getElementById("accountBtn");
-      const dropdownMenu = document.getElementById("dropdownMenu");
-
-      accountBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        dropdownMenu.classList.toggle("hidden");
-      });
-
-      window.addEventListener("click", (e) => {
-        if (
-          !dropdownMenu.contains(e.target) &&
-          !accountBtn.contains(e.target)
-        ) {
-          dropdownMenu.classList.add("hidden");
+        
+    <!-- Fin des scripts -->
+    
+  <script>
+    // ── Navbar active link ──────────────────────────────
+    function setActiveNavLink(activePage) {
+      document.querySelectorAll('[data-page]').forEach(link => {
+        if (link.dataset.page === activePage) {
+          link.classList.add('text-[#ffa300]', 'border-b-2', 'border-[#ffa300]', 'pb-1');
+          link.classList.remove('hover:text-[#ffa300]');
         }
       });
+    }
 
-      // 2. Gestion Menu Mobile
-      const hamburgerBtn = document.getElementById("hamburgerBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-      const closeMobileMenuBtn = document.getElementById("closeMobileMenu");
-
-      hamburgerBtn.addEventListener("click", () => {
-        mobileMenu.classList.remove("hidden");
-        mobileMenu.classList.add("flex");
-      });
-
-      function closeMobileMenuFunc() {
-        mobileMenu.classList.add("hidden");
-        mobileMenu.classList.remove("flex");
+    // ── Dropdown compte ────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const accountBtn   = document.getElementById('accountBtn');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      if (accountBtn && dropdownMenu) {
+        accountBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', e => {
+          if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target))
+            dropdownMenu.classList.add('hidden');
+        });
       }
 
+      // ── Menu mobile ──────────────────────────────────
+      const hamburgerBtn       = document.getElementById('hamburgerBtn');
+      const mobileMenu         = document.getElementById('mobileMenu');
+      const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+      if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+        });
+      }
       if (closeMobileMenuBtn) {
-        closeMobileMenuBtn.addEventListener("click", closeMobileMenuFunc);
+        closeMobileMenuBtn.addEventListener('click', closeMobileMenuFunc);
       }
 
-      // 3. Gestion des Modals
-      const authModal = document.getElementById("authModal");
-      const loginForm = document.getElementById("loginForm");
-      const registerForm = document.getElementById("registerForm");
+      // ── Modal backdrop ───────────────────────────────
+      const authModal = document.getElementById('authModal');
+      authModal?.addEventListener('click', e => { if (e.target === authModal) closeModal(); });
 
-      function openModal(type) {
-        dropdownMenu.classList.add("hidden");
-        authModal.classList.remove("hidden");
+      // ── Scroll reveal ────────────────────────────────
+      revealOnScroll();
+    });
 
-        if (type === "login") {
-          loginForm.classList.remove("hidden");
-          registerForm.classList.add("hidden");
-        } else if (type === "register") {
-          loginForm.classList.add("hidden");
-          registerForm.classList.remove("hidden");
-        }
+    function closeMobileMenuFunc() {
+      const m = document.getElementById('mobileMenu');
+      m?.classList.add('hidden');
+      m?.classList.remove('flex');
+    }
+
+    function openModal(type) {
+      document.getElementById('dropdownMenu')?.classList.add('hidden');
+      document.getElementById('authModal')?.classList.remove('hidden');
+      if (type === 'login') {
+        document.getElementById('loginForm')?.classList.remove('hidden');
+        document.getElementById('registerForm')?.classList.add('hidden');
+      } else {
+        document.getElementById('loginForm')?.classList.add('hidden');
+        document.getElementById('registerForm')?.classList.remove('hidden');
       }
+    }
 
-      function closeModal() {
-        authModal.classList.add("hidden");
+    function closeModal() {
+      document.getElementById('authModal')?.classList.add('hidden');
+    }
+
+    function switchForm(type) {
+      if (type === 'login') {
+        document.getElementById('loginForm')?.classList.remove('hidden');
+        document.getElementById('registerForm')?.classList.add('hidden');
+      } else {
+        document.getElementById('loginForm')?.classList.add('hidden');
+        document.getElementById('registerForm')?.classList.remove('hidden');
       }
+    }
 
-      function switchForm(type) {
-        if (type === "login") {
-          loginForm.classList.remove("hidden");
-          registerForm.classList.add("hidden");
-        } else {
-          loginForm.classList.add("hidden");
-          registerForm.classList.remove("hidden");
-        }
-      }
-
-      authModal.addEventListener("click", (e) => {
-        if (e.target === authModal) {
-          closeModal();
-        }
+    function revealOnScroll() {
+      document.querySelectorAll('.reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100)
+          el.classList.add('active');
       });
-
-      // 4. Animation au scroll
-      function reveal() {
-        var reveals = document.querySelectorAll(".reveal");
-
-        for (var i = 0; i < reveals.length; i++) {
-          var windowHeight = window.innerHeight;
-          var elementTop = reveals[i].getBoundingClientRect().top;
-          var elementVisible = 100;
-
-          if (elementTop < windowHeight - elementVisible) {
-            reveals[i].classList.add("active");
-          }
-        }
-      }
-
-      window.addEventListener("scroll", reveal);
-      reveal();
-    </script>
-  </body>
-</html>
+    }
+    window.addEventListener('scroll', revealOnScroll);
+  </script>
+  <script>document.addEventListener('DOMContentLoaded', () => setActiveNavLink('accueil'));</script>
+</body>
+    </html>

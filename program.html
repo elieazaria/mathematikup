@@ -1,453 +1,644 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nos Programmes - Matematikup</title>
-    <link rel="icon" type="image/png" href="Logo_Matematikup.png" />
-    <script src="https://cdn.tailwindcss.com"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nos programmes – Matematikup</title>
+  <link rel="icon" type="image/png" href="Logo_Matematikup.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { mateBlue: '#0d2b56', mateOrange: '#ffa300' },
+        fontFamily: { sans: ['Segoe UI','Roboto','Helvetica','Arial','sans-serif'] },
+      }},
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* ═══════════════════════════════════════════════════
+       MEGA-DROPDOWN
+    ═══════════════════════════════════════════════════ */
+    #mega-dropdown {
+      display: none;
+      position: fixed;
+      top: 64px; /* hauteur navbar */
+      left: 0; right: 0;
+      z-index: 40;
+      background: #0d2b56;
+      border-top: 2px solid #ffa300;
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    }
+    #mega-dropdown.open { display: flex; }
 
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              mateBlue: "#0d2b56",
-              mateOrange: "#ffa300",
-              mateOrangeLight: "#ffd966",
-            },
-            fontFamily: {
-              sans: ["Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
-            },
-          },
-        },
-      };
-    </script>
+    /* Colonne gauche : liste des classes */
+    .mega-class-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #cbd5e1;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background .15s, color .15s, border-color .15s;
+      white-space: nowrap;
+    }
+    .mega-class-item:hover,
+    .mega-class-item.active {
+      background: rgba(255,163,0,.12);
+      color: #ffa300;
+      border-left-color: #ffa300;
+    }
+    .mega-class-item.active { color: #ffa300; }
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    /* Séparateur de section collège/lycée */
+    .mega-section-label {
+      padding: 10px 24px 6px;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #ffa300;
+      border-bottom: 1px solid rgba(255,163,0,.2);
+      margin-bottom: 2px;
+    }
 
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
-      
-      body {
-        font-family: 'Montserrat', sans-serif;
-      }
-      
-      .chapter-card {
-        transition: all 0.3s ease;
-      }
-      
-      .chapter-card:hover {
-        transform: translateX(8px);
-        box-shadow: 0 8px 25px rgba(13, 43, 86, 0.3);
-      }
-      
-      .chapter-card .arrow {
-        transition: transform 0.3s ease;
-      }
-      
-      .chapter-card:hover .arrow {
-        transform: translateX(5px);
-      }
-      
-      .math-pattern {
-        background-image: 
-          radial-gradient(circle at 20% 80%, rgba(255, 163, 0, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(13, 43, 86, 0.1) 0%, transparent 50%);
-      }
-      
-      .floating-shape {
-        position: absolute;
-        opacity: 0.08;
-        animation: float 6s ease-in-out infinite;
-      }
-      
-      @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(5deg); }
-      }
-    </style>
-  </head>
-  <body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
-    
-    <!-- NAVIGATION PRINCIPALE -->
-    <nav
-      class="bg-mateBlue text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md"
-    >
-      <a href="index.html" class="flex items-center gap-2">
-         <img src="Logo_Matematikup.png" alt="Logo Matematikup" class="h-10 w-auto"/>
-        <div class="font-bold text-2xl tracking-wider">
-          MATEMATIKUP
-        </div>
-      </a>
+    /* Colonne droite : chapitres */
+    .mega-chap-item {
+      display: block;
+      padding: 9px 20px;
+      font-size: .82rem;
+      color: #cbd5e1;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      transition: color .15s, background .15s;
+      cursor: pointer;
+    }
+    .mega-chap-item:hover { color: #ffa300; background: rgba(255,163,0,.06); }
 
-      <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
-        <a href="index.html" class="hover:text-mateOrange transition">Accueil</a>
-        <a href="programmes.html" class="text-mateOrange border-b-2 border-mateOrange pb-1"
-          >Nos programmes</a
-        >
-        <a href="examens.html" class="hover:text-mateOrange transition"
-          >Examen & concours</a
-        >
-        <a href="apropos.html" class="hover:text-mateOrange transition">A propos</a>
-      
-        <!-- PARTIE COMPTE -->
-        <div class="relative">
-          <button id="accountBtn" class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ff9d00] hover:text-[#0b2239] transition duration-300">
-            <i class="fas fa-user-circle text-lg"></i>
-            <span>Compte</span>
-            <i class="fas fa-chevron-down text-xs"></i>
-          </button>
+    /* ═══════════════════════════════════════════════════
+       PAGE PROGRAMME (vue détaillée)
+    ═══════════════════════════════════════════════════ */
+    #page-programme { display: none; }
+    #page-programme.open { display: block; }
 
-          <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50 transform origin-top-right transition-all">
-            <button onclick="openModal('login')" class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2">
-                <i class="fas fa-sign-in-alt text-[#ff9d00]"></i> Se connecter
-            </button>
-            <button onclick="openModal('register')" class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2">
-                <i class="fas fa-user-plus text-[#0b2239]"></i> S'inscrire
-            </button>
-          </div>
-        </div>
-      </div>
+    .chapter-card { transition: box-shadow .2s ease; }
+    .chapter-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,.12); }
+    .chapter-card:hover .icon-wrap { background-color: rgba(255,163,0,.10) !important; }
+    .chapter-card:hover .chap-icon { color: #ffa300 !important; }
+    .chapter-card:hover .chap-title { color: #ffa300 !important; }
 
-      <button id="mobileMenuBtn" class="md:hidden text-white text-2xl">
-        <i class="fas fa-bars"></i>
+    .sidebar-active {
+      background-color: rgba(255,163,0,.10);
+      color: #ffa300 !important;
+      font-weight: 700;
+      border-left: 2px solid #ffa300;
+    }
+
+    .badge-college { background-color: #3b82f6; }
+    .badge-bepc    { background-color: #f59e0b; }
+    .badge-lycee   { background-color: #0d2b56; border:1px solid rgba(255,255,255,.2); }
+    .badge-bac     { background-color: #f43f5e; }
+
+    /* Overlay sombre derrière le mega-dropdown */
+    #mega-overlay {
+      display: none;
+      position: fixed;
+      inset: 64px 0 0 0;
+      background: rgba(0,0,0,.4);
+      z-index: 39;
+    }
+    #mega-overlay.open { display: block; }
+
+    /* Bouton Nos programmes actif */
+    #btn-programmes.mega-open {
+      color: #ffa300;
+      border-bottom: 2px solid #ffa300;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-800 bg-gray-50 overflow-x-hidden">
+
+<!-- ══════════════════════════════════════════════════════════════
+     NAVBAR FIXE
+══════════════════════════════════════════════════════════════ -->
+<nav class="bg-[#0d2b56] text-white py-4 px-6 md:px-12 flex justify-between items-center fixed w-full z-50 shadow-md" style="height:64px;">
+
+  <div class="flex items-center gap-2">
+    <img src="Logo_Matematikup.png" alt="Logo Matematikup" class="h-9 w-auto" />
+    <a href="index.html" class="font-bold text-2xl tracking-wider hover:text-[#ffa300] transition">MATEMATIKUP</a>
+  </div>
+
+  <!-- Desktop Menu -->
+  <div class="hidden md:flex space-x-8 text-sm font-medium items-center">
+    <a href="index.html" class="hover:text-[#ffa300] transition">Accueil</a>
+
+    <!-- Bouton Nos programmes — déclenche le mega-dropdown -->
+    <button id="btn-programmes"
+            class="hover:text-[#ffa300] transition pb-1 flex items-center gap-1 focus:outline-none"
+            onclick="toggleMega()">
+      Nos programmes
+      <i id="mega-chevron" class="fas fa-chevron-down text-xs transition-transform duration-200"></i>
+    </button>
+
+    <a href="examens.html" class="hover:text-[#ffa300] transition">Examen &amp; concours</a>
+    <a href="apropos.html" class="hover:text-[#ffa300] transition">A propos</a>
+
+    <div class="relative">
+      <button id="accountBtn" class="flex items-center gap-2 bg-[#1a3b5c] px-4 py-2 rounded-full hover:bg-[#ffa300] hover:text-[#0b2239] transition duration-300">
+        <i class="fas fa-user-circle text-lg"></i><span>Compte</span><i class="fas fa-chevron-down text-xs"></i>
       </button>
-    </nav>
-
-    <!-- CONTENU PRINCIPAL -->
-    <main class="pt-24 pb-16 min-h-screen math-pattern relative">
-      
-      <!-- Formes décoratives flottantes -->
-      <div class="floating-shape text-mateBlue text-9xl font-bold top-32 left-10">
-        π
+      <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl text-gray-800 overflow-hidden z-50">
+        <button onclick="openModal('login')"    class="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 flex items-center gap-2"><i class="fas fa-sign-in-alt text-[#ffa300]"></i> Se connecter</button>
+        <button onclick="openModal('register')" class="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-2"><i class="fas fa-user-plus text-[#0d2b56]"></i> S'inscrire</button>
       </div>
-      <div class="floating-shape text-mateOrange text-8xl font-bold bottom-20 right-16" style="animation-delay: -2s;">
-        ∑
+    </div>
+  </div>
+
+  <button id="hamburgerBtn" class="md:hidden text-white text-2xl focus:outline-none">
+    <i class="fas fa-bars"></i>
+  </button>
+</nav>
+
+<!-- Menu Mobile -->
+<div id="mobileMenu" class="fixed inset-0 bg-[#0d2b56] z-[45] hidden flex-col pt-20 px-8 md:hidden">
+  <button id="closeMobileMenu" class="absolute top-6 right-6 text-white text-3xl">&times;</button>
+  <div class="flex flex-col space-y-6 text-xl font-medium text-white">
+    <a href="index.html" class="border-b border-white/20 pb-2">Accueil</a>
+    <div>
+      <button class="border-b border-white/20 pb-2 w-full text-left text-[#ffa300] flex items-center justify-between"
+              onclick="document.getElementById('mobile-classes').classList.toggle('hidden')">
+        Nos programmes <i class="fas fa-chevron-down text-sm"></i>
+      </button>
+      <div id="mobile-classes" class="hidden mt-3 ml-4 flex flex-col gap-3 text-base"></div>
+    </div>
+    <a href="examens.html" class="border-b border-white/20 pb-2">Examen &amp; concours</a>
+    <a href="apropos.html" class="border-b border-white/20 pb-2">A propos</a>
+  </div>
+  <div class="mt-10 flex flex-col gap-4">
+    <button onclick="openModal('login');  closeMobileMenuFunc();" class="bg-[#ffa300] text-white py-3 rounded-lg font-bold">Se connecter</button>
+    <button onclick="openModal('register'); closeMobileMenuFunc();" class="border border-white text-white py-3 rounded-lg font-bold hover:bg-white hover:text-[#0d2b56] transition">S'inscrire</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MEGA-DROPDOWN
+     Colonne gauche : classes  |  Colonne droite : chapitres
+══════════════════════════════════════════════════════════════ -->
+<div id="mega-dropdown">
+  <!-- Colonne gauche -->
+  <div class="w-72 flex-shrink-0 border-r border-white/10 overflow-y-auto" style="max-height:calc(100vh - 64px);">
+    <div id="mega-left"></div>
+  </div>
+
+  <!-- Colonne droite -->
+  <div class="flex-grow overflow-y-auto" style="max-height:calc(100vh - 64px);">
+
+    <!-- En-tête colonne droite -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10 sticky top-0 bg-[#0d2b56] z-10">
+      <div>
+        <span id="mega-right-badge" class="inline-block text-white text-xs font-bold px-3 py-1 rounded-full mr-2 badge-college">Collège</span>
+        <span id="mega-right-title" class="text-white font-bold text-lg">6ème</span>
       </div>
-      <div class="floating-shape text-mateBlue text-7xl font-bold top-1/2 right-10" style="animation-delay: -4s;">
-        √
-      </div>
-      
-      <!-- En-tête de la page -->
-      <div class="max-w-6xl mx-auto px-6 mb-12">
-        <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-extrabold text-mateBlue mb-4 tracking-tight">
-            CHAPITRES DE PREMIÈRE SCIENTIFIQUE
-          </h1>
-          <div class="w-24 h-1 bg-mateOrange mx-auto rounded-full"></div>
-          <p class="text-gray-600 mt-4 text-lg">
-            Explorez nos programmes de mathématiques complets et structurés
-          </p>
-        </div>
-      </div>
-
-      <!-- Liste des chapitres -->
-      <div class="max-w-5xl mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          <!-- Colonne gauche -->
-          <div class="space-y-4">
-            <!-- Chapitre 1 -->
-            <a href="chapitre.html?id=1" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    1
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">SECOND DEGRÉ</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 2 -->
-            <a href="chapitre.html?id=2" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    2
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Dérivation</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 3 -->
-            <a href="chapitre.html?id=3" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    3
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Suites</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 4 -->
-            <a href="chapitre.html?id=4" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    4
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Fonction exponentielle</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 5 -->
-            <a href="chapitre.html?id=5" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    5
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Trigonométrie</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-          </div>
-
-          <!-- Colonne droite -->
-          <div class="space-y-4">
-            <!-- Chapitre 6 -->
-            <a href="chapitre.html?id=6" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    6
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Produit scalaire</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 7 -->
-            <a href="chapitre.html?id=7" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    7
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Équations de droites et cercles</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chapitre 8 -->
-            <a href="chapitre.html?id=8" class="chapter-card block bg-mateBlue rounded-xl overflow-hidden shadow-lg">
-              <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-mateOrange rounded-lg flex items-center justify-center font-bold text-white text-xl">
-                    8
-                  </div>
-                  <div>
-                    <h3 class="text-white font-bold text-lg">Probabilités et variables aléatoires</h3>
-                  </div>
-                </div>
-                <div class="flex items-center gap-3">
-                  <i class="fas fa-chevron-right text-mateOrange arrow"></i>
-                </div>
-              </div>
-            </a>
-
-            <!-- Bouton flottant -->
-            <div class="flex justify-end mt-8">
-              <button class="w-16 h-16 bg-mateBlue rounded-full shadow-xl flex items-center justify-center hover:bg-mateOrange transition-all duration-300 hover:scale-110">
-                <i class="fas fa-arrow-up text-white text-xl"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="bg-mateBlue text-white py-12 px-6 border-t border-blue-900">
-      <div
-        class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end"
-      >
-        <div class="mb-6 md:mb-0">
-          <h4 class="font-bold text-2xl mb-4">Suivez-nous sur:</h4>
-          <div class="flex space-x-4">
-            <a href="#" class="text-3xl hover:text-mateOrange transition"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a href="#" class="text-3xl hover:text-mateOrange transition"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a href="#" class="text-3xl hover:text-mateOrange transition"
-              ><i class="fab fa-tiktok"></i
-            ></a>
-            <a href="#" class="text-3xl hover:text-mateOrange transition"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
-          </div>
-        </div>
-
-        <div class="text-right">
-          <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
-          <p class="text-gray-300 mb-8">cours@matematikup.mg</p>
-          <div class="text-gray-500 text-sm">
-            <p>© 2025 Matematikup</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- MODAL POUR CONNEXION ET INSCRIPTION -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative overflow-hidden transform transition-all">
-            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">&times;</button>
-
-            <div id="loginForm" class="p-8">
-                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">Se connecter</h2>
-                <form onsubmit="event.preventDefault(); alert('Tentative de connexion...');">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Email ou Numéro mobile</label>
-                        <input type="text" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre email ou numéro">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
-                        <input type="password" class="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Entrez votre mot de passe">
-                    </div>
-                    <button class="bg-mateOrange hover:bg-orange-500 text-white font-bold py-3 px-4 rounded focus:outline-none w-full transition" type="submit">
-                        Se connecter
-                    </button>
-                </form>
-                <p class="text-center text-gray-500 text-xs mt-6">
-                    Pas encore de compte? 
-                    <button onclick="switchForm('register')" class="text-mateOrange font-bold hover:underline">S'inscrire</button>
-                </p>
-            </div>
-
-            <div id="registerForm" class="p-8 hidden">
-                <h2 class="text-2xl font-bold text-mateBlue mb-6 text-center">S'inscrire</h2>
-                <form onsubmit="event.preventDefault(); alert('Tentative d\'inscription...');">
-                    <div class="mb-3">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Nom complet</label>
-                        <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre nom complet">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
-                        <input type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre email">
-                    </div>
-                     <div class="mb-3">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Numéro mobile</label>
-                        <input type="tel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Votre numéro">
-                    </div>
-                    <div class="mb-3">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
-                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Créer un mot de passe">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
-                        <input type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-mateOrange" placeholder="Retapez le mot de passe">
-                    </div>
-                    <button class="bg-mateBlue hover:bg-blue-900 text-white font-bold py-3 px-4 rounded focus:outline-none w-full transition" type="submit">
-                        S'inscrire
-                    </button>
-                </form>
-                <p class="text-center text-gray-500 text-xs mt-6">
-                    Déjà un compte? 
-                    <button onclick="switchForm('login')" class="text-mateOrange font-bold hover:underline">Se connecter</button>
-                </p>
-            </div>
-        </div>
+      <button onclick="openProgramme()"
+              class="bg-[#ffa300] hover:bg-orange-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition flex items-center gap-2">
+        Voir le programme complet <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
 
-    <script>
-      // Gestion du Dropdown du compte
-      const accountBtn = document.getElementById('accountBtn');
-      const dropdownMenu = document.getElementById('dropdownMenu');
+    <!-- Liste des chapitres -->
+    <div id="mega-right" class="py-2"></div>
 
-      accountBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          dropdownMenu.classList.toggle('hidden');
-      });
+  </div>
+</div>
 
-      window.addEventListener('click', (e) => {
-          if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target)) {
-              dropdownMenu.classList.add('hidden');
-          }
-      });
+<!-- Overlay -->
+<div id="mega-overlay" onclick="closeMega()"></div>
 
-      // Gestion des Modals
-      const authModal = document.getElementById('authModal');
-      const loginForm = document.getElementById('loginForm');
-      const registerForm = document.getElementById('registerForm');
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE PROGRAMME DÉTAILLÉE (cachée par défaut)
+══════════════════════════════════════════════════════════════ -->
+<div id="page-programme">
 
-      function openModal(type) {
-          dropdownMenu.classList.add('hidden');
-          authModal.classList.remove('hidden');
-          
-          if (type === 'login') {
-              loginForm.classList.remove('hidden');
-              registerForm.classList.add('hidden');
-          } else if (type === 'register') {
-              loginForm.classList.add('hidden');
-              registerForm.classList.remove('hidden');
-          }
-      }
+  <!-- HERO -->
+  <header class="bg-[#0d2b56] pt-20 pb-12 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10"
+         style="background-image:radial-gradient(#1a3c6e 1px,transparent 1px);background-size:28px 28px;"></div>
+    <div class="relative z-10 max-w-6xl mx-auto">
 
-      function closeModal() {
-          authModal.classList.add('hidden');
-      }
+      <!-- Fil d'Ariane -->
+      <div class="flex items-center gap-2 text-xs text-white/50 mb-4">
+        <a href="index.html" class="hover:text-[#ffa300] transition">Accueil</a>
+        <span>/</span>
+        <button onclick="closeProgramme()" class="hover:text-[#ffa300] transition">Nos programmes</button>
+        <span>/</span>
+        <span id="hero-breadcrumb" class="text-[#ffa300] font-semibold">6ème</span>
+      </div>
 
-      function switchForm(type) {
-          if (type === 'login') {
-              loginForm.classList.remove('hidden');
-              registerForm.classList.add('hidden');
-          } else {
-              loginForm.classList.add('hidden');
-              registerForm.classList.remove('hidden');
-          }
-      }
+      <div class="flex flex-col md:flex-row md:items-end gap-6">
+        <div class="flex-grow">
+          <span id="hero-badge" class="inline-block text-white text-xs font-bold px-3 py-1 rounded-full mb-3 badge-college">Collège</span>
+          <h1 id="hero-title" class="text-3xl md:text-5xl font-bold text-white mb-3">6ème</h1>
+          <p  id="hero-desc"  class="text-blue-200 text-base max-w-2xl"></p>
+        </div>
+        <div class="flex gap-4 flex-shrink-0">
+          <div class="bg-white/10 rounded-xl px-5 py-3 text-center">
+            <p id="hero-chap-count" class="text-2xl font-bold text-[#ffa300]">0</p>
+            <p class="text-white/60 text-xs">Chapitres</p>
+          </div>
+          <div class="bg-white/10 rounded-xl px-5 py-3 text-center">
+            <p class="text-2xl font-bold text-[#ffa300]">&#x221e;</p>
+            <p class="text-white/60 text-xs">Exercices</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      authModal.addEventListener('click', (e) => {
-          if (e.target === authModal) {
-              closeModal();
-          }
-      });
-    </script>
-  </body>
+  <!-- CONTENU : sidebar + chapitres -->
+  <div class="max-w-6xl mx-auto px-4 py-10 flex gap-8">
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block w-56 flex-shrink-0">
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden sticky top-20">
+        <div class="bg-[#0d2b56] px-4 py-3">
+          <p class="text-[#ffa300] text-xs font-bold uppercase tracking-widest">Collège</p>
+        </div>
+        <ul id="sidebar-college"></ul>
+        <div class="bg-[#0d2b56] px-4 py-3">
+          <p class="text-[#ffa300] text-xs font-bold uppercase tracking-widest">Lycée</p>
+        </div>
+        <ul id="sidebar-lycee"></ul>
+      </div>
+    </aside>
+
+    <!-- GRILLE CHAPITRES -->
+    <main class="flex-grow min-w-0">
+      <h2 class="text-2xl font-bold text-[#0d2b56] mb-6">Chapitres du programme</h2>
+      <div id="chapters-grid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+
+      <!-- CTA -->
+      <div class="mt-10 bg-[#0d2b56] rounded-2xl p-8 text-white text-center relative overflow-hidden">
+        <div class="absolute right-6 top-3 text-8xl opacity-5 font-serif select-none">&pi;</div>
+        <h3 id="cta-title" class="text-xl font-bold mb-2">Prêt à commencer ?</h3>
+        <p class="text-blue-200 text-sm mb-5">Accédez à tous les cours, exercices et à l'assistant IA.</p>
+        <a href="/cours" class="bg-[#ffa300] hover:bg-orange-500 text-white font-bold py-2.5 px-8 rounded-lg transition inline-block">
+          Voir tous les cours <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     AUTH MODAL
+══════════════════════════════════════════════════════════════ -->
+<div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex justify-center items-center">
+  <div class="bg-white rounded-lg shadow-2xl w-full max-w-md mx-4 relative overflow-hidden">
+    <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10">&times;</button>
+    <div id="loginForm" class="p-8">
+      <h2 class="text-2xl font-bold text-[#0d2b56] mb-6 text-center">Se connecter</h2>
+      <form onsubmit="event.preventDefault();">
+        <div class="mb-4"><label class="block text-gray-700 text-sm font-semibold mb-2">Email ou Numéro mobile</label><input type="text" class="shadow border rounded w-full py-3 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Entrez votre email ou numéro" /></div>
+        <div class="mb-6"><label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label><input type="password" class="shadow border rounded w-full py-3 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Mot de passe" /></div>
+        <button type="submit" class="bg-[#ffa300] hover:bg-orange-500 text-white font-bold py-3 rounded w-full transition">Se connecter</button>
+      </form>
+      <p class="text-center text-gray-500 text-xs mt-6">Pas encore de compte ? <button onclick="switchForm('register')" class="text-[#ffa300] font-bold hover:underline">S'inscrire</button></p>
+    </div>
+    <div id="registerForm" class="p-8 hidden">
+      <h2 class="text-2xl font-bold text-[#0d2b56] mb-6 text-center">S'inscrire</h2>
+      <form onsubmit="event.preventDefault();">
+        <div class="mb-3"><label class="block text-gray-700 text-sm font-semibold mb-2">Nom complet</label><input type="text" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Votre nom complet" /></div>
+        <div class="mb-3"><label class="block text-gray-700 text-sm font-semibold mb-2">Email</label><input type="email" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Votre email" /></div>
+        <div class="mb-3"><label class="block text-gray-700 text-sm font-semibold mb-2">Numéro mobile</label><input type="tel" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Votre numéro" /></div>
+        <div class="mb-3"><label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label><input type="password" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Créer un mot de passe" /></div>
+        <div class="mb-6"><label class="block text-gray-700 text-sm font-semibold mb-2">Confirmer</label><input type="password" class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ffa300]" placeholder="Retapez le mot de passe" /></div>
+        <button type="submit" class="bg-[#0d2b56] hover:bg-blue-900 text-white font-bold py-3 rounded w-full transition">S'inscrire</button>
+      </form>
+      <p class="text-center text-gray-500 text-xs mt-6">Déjà un compte ? <button onclick="switchForm('login')" class="text-[#ffa300] font-bold hover:underline">Se connecter</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════ -->
+<footer class="bg-[#0d2b56] text-white py-12 px-6 border-t border-blue-900">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end">
+    <div class="mb-6 md:mb-0">
+      <h4 class="font-bold text-2xl mb-4">Suivez-nous sur :</h4>
+      <div class="flex space-x-4">
+        <a href="#" class="text-3xl hover:text-[#ffa300] transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="text-3xl hover:text-[#ffa300] transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-3xl hover:text-[#ffa300] transition"><i class="fab fa-tiktok"></i></a>
+        <a href="#" class="text-3xl hover:text-[#ffa300] transition"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="text-right">
+      <p class="text-gray-300 mb-1">+261 32 88 189 52</p>
+      <p class="text-gray-300 mb-8">contact@matematikup.mg</p>
+      <p class="text-gray-500 text-sm">© 2025 Matematikup</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DONNÉES
+══════════════════════════════════════════════════════════════ -->
+<script>
+const COLLEGE_CLASSES = [
+  { slug:'6eme',  label:'6ème',  chapitres:['Nombres entiers et décimaux','Fractions','Géométrie plane','Angles et droites','Périmètres et aires','Statistiques descriptives','Proportionnalité','Symétrie axiale'] },
+  { slug:'5eme',  label:'5ème',  chapitres:['Nombres relatifs','Fractions et opérations','Théorème de Pythagore','Volumes et solides','Proportionnalité et pourcentages','Probabilités (introduction)','Symétrie centrale','Calcul littéral'] },
+  { slug:'4eme',  label:'4ème',  chapitres:['Calcul algébrique','Équations du premier degré','Inéquations','Trigonométrie dans le triangle rectangle','Géométrie dans l\'espace','Transformations','Statistiques et représentations graphiques','Fonctions linéaires et affines'] },
+  { slug:'3eme',  label:'3ème',  chapitres:['Théorème de Thalès','Fonctions affines','Systèmes d\'équations','Géométrie dans l\'espace','Probabilités','Statistiques et diagrammes','Pythagore et trigonométrie — révisions','Préparation au BEPC'] },
+];
+const LYCEE_CLASSES = [
+  { slug:'seconde',       label:'Seconde',       chapitres:['Fonctions de référence','Vecteurs','Droites et systèmes','Statistiques bivariées','Probabilités','Géométrie repérée','Équations et inéquations','Suites numériques'] },
+  { slug:'premiere-l',    label:'Première L',    chapitres:['Suites arithmétiques et géométriques','Probabilités conditionnelles','Logique et raisonnement','Statistiques appliquées','Algèbre linéaire'] },
+  { slug:'premiere-s',    label:'Première S',    chapitres:['Dérivées et applications','Trigonométrie avancée','Suites','Géométrie dans l\'espace','Probabilités','Limites et continuité'] },
+  { slug:'terminale-a',   label:'Terminale A',   chapitres:['Fonctions et variations','Intégrales','Statistiques appliquées','Probabilités avancées','Algèbre et équations'] },
+  { slug:'terminale-c',   label:'Terminale C',   chapitres:['Analyse avancée','Nombres complexes','Matrices','Probabilités avancées','Géométrie dans l\'espace','Suites et récurrences','Algorithmique'] },
+  { slug:'terminale-d',   label:'Terminale D',   chapitres:['Fonctions avancées','Probabilités et statistiques','Dérivées et intégrales','Algèbre','Géométrie dans l\'espace'] },
+  { slug:'terminale-s',   label:'Terminale S',   chapitres:['Analyse (limites, dérivées, intégrales)','Nombres complexes','Matrices','Probabilités','Géométrie dans l\'espace','Algorithmique'] },
+  { slug:'terminale-l',   label:'Terminale L',   chapitres:['Mathématiques appliquées','Graphes et réseaux','Statistiques','Probabilités','Suites et logique'] },
+  { slug:'terminale-ose', label:'Terminale OSE', chapitres:['Optimisation','Modélisation','Algorithmique','Économie mathématique','Probabilités et statistiques'] },
+];
+
+const CLASS_DETAILS = {
+  '6eme':          { description:'Introduction aux mathématiques du collège. Découverte des nombres, de la géométrie et des premières notions statistiques.', badge:'Collège',      badgeClass:'badge-college' },
+  '5eme':          { description:'Approfondissement du calcul, découverte du théorème de Pythagore et des volumes.',                                          badge:'Collège',      badgeClass:'badge-college' },
+  '4eme':          { description:'Algèbre, inéquations, trigonométrie dans le triangle rectangle. Préparation à la 3ème.',                                    badge:'Collège',      badgeClass:'badge-college' },
+  '3eme':          { description:"Consolidation des acquis du collège et préparation au BEPC. Fonctions, géométrie dans l'espace.",                           badge:'BEPC',         badgeClass:'badge-bepc'    },
+  'seconde':       { description:'Entrée au lycée : fonctions, vecteurs, statistiques et probabilités. Base indispensable pour la suite.',                    badge:'Lycée',        badgeClass:'badge-lycee'   },
+  'premiere-l':    { description:'Mathématiques en Première Littéraire. Accent sur les suites, les probabilités et la logique.',                              badge:'Lycée',        badgeClass:'badge-lycee'   },
+  'premiere-s':    { description:'Mathématiques en Première Scientifique. Dérivées, trigonométrie et suites.',                                                badge:'Lycée',        badgeClass:'badge-lycee'   },
+  'terminale-a':   { description:'Terminale série A. Fonctions, intégrales et statistiques appliquées.',                                                      badge:'BAC',          badgeClass:'badge-bac'     },
+  'terminale-c':   { description:'Terminale série C — programme scientifique complet. Préparation intensive au BAC.',                                         badge:'BAC Série C',  badgeClass:'badge-bac'     },
+  'terminale-d':   { description:'Terminale série D. Fonctions, probabilités et statistiques au programme du BAC.',                                           badge:'BAC Série D',  badgeClass:'badge-bac'     },
+  'terminale-s':   { description:'Terminale Scientifique. Analyse avancée, complexes, matrices et probabilités.',                                             badge:'BAC',          badgeClass:'badge-bac'     },
+  'terminale-l':   { description:'Terminale Littéraire. Mathématiques appliquées, graphes et statistiques.',                                                  badge:'BAC',          badgeClass:'badge-bac'     },
+  'terminale-ose': { description:'Terminale Option Sciences et Économie. Optimisation, modélisation et algorithmique.',                                       badge:'BAC',          badgeClass:'badge-bac'     },
+};
+
+const CHAPTER_ICONS = ['fa-hashtag','fa-divide','fa-superscript','fa-shapes','fa-ruler','fa-chart-bar','fa-percentage','fa-infinity','fa-calculator','fa-wave-square','fa-circle','fa-cube'];
+const CARD_BORDER_COLORS = ['#ffa300','#60a5fa','#34d399','#c084fc','#f472b6','#38bdf8','#fb923c','#2dd4bf','#818cf8'];
+
+const allClasses = [...COLLEGE_CLASSES, ...LYCEE_CLASSES];
+let currentSlug  = '6eme';
+let megaOpen     = false;
+
+// ═══════════════════════════════════════════════════════════════
+// MEGA-DROPDOWN
+// ═══════════════════════════════════════════════════════════════
+function buildMegaLeft() {
+  const container = document.getElementById('mega-left');
+  container.innerHTML = '';
+
+  // Collège
+  const secC = document.createElement('div');
+  secC.className = 'mega-section-label';
+  secC.textContent = 'Collège';
+  container.appendChild(secC);
+  COLLEGE_CLASSES.forEach(cls => container.appendChild(makeMegaItem(cls)));
+
+  // Lycée
+  const secL = document.createElement('div');
+  secL.className = 'mega-section-label mt-2';
+  secL.textContent = 'Lycée';
+  container.appendChild(secL);
+  LYCEE_CLASSES.forEach(cls => container.appendChild(makeMegaItem(cls)));
+}
+
+function makeMegaItem(cls) {
+  const el = document.createElement('div');
+  el.className = 'mega-class-item' + (cls.slug === currentSlug ? ' active' : '');
+  el.dataset.slug = cls.slug;
+  el.innerHTML = `${cls.label} <i class="fas fa-chevron-right text-xs opacity-50"></i>`;
+  el.addEventListener('click', () => selectMegaClass(cls.slug));
+  return el;
+}
+
+function selectMegaClass(slug) {
+  currentSlug = slug;
+
+  // Mise à jour classe active dans la colonne gauche
+  document.querySelectorAll('.mega-class-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.slug === slug);
+  });
+
+  const cls = allClasses.find(c => c.slug === slug);
+  const det = CLASS_DETAILS[slug];
+
+  // En-tête colonne droite
+  const badge = document.getElementById('mega-right-badge');
+  badge.textContent = det.badge;
+  badge.className = `inline-block text-white text-xs font-bold px-3 py-1 rounded-full mr-2 ${det.badgeClass}`;
+  document.getElementById('mega-right-title').textContent = cls.label;
+
+  // Chapitres colonne droite
+  const right = document.getElementById('mega-right');
+  right.innerHTML = '';
+  cls.chapitres.forEach((chap, i) => {
+    const a = document.createElement('div');
+    a.className = 'mega-chap-item';
+    a.innerHTML = `<i class="fas ${CHAPTER_ICONS[i % CHAPTER_ICONS.length]} text-[#ffa300] mr-3 text-xs opacity-70"></i>${chap}`;
+    right.appendChild(a);
+  });
+}
+
+function toggleMega() {
+  megaOpen ? closeMega() : openMega();
+}
+
+function openMega() {
+  megaOpen = true;
+  document.getElementById('mega-dropdown').classList.add('open');
+  document.getElementById('mega-overlay').classList.add('open');
+  document.getElementById('btn-programmes').classList.add('mega-open');
+  document.getElementById('mega-chevron').style.transform = 'rotate(180deg)';
+  buildMegaLeft();
+  selectMegaClass(currentSlug);
+}
+
+function closeMega() {
+  megaOpen = false;
+  document.getElementById('mega-dropdown').classList.remove('open');
+  document.getElementById('mega-overlay').classList.remove('open');
+  document.getElementById('btn-programmes').classList.remove('mega-open');
+  document.getElementById('mega-chevron').style.transform = 'rotate(0deg)';
+}
+
+// Ouvre la page programme détaillée
+function openProgramme(slug) {
+  if (slug) currentSlug = slug;
+  closeMega();
+  document.getElementById('page-programme').classList.add('open');
+  renderHero();
+  renderSidebar();
+  renderChapters();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeProgramme() {
+  document.getElementById('page-programme').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PAGE PROGRAMME DÉTAILLÉE
+// ═══════════════════════════════════════════════════════════════
+function renderHero() {
+  const cls = allClasses.find(c => c.slug === currentSlug);
+  const det = CLASS_DETAILS[currentSlug];
+  document.getElementById('hero-breadcrumb').textContent = cls.label;
+  document.getElementById('hero-title').textContent      = cls.label;
+  document.getElementById('hero-desc').textContent       = det.description;
+  document.getElementById('hero-chap-count').textContent = cls.chapitres.length;
+  document.getElementById('cta-title').textContent       = `Prêt à commencer ${cls.label} ?`;
+  const badge = document.getElementById('hero-badge');
+  badge.textContent = det.badge;
+  badge.className   = `inline-block text-white text-xs font-bold px-3 py-1 rounded-full mb-3 ${det.badgeClass}`;
+}
+
+function renderSidebar() {
+  function buildList(classes, listId) {
+    const ul = document.getElementById(listId);
+    ul.innerHTML = '';
+    classes.forEach(cls => {
+      const isActive = cls.slug === currentSlug;
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <a onclick="switchClass('${cls.slug}')" style="cursor:pointer;"
+           class="flex items-center gap-2 px-4 py-3 text-sm border-b border-gray-50 transition
+                  ${isActive ? 'sidebar-active' : 'text-gray-600 hover:bg-gray-50 hover:text-[#0d2b56]'}">
+          ${isActive ? '<i class="fas fa-caret-right text-[#ffa300] text-xs"></i>' : ''}
+          ${cls.label}
+        </a>`;
+      ul.appendChild(li);
+    });
+  }
+  buildList(COLLEGE_CLASSES, 'sidebar-college');
+  buildList(LYCEE_CLASSES,   'sidebar-lycee');
+}
+
+function switchClass(slug) {
+  currentSlug = slug;
+  renderHero();
+  renderSidebar();
+  renderChapters();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderChapters() {
+  const cls = allClasses.find(c => c.slug === currentSlug);
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = '';
+  const levelParam = currentSlug.toUpperCase().replace(/-/g,'_');
+
+  cls.chapitres.forEach((chap, i) => {
+    const color = CARD_BORDER_COLORS[i % CARD_BORDER_COLORS.length];
+    const icon  = CHAPTER_ICONS[i % CHAPTER_ICONS.length];
+    const card  = document.createElement('div');
+    card.className = 'chapter-card bg-white rounded-xl shadow-sm flex flex-col';
+    card.style.borderBottom = `4px solid ${color}`;
+    card.innerHTML = `
+      <div class="p-5 flex-grow">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="icon-wrap w-10 h-10 rounded-lg flex items-center justify-center transition" style="background-color:rgba(13,43,86,0.05);">
+            <i class="fas ${icon} chap-icon text-sm transition" style="color:#0d2b56;"></i>
+          </div>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Chapitre ${i+1}</span>
+        </div>
+        <h3 class="chap-title font-bold text-base leading-snug transition" style="color:#0d2b56;">${chap}</h3>
+      </div>
+      <div class="px-5 pb-4 flex items-center gap-3">
+        <a href="/cours?schoolLevel=${levelParam}" class="btn-cours flex-1 text-center text-white text-xs font-bold py-2 rounded-lg transition" style="background-color:#0d2b56;">
+          <i class="fas fa-book-open mr-1"></i> Cours
+        </a>
+        <a href="/cours?schoolLevel=${levelParam}" class="btn-exo flex-1 text-center text-xs font-bold py-2 rounded-lg transition" style="border:1px solid #0d2b56;color:#0d2b56;background:transparent;">
+          <i class="fas fa-pencil-alt mr-1"></i> Exercices
+        </a>
+      </div>`;
+
+    const bc = card.querySelector('.btn-cours');
+    bc.onmouseover = () => bc.style.backgroundColor = '#1a3b5c';
+    bc.onmouseout  = () => bc.style.backgroundColor = '#0d2b56';
+    const be = card.querySelector('.btn-exo');
+    be.onmouseover = () => { be.style.backgroundColor='#0d2b56'; be.style.color='white'; };
+    be.onmouseout  = () => { be.style.backgroundColor='transparent'; be.style.color='#0d2b56'; };
+
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVBAR INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Dropdown compte
+  const accountBtn   = document.getElementById('accountBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  accountBtn.addEventListener('click', e => { e.stopPropagation(); dropdownMenu.classList.toggle('hidden'); });
+  window.addEventListener('click', e => {
+    if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target))
+      dropdownMenu.classList.add('hidden');
+    // Ferme mega si clic hors zone
+    const mega = document.getElementById('mega-dropdown');
+    const btn  = document.getElementById('btn-programmes');
+    if (megaOpen && !mega.contains(e.target) && !btn.contains(e.target)) closeMega();
+  });
+
+  // Menu mobile
+  document.getElementById('hamburgerBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.remove('hidden');
+    document.getElementById('mobileMenu').classList.add('flex');
+  });
+  document.getElementById('closeMobileMenu').addEventListener('click', closeMobileMenuFunc);
+
+  // Remplir menu mobile
+  const mobileClassList = document.getElementById('mobile-classes');
+  allClasses.forEach(cls => {
+    const a = document.createElement('a');
+    a.className = 'text-white/80 hover:text-[#ffa300] py-1';
+    a.textContent = cls.label;
+    a.style.cursor = 'pointer';
+    a.addEventListener('click', () => {
+      closeMobileMenuFunc();
+      openProgramme(cls.slug);
+    });
+    mobileClassList.appendChild(a);
+  });
+
+  // Ferme modal sur backdrop
+  document.getElementById('authModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('authModal')) closeModal();
+  });
+
+  // Si URL contient ?classe=xxx, ouvrir directement la page programme
+  const urlSlug = new URLSearchParams(window.location.search).get('classe');
+  if (urlSlug && allClasses.find(c => c.slug === urlSlug)) {
+    openProgramme(urlSlug);
+  }
+});
+
+function closeMobileMenuFunc() {
+  document.getElementById('mobileMenu').classList.add('hidden');
+  document.getElementById('mobileMenu').classList.remove('flex');
+}
+function openModal(t) {
+  document.getElementById('dropdownMenu').classList.add('hidden');
+  document.getElementById('authModal').classList.remove('hidden');
+  document.getElementById('loginForm').classList.toggle('hidden', t !== 'login');
+  document.getElementById('registerForm').classList.toggle('hidden', t !== 'register');
+}
+function closeModal()  { document.getElementById('authModal').classList.add('hidden'); }
+function switchForm(t) {
+  document.getElementById('loginForm').classList.toggle('hidden', t !== 'login');
+  document.getElementById('registerForm').classList.toggle('hidden', t !== 'register');
+}
+</script>
+</body>
 </html>
