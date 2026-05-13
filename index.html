@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MATEMATIKUP — La plateforme maths #1 pour les lycéens</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="images/Logo_Matematikup.png" />
+  <!-- Tailwind (utilitaires complémentaires) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { display:['Nunito','sans-serif'], body:['Nunito Sans','sans-serif'] },
+        keyframes: {
+          'fade-up':    { '0%':{opacity:'0',transform:'translateY(28px)'},'100%':{opacity:'1',transform:'translateY(0)'} },
+          'fade-right': { '0%':{opacity:'0',transform:'translateX(48px)'},'100%':{opacity:'1',transform:'translateX(0)'} },
+          'float':      { '0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-12px)'} },
+          'slide-badge':{ '0%':{opacity:'0',transform:'translateX(24px)'},'100%':{opacity:'1',transform:'translateX(0)'} },
+          'fade-down':  { '0%':{opacity:'0',transform:'translateY(-20px)'},'100%':{opacity:'1',transform:'translateY(0)'} },
+        },
+        animation: {
+          'fade-up':    'fade-up .65s cubic-bezier(.22,.68,0,1.2) both',
+          'fade-right': 'fade-right .7s cubic-bezier(.22,.68,0,1.2) both',
+          'float':      'float 4s ease-in-out infinite',
+          'slide-badge':'slide-badge .55s cubic-bezier(.22,.68,0,1.2) both',
+          'fade-down':  'fade-down .6s cubic-bezier(.22,.68,0,1.2) both',
+        },
+      }},
+    };
+  </script>
+
+  <!-- Global CSS partagé -->
+  <link rel="stylesheet" href="css/global.css" />
+  
+  <style>
+    /* ── Page-specific ── */
+    body { background: #0d2b56; }
+
+    .d1{animation-delay:.05s} .d2{animation-delay:.15s} .d3{animation-delay:.27s}
+    .d4{animation-delay:.38s} .d5{animation-delay:.48s} .d6{animation-delay:.58s}
+    .d7{animation-delay:.72s} .d8{animation-delay:.88s}
+
+    .wave-wrap { position:absolute; bottom:-1px; left:0; width:100%; line-height:0; }
+    .wave-wrap svg { display:block; width:100%; }
+
+    .search-input::placeholder { color:rgba(0,0,0,.4); }
+    .search-input:focus { outline:none; }
+
+    /* Course & filter pills */
+    .badge-pill { font-family:'Nunito',sans-serif; font-weight:900; font-size:10px; padding:3px 10px; border-radius:99px; }
+    .tag-pill   { font-size:11px; font-weight:700; padding:2px 10px; border-radius:99px; }
+    .active-navy   { background:#0d2b56; color:#fff; }
+    .active-gold   { background:#ffa300; color:#fff; }
+    .active-purple { background:#8B5CF6; color:#fff; }
+    .inactive-pill { background:#F3F4F6; color:#374151; }
+    .inactive-pill:hover { background:#E5E7EB; }
+
+    /* Sections backgrounds */
+    .section-light { background:#f0f4ff; }
+    .section-white { background:#fff; }
+
+    /* Underline gold */
+    .uline-gold {
+      text-decoration:underline;
+      text-decoration-color:#ffa300;
+      text-decoration-thickness:3px;
+      text-underline-offset:5px;
+    }
+
+    @media(max-width:767px){
+      .hero-title { font-size: clamp(2rem,9vw,3rem) !important; line-height:1.1 !important; }
+      .hero-right { display:none !important; }
+      .stats-row  { gap:14px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     HEADER — Composant réutilisable
+══════════════════════════════════ -->
+<script src="components/header.js" data-page="index"></script>
+
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section style="background:#0d2b56; position:relative; min-height:100svh; overflow:hidden;">
+
+  <!-- Glow blobs -->
+  <div aria-hidden="true" style="pointer-events:none; position:absolute; inset:0; overflow:hidden;">
+    <div style="position:absolute; top:-128px; left:-96px; width:500px; height:500px; border-radius:50%; opacity:.2; background:radial-gradient(circle,#4B9FD6,transparent 70%);"></div>
+    <div style="position:absolute; bottom:0; right:0; width:420px; height:420px; border-radius:50%; opacity:.1; background:radial-gradient(circle,#ffa300,transparent 70%);"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-5 md:px-10 lg:px-16 pt-16 pb-48
+              grid lg:grid-cols-2 gap-10 items-center">
+
+    <!-- ── LEFT ── -->
+    <div class="max-w-[560px]">
+
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-white/20
+                  bg-white/5 px-4 py-1.5 text-xs font-bold mb-7 animate-fade-up d1" style="color:#fff;">
+        <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="#ffa300">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        La plateforme maths n°1 pour les collégiens et lycéens Malagasy
+      </div>
+
+      <!-- H1 -->
+      <h1 class="hero-title font-black leading-[1.08] tracking-tight mb-6 animate-fade-up d2"
+          style="font-family:'Nunito',sans-serif; font-size:3.3rem; color:#fff;">
+        Avancez à votre<br/>
+        <span class="text-[#ffa300] uline-gold">propre rythme</span>, et<br/>
+        apprenez en vous<br/>
+        <span class="text-[#ffa300]">amusant</span> avec<br/>
+        MATEMATIKUP&nbsp;!!!
+      </h1>
+
+      <!-- Desc -->
+      <p class="animate-fade-up d3 mb-9"
+         style="color:rgba(255,255,255,.55); font-size:1.02rem; line-height:1.7;">
+        Des centaines de cours interactifs, des défis, des quiz et un suivi
+        personnalisé par IA pour progresser en maths au collège comme au lycée.
+      </p>
+
+      <!-- Search bar -->
+      <div class="animate-fade-up d4 max-w-[540px]">
+        <div style="display:flex; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(8,30,61,.6);">
+          <div style="display:flex; align-items:center; padding:0 16px;">
+            <svg width="16" height="16" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+          <input type="text" placeholder="Rechercher un cours (algèbre, géométrie…)"
+                 class="search-input"
+                 style="flex:1; padding:16px 8px; font-size:.875rem; color:#374151; font-weight:600; background:transparent; border:none; min-width:0;" />
+          <div style="padding:6px;">
+            <a href="programmes.html"
+               style="display:block; background:#ffa300; color:#0d2b56; font-family:'Nunito',sans-serif; font-weight:900; font-size:.875rem; padding:12px 18px; border-radius:12px; text-decoration:none; white-space:nowrap; transition:background .2s;"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              Explorer les cours
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium link -->
+      <p class="animate-fade-up d5 mt-4" style="font-size:.875rem; color:rgba(255,255,255,.45);">
+        Besoin de plus d'entraînement ?
+        <a href="auth.html#register" class="uline-gold ml-1"
+           style="color:#ffa300; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px;"
+           onmouseover="this.style.color='#cc8200'" onmouseout="this.style.color='#ffa300'">
+          Accéder à la version premium ✨
+        </a>
+      </p>
+
+      <!-- Stats -->
+      <div class="animate-fade-up d6 stats-row"
+           style="display:flex; flex-wrap:wrap; align-items:center; gap:24px; margin-top:40px;">
+        <div>
+          <p id="stat-students" style="font-family:'Nunito',sans-serif; font-weight:900; font-size:1.875rem; color:#ffa300;">12 000+</p>
+          <p style="color:rgba(255,255,255,.45); font-size:.75rem; font-weight:600; margin-top:2px;">Élèves actifs</p>
+        </div>
+        <div style="width:1px; height:40px; background:rgba(255,255,255,.1);"></div>
+        <div>
+          <p id="stat-courses" style="font-family:'Nunito',sans-serif; font-weight:900; font-size:1.875rem; color:#ffa300;">500+</p>
+          <p style="color:rgba(255,255,255,.45); font-size:.75rem; font-weight:600; margin-top:2px;">Cours disponibles</p>
+        </div>
+        <div style="width:1px; height:40px; background:rgba(255,255,255,.1);"></div>
+        <div>
+          <p style="font-family:'Nunito',sans-serif; font-weight:900; font-size:1.875rem; color:#ffa300;">4.9/5</p>
+          <p style="color:rgba(255,255,255,.45); font-size:.75rem; font-weight:600; margin-top:2px;">Note moyenne</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: floating card ── -->
+    <div class="hero-right relative flex justify-center lg:justify-end mt-8 lg:mt-0 animate-fade-right d3">
+      <div class="animate-float" style="position:relative; width:360px;">
+
+        <!-- Person card -->
+        <div style="border-radius:24px; overflow:hidden; box-shadow:0 32px 80px rgba(8,30,61,.7); border:1px solid rgba(255,255,255,.1); height:430px; background:linear-gradient(145deg,#5BB3E8,#2E89C7,#1A6FA8);">
+          <!-- Remplacer par: <img src="assets/eleve.png" class="w-full h-full object-cover object-top" alt="Élève"> -->
+          <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; opacity:.3;">
+            <svg width="96" height="96" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+            <p style="color:#fff; font-size:.75rem; font-weight:600; text-align:center; padding:0 24px;">Remplacer par<br/>l'image de l'élève</p>
+          </div>
+        </div>
+
+        <!-- Badge rating -->
+        <div class="animate-slide-badge d7" style="position:absolute; top:-16px; right:-16px; background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.15); padding:12px 16px; display:flex; align-items:center; gap:10px; z-index:10;">
+          <span style="color:#ffa300; font-size:1.5rem; line-height:1;">★</span>
+          <div>
+            <p style="font-family:'Nunito',sans-serif; font-weight:900; color:#0d2b56; font-size:1rem; line-height:1;">4.9/5</p>
+            <p style="color:rgba(13,43,86,.45); font-size:.7rem; margin-top:2px; font-weight:600;">Satisfaction élèves</p>
+          </div>
+        </div>
+
+        <!-- Badge niveau -->
+        <div class="animate-slide-badge d7" style="position:absolute; bottom:-20px; left:-20px; background:#163260; border:1px solid rgba(255,255,255,.1); border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.25); padding:12px 14px; display:flex; align-items:center; gap:10px; z-index:10; max-width:210px;">
+          <div style="width:36px; height:36px; background:rgba(255,163,0,.15); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem;">🏆</div>
+          <div style="min-width:0;">
+            <p style="font-family:'Nunito',sans-serif; font-weight:900; color:#fff; font-size:.8rem; line-height:1.3;">Niveau débloqué !</p>
+            <p style="color:rgba(255,255,255,.45); font-size:.7rem; margin-top:2px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Algèbre — Niveau 3 / 5</p>
+          </div>
+        </div>
+
+        <!-- Badge résultats -->
+        <div class="animate-slide-badge d8" style="position:absolute; bottom:-20px; right:8px; background:#163260; border:1px solid rgba(255,255,255,.1); border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,.25); padding:12px 14px; display:flex; align-items:center; gap:8px; z-index:10; max-width:155px;">
+          <div style="width:32px; height:32px; background:rgba(34,197,94,.15); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          </div>
+          <div>
+            <p style="font-family:'Nunito',sans-serif; font-weight:900; color:#22c55e; font-size:.8rem; line-height:1.3;">+78% résultats</p>
+            <p style="color:rgba(255,255,255,.4); font-size:.7rem; margin-top:2px; font-weight:600;">Moyenne en hausse</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Wave -->
+  <div class="wave-wrap">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,45 C480,90 960,0 1440,45 L1440,90 L0,90 Z" fill="#f0f4ff"/>
+    </svg>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     NOS ATOUTS
+══════════════════════════════════ -->
+<section id="features" class="section-light py-20 px-5 md:px-10 lg:px-16">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center mb-14">
+      
+      <h2 class="font-black text-4xl md:text-5xl text-[#0d2b56] mb-4 leading-tight"
+          style="font-family:'Nunito',sans-serif;">
+        <span class="text-[#ffa300] uline-gold">Pourquoi</span> nous choisir ?
+      </h2>
+      <p class="text-[#0d2b56]/55 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+        Tout ce dont tu as besoin pour progresser en maths, au même endroit.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- Card 1 -->
+      <div class="feature-card bg-white rounded-2xl p-6 shadow-sm border border-[#0d2b56]/6
+                  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+        <div class="absolute top-2 right-2 w-20 h-20 rounded-full opacity-20 group-hover:opacity-35 transition-opacity"
+             style="background:radial-gradient(circle,#E8EDFF,transparent);"></div>
+        <span class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#ffa300] text-white text-xs font-black flex items-center justify-center z-10"
+              style="font-family:'Nunito',sans-serif;">1</span>
+        <div class="w-14 h-14 rounded-2xl bg-[#E8EDFF] flex items-center justify-center mb-5 text-2xl">📚</div>
+        <h3 class="font-black text-[#0d2b56] text-base mb-2 leading-snug" style="font-family:'Nunito',sans-serif;">
+          + de 500 cours<br/>contextualisés
+        </h3>
+        <p class="text-[#0d2b56]/55 text-sm leading-relaxed">
+          Des leçons adaptées à chaque niveau (6ème → Terminale), avec des exemples du quotidien.
+        </p>
+        <div class="mt-5 h-1 w-10 rounded-full bg-[#ffa300]"></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="feature-card bg-white rounded-2xl p-6 shadow-sm border border-[#0d2b56]/6
+                  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+        <div class="absolute top-2 right-2 w-20 h-20 rounded-full opacity-20 group-hover:opacity-35 transition-opacity"
+             style="background:radial-gradient(circle,#EDE8FF,transparent);"></div>
+        <span class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#0d2b56] text-white text-xs font-black flex items-center justify-center z-10"
+              style="font-family:'Nunito',sans-serif;">2</span>
+        <div class="w-14 h-14 rounded-2xl bg-[#EDE8FF] flex items-center justify-center mb-5 text-2xl">🎮</div>
+        <h3 class="font-black text-[#ffa300] text-base mb-2 leading-snug" style="font-family:'Nunito',sans-serif;">
+          Contenus interactifs &<br/>ludiques
+        </h3>
+        <p class="text-[#0d2b56]/55 text-sm leading-relaxed">
+          Quizz, défis chronométrés, badges… Apprends comme tu joues à un jeu vidéo.
+        </p>
+        <div class="mt-5 h-1 w-10 rounded-full bg-[#0d2b56]"></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="feature-card bg-white rounded-2xl p-6 shadow-sm border border-[#0d2b56]/6
+                  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+        <div class="absolute top-2 right-2 w-20 h-20 rounded-full opacity-20 group-hover:opacity-35 transition-opacity"
+             style="background:radial-gradient(circle,#E8F8FF,transparent);"></div>
+        <span class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#ffa300] text-white text-xs font-black flex items-center justify-center z-10"
+              style="font-family:'Nunito',sans-serif;">3</span>
+        <div class="w-14 h-14 rounded-2xl bg-[#E8F8FF] flex items-center justify-center mb-5 text-2xl">📊</div>
+        <h3 class="font-black text-[#0d2b56] text-base mb-2 leading-snug" style="font-family:'Nunito',sans-serif;">
+          Tableau de bord<br/>+ planning
+        </h3>
+        <p class="text-[#0d2b56]/55 text-sm leading-relaxed">
+          Planning intelligent adapté à ton emploi du temps et tes objectifs personnels.
+        </p>
+        <div class="mt-5 h-1 w-10 rounded-full bg-[#ffa300]"></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="feature-card bg-white rounded-2xl p-6 shadow-sm border border-[#0d2b56]/6
+                  hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+        <div class="absolute top-2 right-2 w-20 h-20 rounded-full opacity-20 group-hover:opacity-35 transition-opacity"
+             style="background:radial-gradient(circle,#E8FFF4,transparent);"></div>
+        <span class="absolute top-4 right-4 w-6 h-6 rounded-full bg-[#0d2b56] text-white text-xs font-black flex items-center justify-center z-10"
+              style="font-family:'Nunito',sans-serif;">4</span>
+        <div class="w-14 h-14 rounded-2xl bg-[#E8FFF4] flex items-center justify-center mb-5 text-2xl">🤖</div>
+        <h3 class="font-black text-[#ffa300] text-base mb-2 leading-snug" style="font-family:'Nunito',sans-serif;">
+          Suivi individuel<br/>+ assistant IA
+        </h3>
+        <p class="text-[#0d2b56]/55 text-sm leading-relaxed">
+          L'IA analyse tes erreurs et propose des exercices ciblés pour progresser vite.
+        </p>
+        <div class="mt-5 h-1 w-10 rounded-full bg-[#0d2b56]"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     BADGES BANNER
+══════════════════════════════════ -->
+<section class="section-light pb-14 px-5 md:px-10 lg:px-16">
+  <div class="max-w-7xl mx-auto">
+    <div class="rounded-3xl px-8 md:px-10 py-8 flex flex-col md:flex-row items-start md:items-center gap-8 justify-between"
+         style="background:#163260;">
+      <div class="max-w-md">
+        <h3 class="font-black text-white text-xl md:text-2xl mb-2 leading-snug" style="font-family:'Nunito',sans-serif;">
+          Progresse et gagne des badges 🏅
+        </h3>
+        <p class="text-white/55 text-sm leading-relaxed">
+          Chaque cours complété, chaque quiz réussi te rapproche d'un nouveau trophée. Défie tes camarades !
+        </p>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap flex-shrink-0">
+        <div class="flex flex-col items-center gap-1.5 bg-white/8 border border-white/10 rounded-2xl px-5 py-4 hover:border-[#ffa300]/40 transition-all cursor-default">
+          <span class="text-3xl">🥇</span>
+          <span class="text-[#ffa300] text-[11px] font-black text-center" style="font-family:'Nunito',sans-serif;">Génie des maths</span>
+        </div>
+        <div class="flex flex-col items-center gap-1.5 bg-white/8 border border-white/10 rounded-2xl px-5 py-4 hover:border-[#8B5CF6]/40 transition-all cursor-default">
+          <span class="text-3xl">⚡</span>
+          <span class="text-[#8B5CF6] text-[11px] font-black text-center" style="font-family:'Nunito',sans-serif;">Quiz Speedster</span>
+        </div>
+        <div class="flex flex-col items-center gap-1.5 bg-white/8 border border-white/10 rounded-2xl px-5 py-4 hover:border-[#EF4444]/40 transition-all cursor-default">
+          <span class="text-3xl">🔥</span>
+          <span class="text-[#EF4444] text-[11px] font-black text-center" style="font-family:'Nunito',sans-serif;">Série x7</span>
+        </div>
+        <div class="flex flex-col items-center gap-1.5 bg-white/8 border border-white/10 rounded-2xl px-5 py-4 hover:border-[#10B981]/40 transition-all cursor-default">
+          <span class="text-3xl">🎯</span>
+          <span class="text-[#10B981] text-[11px] font-black text-center" style="font-family:'Nunito',sans-serif;">100% Précision</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     ACTIVITÉS VIE RÉELLE
+══════════════════════════════════ -->
+<section class="section-white pt-20 pb-6 px-5 md:px-10 lg:px-16">
+  <div class="max-w-7xl mx-auto text-center">
+    
+    <h2 class="font-black text-4xl md:text-5xl text-[#0d2b56] leading-tight mb-3"
+        style="font-family:'Nunito',sans-serif;">
+      Extrait des activités appliquées<br/>dans la vie réelle 🌍
+    </h2>
+  </div>
+</section>
+
+<section id="courses" class="section-white pb-20 px-5 md:px-10 lg:px-16">
+  <div class="max-w-7xl mx-auto">
+
+    <p class="text-center text-[#0d2b56]/55 text-base mb-10 max-w-xl mx-auto">
+      Des exercices tirés du quotidien pour comprendre à quoi servent vraiment les maths.
+      Niveau <strong class="text-[#0d2b56]">1ère</strong>.
+    </p>
+
+    <div id="course-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+
+      <!-- Card 1 — Fonctions second degré -->
+      <article class="course-item bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden
+                      shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+        <div class="h-40 relative flex items-center justify-center text-5xl"
+             style="background:linear-gradient(135deg,#fff4e0,#ffe8c0);">
+          📈
+          <span class="badge-pill bg-[#0d2b56] text-white absolute top-3 right-3">Seconde</span>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ffa300] to-[#ff7b00]"></div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">Seconde</span>
+            <span class="tag-pill bg-[#FFF3DC] text-[#cc8200]">Algèbre</span>
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">Intermédiaire</span>
+          </div>
+          <h3 class="font-black text-[#0d2b56] text-base mb-2" style="font-family:'Nunito',sans-serif;">Fonctions du second degré</h3>
+          <p class="text-[#0d2b56]/50 text-xs leading-relaxed mb-auto">
+            Discriminant, racines, forme canonique appliqués à la trajectoire d'un ballon ou au bénéfice d'une entreprise.
+          </p>
+          <div class="flex items-center justify-between mt-3 text-xs text-[#0d2b56]/40 font-semibold">
+            <span>⏱ 25 min</span>
+            <span class="text-[#ffa300]">★ <span class="text-[#0d2b56]/50">4.8 (340)</span></span>
+          </div>
+          <a href="pages/artifice.html"
+             class="mt-4 block text-center text-white font-black text-sm py-2.5 rounded-xl transition-all duration-200"
+             style="background:#0d2b56; font-family:'Nunito',sans-serif;"
+             onmouseover="this.style.background='#ffa300'"
+             onmouseout="this.style.background='#0d2b56'">
+            Commencer ›
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 2 — Statistiques -->
+      <article class="course-item bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden
+                      shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+        <div class="h-40 relative flex items-center justify-center text-5xl"
+             style="background:linear-gradient(135deg,#fff4e0,#ffe8c0);">
+          📊
+          <span class="badge-pill bg-[#0d2b56] text-white absolute top-3 right-3">1ère</span>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ffa300] to-[#ff7b00]"></div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">1ère</span>
+            <span class="tag-pill bg-[#FFF3DC] text-[#cc8200]">Statistiques</span>
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">Intermédiaire</span>
+          </div>
+          <h3 class="font-black text-[#0d2b56] text-base mb-2" style="font-family:'Nunito',sans-serif;">Statistiques</h3>
+          <p class="text-[#0d2b56]/50 text-xs leading-relaxed mb-auto">
+            Moyenne, médiane, écart-type interprétés via les données climatiques ou les résultats scolaires.
+          </p>
+          <div class="flex items-center justify-between mt-3 text-xs text-[#0d2b56]/40 font-semibold">
+            <span>⏱ 30 min</span>
+            <span class="text-[#ffa300]">★ <span class="text-[#0d2b56]/50">4.7 (510)</span></span>
+          </div>
+          <a href="pages/jus"
+             class="mt-4 block text-center text-white font-black text-sm py-2.5 rounded-xl transition-all duration-200"
+             style="background:#0d2b56; font-family:'Nunito',sans-serif;"
+             onmouseover="this.style.background='#ffa300'"
+             onmouseout="this.style.background='#0d2b56'">
+            Commencer  ›
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 3 — Suites mathématiques -->
+      <article class="course-item bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden
+                      shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+        <div class="h-40 relative flex items-center justify-center text-5xl"
+             style="background:linear-gradient(135deg,#fff4e0,#ffe8c0);">
+          🔁
+          <span class="badge-pill bg-[#0d2b56] text-white absolute top-3 right-3">1ère</span>
+          <!-- Mini sequence visual -->
+          <div class="absolute bottom-8 flex items-end gap-1">
+            <div class="w-2 rounded-sm" style="height:8px; background:rgba(2,132,199,.3);"></div>
+            <div class="w-2 rounded-sm" style="height:14px; background:rgba(2,132,199,.45);"></div>
+            <div class="w-2 rounded-sm" style="height:20px; background:rgba(2,132,199,.6);"></div>
+            <div class="w-2 rounded-sm" style="height:28px; background:rgba(2,132,199,.75);"></div>
+            <div class="w-2 rounded-sm" style="height:38px; background:#0284C7;"></div>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ffa300] to-[#ff7b00]"></div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">1ère</span>
+            <span class="tag-pill bg-[#FFF3DC] text-[#cc8200]">Suites</span>
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">Intermédiaire</span>
+          </div>
+          <h3 class="font-black text-[#0d2b56] text-base mb-2" style="font-family:'Nunito',sans-serif;">Suites mathématiques</h3>
+          <p class="text-[#0d2b56]/50 text-xs leading-relaxed mb-auto">
+            Suites arithmétiques &amp; géométriques appliquées aux intérêts bancaires et à la démographie.
+          </p>
+          <div class="flex items-center justify-between mt-3 text-xs text-[#0d2b56]/40 font-semibold">
+            <span>⏱ 40 min</span>
+            <span class="text-[#ffa300]">★ <span class="text-[#0d2b56]/50">4.8 (315)</span></span>
+          </div>
+          <a href="pages/bred.html"
+             class="mt-4 block text-center text-white font-black text-sm py-2.5 rounded-xl transition-all duration-200"
+             style="background:#0d2b56; font-family:'Nunito',sans-serif;"
+             onmouseover="this.style.background='#ffa300'"
+             onmouseout="this.style.background='#0d2b56'">
+            Commencer  ›
+          </a>
+        </div>
+      </article>
+
+      <!-- Card 4 — Dénombrement -->
+      <article class="course-item bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden
+                      shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+        <div class="h-40 relative flex items-center justify-center text-5xl"
+             style="background:linear-gradient(135deg,#fff4e0,#ffe8c0);">
+          🔢
+          <span class="badge-pill bg-[#0d2b56] text-white absolute top-3 right-3">1ère</span>
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ffa300] to-[#ff7b00]"></div>
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">1ère</span>
+            <span class="tag-pill bg-[#FFF3DC] text-[#cc8200]">Dénombrement</span>
+            <span class="tag-pill bg-[#EEF2FF] text-[#0d2b56]">Avancé</span>
+          </div>
+          <h3 class="font-black text-[#0d2b56] text-base mb-2" style="font-family:'Nunito',sans-serif;">Dénombrement</h3>
+          <p class="text-[#0d2b56]/50 text-xs leading-relaxed mb-auto">
+            Arrangements, permutations, combinaisons utilisés en cryptographie et logistique.
+          </p>
+          <div class="flex items-center justify-between mt-3 text-xs text-[#0d2b56]/40 font-semibold">
+            <span>⏱ 40 min</span>
+            <span class="text-[#ffa300]">★ <span class="text-[#0d2b56]/50">4.6 (180)</span></span>
+          </div>
+          <a href="pages/coi.html"
+             class="mt-4 block text-center text-white font-black text-sm py-2.5 rounded-xl transition-all duration-200"
+             style="background:#0d2b56; font-family:'Nunito',sans-serif;"
+             onmouseover="this.style.background='#ffa300'"
+             onmouseout="this.style.background='#0d2b56'">
+            Commencer  ›
+          </a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="programmes.html"
+         class="inline-block text-white font-black px-10 py-4 rounded-2xl text-sm shadow-lg transition-all duration-200"
+         style="background:#0d2b56; font-family:'Nunito',sans-serif;"
+         onmouseover="this.style.background='#ffa300'; this.style.boxShadow='0 8px 32px rgba(255,163,0,.3)'"
+         onmouseout="this.style.background='#0d2b56'; this.style.boxShadow=''">
+        Voir toutes les activités →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     BLOG & CONSEILS
+══════════════════════════════════ -->
+<section id="blog" class="section-white py-20 px-5 md:px-10 lg:px-16" style="border-top:1px solid rgba(13,43,86,.06);">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+      <div>
+        <div class="inline-flex items-center gap-2 bg-[#F4F0FF] border border-[#8B5CF6]/20
+                    rounded-full px-4 py-1.5 text-xs font-black text-[#7C3AED] mb-4 uppercase tracking-widest">
+          💡 Blog &amp; Conseils
+        </div>
+        <h2 class="font-black text-3xl md:text-4xl text-[#0d2b56] leading-tight" style="font-family:'Nunito',sans-serif;">
+          Nos enseignants vous
+          <span class="text-[#ffa300] uline-gold">conseillent</span> 
+        </h2>
+        <p class="text-[#0d2b56]/50 text-sm mt-2 max-w-sm">
+          Des conseils pratiques de nos professeurs pour progresser rapidement.
+        </p>
+      </div>
+      <a href="#" class="flex-shrink-0 inline-flex items-center gap-2 border border-[#0d2b56]/20
+                         text-[#0d2b56] font-black text-sm px-6 py-3 rounded-xl transition-all"
+         style="font-family:'Nunito',sans-serif;"
+         onmouseover="this.style.background='#0d2b56'; this.style.color='#fff'"
+         onmouseout="this.style.background='transparent'; this.style.color='#0d2b56'">
+        Tous les articles →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Article 1 -->
+      <article class="bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="relative overflow-hidden" style="height:200px;">
+          <img src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80" alt="Mémorisation"
+               class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+          <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm
+                      text-[#8B5CF6] text-xs font-black px-3 py-1.5 rounded-full shadow-sm">
+            🧠 Mémorisation
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-black text-[#0d2b56] text-base mb-2 leading-snug hover:text-[#ffa300] transition-colors cursor-pointer"
+              style="font-family:'Nunito',sans-serif;">Comment avoir une bonne mémoire ?</h3>
+          <p class="text-[#0d2b56]/50 text-sm leading-relaxed mb-5">
+            Techniques scientifiquement prouvées pour retenir les formules mathématiques plus facilement.
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-[#0d2b56]/40 font-semibold">Prof. Martin · ⏱ 5 min</span>
+            <a href="#" class="bg-[#ffa300] text-white font-black text-xs px-4 py-2 rounded-xl transition-colors"
+               style="font-family:'Nunito',sans-serif;"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              Lire plus →
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 2 -->
+      <article class="bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="relative overflow-hidden" style="height:200px;">
+          <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80" alt="Méthode"
+               class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+          <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm
+                      text-[#06B6D4] text-xs font-black px-3 py-1.5 rounded-full shadow-sm">
+            📝 Méthode de travail
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-black text-[#0d2b56] text-base mb-2 leading-snug hover:text-[#ffa300] transition-colors cursor-pointer"
+              style="font-family:'Nunito',sans-serif;">Comment rédiger une fiche de résumé ?</h3>
+          <p class="text-[#0d2b56]/50 text-sm leading-relaxed mb-5">
+            Guide pas-à-pas pour créer des fiches de révision qui font vraiment la différence.
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-[#0d2b56]/40 font-semibold">Prof. Dubois · ⏱ 7 min</span>
+            <a href="#" class="bg-[#ffa300] text-white font-black text-xs px-4 py-2 rounded-xl transition-colors"
+               style="font-family:'Nunito',sans-serif;"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              Lire plus →
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Article 3 -->
+      <article class="bg-white rounded-2xl border border-[#0d2b56]/8 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div class="relative overflow-hidden" style="height:200px;">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="Stratégie"
+               class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+          <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-white/90 backdrop-blur-sm
+                      text-[#10B981] text-xs font-black px-3 py-1.5 rounded-full shadow-sm">
+            🎯 Stratégie
+          </div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-black text-[#0d2b56] text-base mb-2 leading-snug hover:text-[#ffa300] transition-colors cursor-pointer"
+              style="font-family:'Nunito',sans-serif;">Comment apprendre les maths efficacement ?</h3>
+          <p class="text-[#0d2b56]/50 text-sm leading-relaxed mb-5">
+            Les meilleures stratégies adoptées par les élèves qui réussissent leurs examens.
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-[#0d2b56]/40 font-semibold">Prof. Leroy · ⏱ 6 min</span>
+            <a href="#" class="bg-[#ffa300] text-white font-black text-xs px-4 py-2 rounded-xl transition-colors"
+               style="font-family:'Nunito',sans-serif;"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              Lire plus →
+            </a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     SECTION PREMIUM
+══════════════════════════════════ -->
+<section id="premium" style="background:#f0f4ff;" class="py-16 px-5 md:px-10 lg:px-16">
+  <div class="max-w-7xl mx-auto">
+    <div class="rounded-3xl overflow-hidden relative" style="background:#0d2b56;">
+      <div class="pointer-events-none absolute -top-20 -right-20 w-72 h-72 rounded-full opacity-10"
+           style="background:radial-gradient(circle,#ffa300,transparent 70%);"></div>
+      <div class="pointer-events-none absolute -bottom-16 left-[30%] w-56 h-56 rounded-full opacity-8"
+           style="background:radial-gradient(circle,#4B9FD6,transparent 70%);"></div>
+
+      <div class="relative z-10 grid lg:grid-cols-2 items-stretch">
+
+        <!-- Left -->
+        <div class="p-8 md:p-12 flex flex-col justify-center">
+          <div class="inline-flex items-center gap-2 bg-[#ffa300]/15 border border-[#ffa300]/30
+                      rounded-full px-4 py-1.5 text-xs font-black text-[#ffa300] mb-6 w-fit uppercase tracking-widest">
+            👑 MATEMATIKUP PREMIUM
+          </div>
+          <h2 class="font-black text-3xl md:text-5xl text-white leading-tight mb-4" style="font-family:'Nunito',sans-serif;">
+            Passez au niveau<br/>
+            <span class="text-[#ffa300] uline-gold">supérieur</span> avec<br/>
+            MATEMATIKUP Premium 🚀
+          </h2>
+          <p class="text-white/60 text-base leading-relaxed mb-8 max-w-md">
+            Accédez à l'intégralité du catalogue, bénéficiez d'un accompagnement IA personnalisé
+            et révisez sans limites pour décrocher les meilleures notes.
+          </p>
+          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 mb-10">
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Accès illimité à tous les cours
+            </li>
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Corrections détaillées par IA
+            </li>
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Planning de révision personnalisé
+            </li>
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Sessions live avec des professeurs
+            </li>
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Fiches de cours téléchargeables
+            </li>
+            <li class="flex items-start gap-2.5 text-white/80 text-sm">
+              <span class="w-5 h-5 rounded-full bg-[#ffa300] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              Concours &amp; examens blancs illimités
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-3">
+            <a href="auth.html#register"
+               class="inline-flex items-center gap-2 text-white font-black px-7 py-3.5 rounded-2xl text-sm transition-all"
+               style="background:#ffa300; font-family:'Nunito',sans-serif; box-shadow:0 6px 20px rgba(255,163,0,.3);"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              👑 Découvrir l'offre →
+            </a>
+            <a href="#" class="inline-flex items-center border border-white/20 text-white/80 font-bold px-7 py-3.5 rounded-2xl text-sm transition-all"
+               style="font-family:'Nunito',sans-serif;"
+               onmouseover="this.style.borderColor='rgba(255,255,255,.5)'; this.style.color='#fff'"
+               onmouseout="this.style.borderColor='rgba(255,255,255,.2)'; this.style.color='rgba(255,255,255,.8)'">
+              Voir les tarifs
+            </a>
+          </div>
+        </div>
+
+        <!-- Right — Pricing card -->
+        <div class="p-8 md:p-12 flex items-center justify-center lg:justify-end">
+          <div class="w-full max-w-sm rounded-2xl p-7 border border-white/10"
+               style="background:rgba(255,255,255,.07); backdrop-filter:blur(16px);">
+            <div class="flex justify-center mb-5">
+              <span class="inline-flex items-center gap-1.5 bg-[#ffa300] text-white font-black text-xs px-5 py-2 rounded-full"
+                    style="font-family:'Nunito',sans-serif;">
+                🔥 LE PLUS POPULAIRE
+              </span>
+            </div>
+            <p class="text-white/50 text-sm text-center mb-3 font-semibold">Abonnement annuel</p>
+            <div class="flex items-end justify-center gap-1 mb-1">
+              <span class="text-white/70 text-lg font-bold self-start mt-2">Ar</span>
+              <span class="font-black text-white" style="font-family:'Nunito',sans-serif; font-size:4.5rem; line-height:1;">5 000</span>
+              <span class="text-white text-sm font-semibold self-end mb-1" style="font-family:'Nunito',sans-serif;">/mois</span>
+            </div>
+            <p class="text-center text-[#ffa300] text-xs line-through font-black mb-1">Au lieu de 15 000 Ar/mois</p>
+            <p class="text-center text-white/35 text-xs mb-6">≈ 9.99 €/mois</p>
+            <ul class="space-y-3 mb-7">
+              <li class="flex items-center gap-3 text-white/75 text-sm"><span class="text-lg flex-shrink-0">✅</span> Tous les cours débloqués</li>
+              <li class="flex items-center gap-3 text-white/75 text-sm"><span class="text-lg flex-shrink-0">🤖</span> Assistant IA illimité</li>
+              <li class="flex items-center gap-3 text-white/75 text-sm"><span class="text-lg flex-shrink-0">📊</span> Suivi de progression</li>
+              <li class="flex items-center gap-3 text-white/75 text-sm"><span class="text-lg flex-shrink-0">🏆</span> Certifications officielles</li>
+            </ul>
+            <a href="auth.html#register"
+               class="block text-center text-white font-black py-4 rounded-xl text-sm transition-all"
+               style="background:#ffa300; font-family:'Nunito',sans-serif; box-shadow:0 6px 20px rgba(255,163,0,.25);"
+               onmouseover="this.style.background='#cc8200'" onmouseout="this.style.background='#ffa300'">
+              ⚡ Commencer maintenant
+            </a>
+            <p class="text-center text-white/30 text-xs mt-3">Annulation possible à tout moment</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     FOOTER — Composant réutilisable
+══════════════════════════════════ -->
+<script src="components/footer.js"></script>
+
+
+<!-- ══════════════════════════════════
+     JS spécifique à index.html
+══════════════════════════════════ -->
+<script src="js/index.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Préparation Examens - BEPC, Baccalauréat & Concours | Matematikup</title>
+    <meta name="description" content="Préparez vos examens avec Matematikup : cours particuliers et collectifs pour le BEPC, Bac et Concours (IST, ENI, Polytechnique). Sujjets types PDF disponibles.">
+    
+    <link rel="icon" type="image/png" href="images/Logo_Matematikup.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { display:['Nunito','sans-serif'], body:['Nunito Sans','sans-serif'] },
+        keyframes: {
+          'fade-up':    { '0%':{opacity:'0',transform:'translateY(28px)'},'100%':{opacity:'1',transform:'translateY(0)'} },
+          'fade-right': { '0%':{opacity:'0',transform:'translateX(48px)'},'100%':{opacity:'1',transform:'translateX(0)'} },
+          'float':      { '0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-12px)'} },
+          'slide-badge':{ '0%':{opacity:'0',transform:'translateX(24px)'},'100%':{opacity:'1',transform:'translateX(0)'} },
+        },
+        animation: {
+          'fade-up':    'fade-up .65s cubic-bezier(.22,.68,0,1.2) both',
+          'fade-right': 'fade-right .7s cubic-bezier(.22,.68,0,1.2) both',
+          'float':      'float 4s ease-in-out infinite',
+          'slide-badge':'slide-badge .55s cubic-bezier(.22,.68,0,1.2) both',
+        },
+        colors: {
+              mateBlue: "#0d2b56",
+              mateOrange: "#ffa300",
+              mateOrangeLight: "#ffd966",
+            }
+      }},
+    };
+  </script>
+
+  <!-- Global CSS partagé -->
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+  </head>
+  <body class="font-body">
+    <script src="components/header.js" data-page="examens"></script>
+    
+    <!-- HERO SECTION -->
+    <header class="bg-mateBlue pt-32 pb-16 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        <div class="relative z-10">
+            <span class="inline-block bg-mateOrange/20 text-mateOrange text-sm font-semibold px-4 py-1 rounded-full mb-4 animate-fade-down">Session 2025-2026</span>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Préparation <span class="text-mateOrange">Examens</span></h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto px-4">Cours intensifs, sujets types et corrections pour réussir le BEPC, le Baccalauréat et les concours d'entrée.</p>
+        </div>
+    </header>
+
+    <!-- SECTION OFFRES DE COURS (TABS) -->
+    <section class="py-16 bg-gray-50 px-6">
+        <div class="max-w-6xl mx-auto">
+            
+            <div class="text-center mb-10 reveal">
+                <h2 class="text-2xl font-bold text-mateBlue">Nos Formules de Préparation</h2>
+                <p class="text-gray-500 mt-2">Cours particuliers ou en groupe, adaptés à votre besoin.</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8 reveal" id="examTabs">
+                <button onclick="showTab('bepc')" class="tab-btn active px-6 py-2 rounded-full font-semibold transition-all duration-300 bg-mateBlue text-white shadow-lg" data-tab="bepc">
+                    <i class="fas fa-graduation-cap mr-2"></i>BEPC / Brevet
+                </button>
+                <button onclick="showTab('bac')" class="tab-btn px-6 py-2 rounded-full font-semibold transition-all duration-300 bg-white text-gray-600 hover:bg-gray-100" data-tab="bac">
+                    <i class="fas fa-award mr-2"></i>Baccalauréat
+                </button>
+                <button onclick="showTab('concours')" class="tab-btn px-6 py-2 rounded-full font-semibold transition-all duration-300 bg-white text-gray-600 hover:bg-gray-100" data-tab="concours">
+                    <i class="fas fa-university mr-2"></i>Concours IST & Écoles
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tabContent" class="min-h-[300px]">
+                
+                <!-- BEPC Content -->
+                <div id="bepc" class="tab-panel">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="bg-white p-8 rounded-xl shadow-sm border-l-4 border-mateOrange reveal">
+                            <h3 class="text-xl font-bold text-mateBlue mb-2">Objectif Réussite BEPC</h3>
+                            <p class="text-gray-600 mb-6">Révision complète du programme, méthodologie et sujets types pour le Brevet d'Études du Premier Cycle.</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="bg-mateOrange/10 p-3 rounded-full text-mateOrange">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-mateBlue">Cours Particuliers</h4>
+                                        <p class="text-sm text-gray-500">Suivi personnalisé, rythme adapté, focalisation sur les lacunes.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="bg-mateBlue/10 p-3 rounded-full text-mateBlue">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-mateBlue">Cours en Groupe</h4>
+                                        <p class="text-sm text-gray-500">Émulation collective, prix attractifs, travaux dirigés en binôme.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center reveal" style="transition-delay: 100ms">
+                            <img src="images/bepc_illustation.png" alt="Préparation BEPC" class="max-w-xs mx-auto rounded-lg shadow-md transform hover:scale-105 transition-transform duration-500">
+                            <!-- Placeholder si pas d'image -->
+                            <div class="hidden max-w-xs mx-auto bg-mateBlue/5 rounded-lg p-10 text-gray-400">
+                                <i class="fas fa-book-open text-6xl mb-4"></i>
+                                <p>Illustration BEPC</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BACCALAUREAT Content -->
+                <div id="bac" class="tab-panel hidden">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="bg-white p-8 rounded-xl shadow-sm border-l-4 border-mateBlue reveal">
+                            <h3 class="text-xl font-bold text-mateBlue mb-2">Prépa Bac (Séries A, C, D, L, OSE, S)</h3>
+                            <p class="text-gray-600 mb-6">Maîtrisez les concepts clés et la résolution de problèmes complexes pour décrocher votre mention.</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="bg-mateOrange/10 p-3 rounded-full text-mateOrange">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-mateBlue">Coaching Individuel</h4>
+                                        <p class="text-sm text-gray-500">Préparation sur mesure, focus sur les points faibles.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                                    <div class="bg-mateBlue/10 p-3 rounded-full text-mateBlue">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-mateBlue">Sessions de Groupe</h4>
+                                        <p class="text-sm text-gray-500">Simulations d'examens, corrections collectives.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center reveal" style="transition-delay: 100ms">
+                            <div class="max-w-xs mx-auto bg-mateBlue/5 rounded-lg p-10 text-gray-400">
+                                <i class="fas fa-user-graduate text-6xl mb-4 text-mateBlue/30"></i>
+                                <p class="text-mateBlue font-semibold">Vers le Succès au Bac</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONCOURS Content -->
+                <div id="concours" class="tab-panel hidden">
+                    <div class="bg-white p-8 rounded-xl shadow-sm border-t-4 border-mateOrange reveal">
+                        <h3 class="text-xl font-bold text-mateBlue mb-6 text-center">Concours d'entrée aux Grandes Écoles</h3>
+                        <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Préparation intensive pour intégrer les filières prestigieuses (IST, ENI, Polytechnique, AGRO, etc.).</p>
+                        
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center gap-2 mb-2 text-mateBlue font-bold">
+                                    <i class="fas fa-microchip text-mateOrange"></i> ENI / Polytechnique
+                                </div>
+                                <p class="text-sm text-gray-500">Maths appliquées, algèbre, analyse niveau concours.</p>
+                            </div>
+                            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center gap-2 mb-2 text-mateBlue font-bold">
+                                    <i class="fas fa-seedling text-mateOrange"></i> AGRO / Environnement
+                                </div>
+                                <p class="text-sm text-gray-500">Statistiques, probabilités, mathématiques appliquées.</p>
+                            </div>
+                            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center gap-2 mb-2 text-mateBlue font-bold">
+                                    <i class="fas fa-laptop-code text-mateOrange"></i> IST & Informatique
+                                </div>
+                                <p class="text-sm text-gray-500">Logique, algorithmique, bases mathématiques IT.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION SUJETS TYPES (PDF) -->
+    <section class="py-16 bg-white px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12 reveal">
+                <span class="text-mateOrange font-semibold uppercase text-sm tracking-wider">Ressources</span>
+                <h2 class="text-3xl font-bold text-mateBlue mt-2">Sujets Types & Annales</h2>
+                <p class="text-gray-500 mt-2 max-w-xl mx-auto">Entraînez-vous sur de vrais sujets d'années précédentes. Téléchargez gratuitement les énoncés PDF.</p>
+            </div>
+
+            <div class="overflow-x-auto shadow-md rounded-lg reveal">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-mateBlue text-white">
+                        <tr>
+                            <th class="p-4 font-semibold">Examen</th>
+                            <th class="p-4 font-semibold">Sujet</th>
+                            <th class="p-4 font-semibold text-center">Télécharger PDF</th>
+                            <th class="p-4 font-semibold text-center">Correction</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <!-- Ligne 1 -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 text-gray-700 font-medium">Bac D</td>
+                            <td class="p-4 text-gray-600">Mathématiques - Session 2023</td>
+                            <td class="p-4 text-center">
+                                <a href="#" class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
+                                    <i class="fas fa-download"></i> Gratuit
+                                </a>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button class="inline-flex items-center gap-2 bg-mateOrange text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-lock"></i> Débloquer
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Ligne 2 -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 text-gray-700 font-medium">Bac C</td>
+                            <td class="p-4 text-gray-600">Mathématiques - Session 2022</td>
+                            <td class="p-4 text-center">
+                                <a href="#" class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
+                                    <i class="fas fa-download"></i> Gratuit
+                                </a>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button class="inline-flex items-center gap-2 bg-mateOrange text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-lock"></i> Débloquer
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Ligne 3 -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 text-gray-700 font-medium">BEPC</td>
+                            <td class="p-4 text-gray-600">Mathématiques - Session 2023</td>
+                            <td class="p-4 text-center">
+                                <a href="#" class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
+                                    <i class="fas fa-download"></i> Gratuit
+                                </a>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button class="inline-flex items-center gap-2 bg-mateOrange text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-lock"></i> Débloquer
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Ligne 4 -->
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 text-gray-700 font-medium">Concours ENI</td>
+                            <td class="p-4 text-gray-600">Mathématiques Générales - 2022</td>
+                            <td class="p-4 text-center">
+                                <a href="#" class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium hover:bg-green-200 transition-colors">
+                                    <i class="fas fa-download"></i> Gratuit
+                                </a>
+                            </td>
+                            <td class="p-4 text-center">
+                                <button class="inline-flex items-center gap-2 bg-mateOrange text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-orange-600 transition-colors">
+                                    <i class="fas fa-lock"></i> Débloquer
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Call to Action Correction -->
+            <div class="mt-8 bg-blue-50 border border-blue-100 p-6 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 reveal">
+                <div class="flex items-center gap-4">
+                    <div class="bg-mateBlue text-white p-3 rounded-lg">
+                        <i class="fas fa-key text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-mateBlue">Accès aux corrections détaillées</h4>
+                        <p class="text-sm text-gray-500">Obtenez les corrigés pas-à-pas pour comprendre vos erreurs.</p>
+                    </div>
+                </div>
+                <button onclick="openModal('login')" class="bg-mateOrange text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-colors shadow-sm whitespace-nowrap">
+                    <i class="fas fa-crown mr-2"></i>Voir les tarifs
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="components/footer.js"></script>
+    
+  <script>
+    // ── Navbar active link ──────────────────────────────
+    function setActiveNavLink(activePage) {
+      document.querySelectorAll('[data-page]').forEach(link => {
+        if (link.dataset.page === activePage) {
+          link.classList.add('text-[#ffa300]', 'border-b-2', 'border-[#ffa300]', 'pb-1');
+          link.classList.remove('hover:text-[#ffa300]');
+        }
+      });
+    }
+
+    // ── Dropdown compte ────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const accountBtn   = document.getElementById('accountBtn');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      if (accountBtn && dropdownMenu) {
+        accountBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('hidden');
+        });
+        window.addEventListener('click', e => {
+          if (!dropdownMenu.contains(e.target) && !accountBtn.contains(e.target))
+            dropdownMenu.classList.add('hidden');
+        });
+      }
+
+      // ── Menu mobile ──────────────────────────────────
+      const hamburgerBtn       = document.getElementById('hamburgerBtn');
+      const mobileMenu         = document.getElementById('mobileMenu');
+      const closeMobileMenuBtn = document.getElementById('closeMobileMenu');
+      if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('flex');
+        });
+      }
+      if (closeMobileMenuBtn) {
+        closeMobileMenuBtn.addEventListener('click', closeMobileMenuFunc);
+      }
+
+      // ── Modal backdrop ───────────────────────────────
+      const authModal = document.getElementById('authModal');
+      authModal?.addEventListener('click', e => { if (e.target === authModal) closeModal(); });
+
+      // ── Scroll reveal ────────────────────────────────
+      revealOnScroll();
+    });
+
+    function closeMobileMenuFunc() {
+      const m = document.getElementById('mobileMenu');
+      m?.classList.add('hidden');
+      m?.classList.remove('flex');
+    }
+
+    function openModal(type) {
+      document.getElementById('dropdownMenu')?.classList.add('hidden');
+      document.getElementById('authModal')?.classList.remove('hidden');
+      if (type === 'login') {
+        document.getElementById('loginForm')?.classList.remove('hidden');
+        document.getElementById('registerForm')?.classList.add('hidden');
+      } else {
+        document.getElementById('loginForm')?.classList.add('hidden');
+        document.getElementById('registerForm')?.classList.remove('hidden');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('authModal')?.classList.add('hidden');
+    }
+
+    function switchForm(type) {
+      if (type === 'login') {
+        document.getElementById('loginForm')?.classList.remove('hidden');
+        document.getElementById('registerForm')?.classList.add('hidden');
+      } else {
+        document.getElementById('loginForm')?.classList.add('hidden');
+        document.getElementById('registerForm')?.classList.remove('hidden');
+      }
+    }
+
+    function revealOnScroll() {
+      document.querySelectorAll('.reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100)
+          el.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+
+    // ── TABS LOGIC ────────────────────────────────────
+    function showTab(tabId) {
+        // Hide all panels
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.add('hidden');
+        });
+        
+        // Remove active state from buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('bg-mateBlue', 'text-white', 'shadow-lg');
+            btn.classList.add('bg-white', 'text-gray-600', 'hover:bg-gray-100');
+        });
+
+        // Show selected panel
+        document.getElementById(tabId).classList.remove('hidden');
+        
+        // Add active state to clicked button
+        const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+        if(activeBtn){
+            activeBtn.classList.add('bg-mateBlue', 'text-white', 'shadow-lg');
+            activeBtn.classList.remove('bg-white', 'text-gray-600', 'hover:bg-gray-100');
+        }
+    }
+  </script>
+  <script>document.addEventListener('DOMContentLoaded', () => setActiveNavLink('examens'));</script>
+</body>
+</html>
