@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimisation – Yaourt Madagascar</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yogurt-dark: #0a5c36;
+  --yogurt-green: #00a86b;
+  --yogurt-mint: #00d89a;
+  --yogurt-light: #e8fdf5;
+  --gold: #f5b800;
+  --success: #00c896;
+  --error: #ff4d6d;
+  --bg: #f0fff6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(0,216,154,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(0,168,107,0.10) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, var(--yogurt-dark) 0%, var(--yogurt-green) 100%);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content:'';
+  position:absolute; bottom:-2px; left:0; right:0; height:60px;
+  background: var(--bg);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 32px 60px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo-wrap {
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 80px;
+  height: 80px;
+}
+.logo-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--yogurt-dark);
+  line-height: 1;
+}
+
+.header-title h1 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.header-title p {
+  color: var(--yogurt-mint);
+  font-size: 0.95rem;
+  font-weight: 400;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* Intro card */
+.intro-card {
+  max-width: 820px;
+  margin: -20px auto 32px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 36px;
+  box-shadow: 0 8px 40px rgba(0,168,107,0.10);
+  border-left: 6px solid var(--yogurt-mint);
+  position: relative;
+  z-index: 2;
+}
+.intro-card .badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--yogurt-light);
+  color: var(--yogurt-green);
+  border-radius: 30px;
+  padding: 4px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.intro-card p { color: #334; font-size: 1rem; line-height: 1.7; }
+.formula-box {
+  margin-top: 16px;
+  background: var(--yogurt-light);
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--yogurt-dark);
+  font-weight: 600;
+  border-left: 4px solid var(--yogurt-green);
+}
+
+/* Sections */
+.section {
+  max-width: 820px;
+  margin: 0 auto 28px;
+  padding: 0 16px;
+}
+.section-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px 36px;
+  box-shadow: 0 4px 24px rgba(0,168,107,0.07);
+}
+.section-title {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 22px;
+}
+.section-num {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--yogurt-green), var(--yogurt-mint));
+  color: #fff; font-weight: 800; font-size: 0.95rem;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.section-title h2 { font-size: 1.1rem; color: var(--yogurt-dark); font-weight: 700; }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.95rem;
+}
+th {
+  background: var(--yogurt-dark);
+  color: #fff; padding: 12px 16px;
+  font-weight: 700; text-align: center;
+  font-size: 0.88rem; letter-spacing: 0.04em;
+}
+th:first-child { border-radius: 10px 0 0 0; }
+th:last-child { border-radius: 0 10px 0 0; }
+td {
+  padding: 10px 16px; text-align: center;
+  border-bottom: 1px solid #e8f0fa;
+  font-family: 'JetBrains Mono', monospace;
+}
+tr:nth-child(even) td { background: var(--yogurt-light); }
+.input-cell {
+  background: transparent;
+  border: 2px solid #c8f5e0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  width: 130px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--yogurt-dark);
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-cell:focus { outline:none; border-color: var(--yogurt-mint); box-shadow: 0 0 0 3px rgba(0,216,154,0.18); }
+.input-cell.correct { border-color: var(--success); background: rgba(0,200,150,0.08); }
+.input-cell.wrong { border-color: var(--error); background: rgba(255,77,109,0.07); animation: shake 0.4s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* Select */
+.obs-group { margin-bottom: 20px; }
+.obs-label { font-size:0.88rem; color: var(--yogurt-green); font-weight:700; margin-bottom:8px; display:block; }
+.obs-select-wrap { position: relative; }
+.obs-select {
+  width: 100%; appearance: none; -webkit-appearance: none;
+  border: 2px solid #c8f5e0; border-radius: 12px;
+  padding: 13px 44px 13px 16px;
+  font-family: 'Sora', sans-serif; font-size: 0.93rem;
+  color: var(--yogurt-dark); background: #fff;
+  cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; line-height: 1.4;
+}
+.obs-select:focus { outline: none; border-color: var(--yogurt-mint); box-shadow: 0 0 0 3px rgba(0,216,154,0.18); }
+.obs-select.correct { border-color: var(--success); background: rgba(0,200,150,0.06); }
+.obs-select.wrong { border-color: var(--error); background: rgba(255,77,109,0.06); animation: shake 0.4s; }
+.obs-select-wrap::after {
+  content: '▾'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  color: var(--yogurt-green); font-size: 1rem; pointer-events: none;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items:center; gap:8px;
+  padding:12px 28px; border-radius:12px; border:none; cursor:pointer;
+  font-family:'Sora',sans-serif; font-weight:700; font-size:0.95rem;
+  transition: all 0.2s; letter-spacing:0.02em;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--yogurt-green), var(--yogurt-mint));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0,168,107,0.25);
+}
+.btn-primary:hover { transform:translateY(-2px); box-shadow: 0 8px 24px rgba(0,168,107,0.35); }
+.btn-gold {
+  background: linear-gradient(135deg, #f5b800, #ff8c00);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(245,184,0,0.3);
+}
+.btn-gold:hover { transform:translateY(-2px); }
+
+/* Feedback */
+.feedback {
+  margin-top: 16px; padding: 14px 18px; border-radius:12px;
+  font-size:0.9rem; display:none; line-height:1.6;
+}
+.feedback.success { background:rgba(0,200,150,0.12); border-left:4px solid var(--success); color:#005c45; display:block; }
+.feedback.error { background:rgba(255,77,109,0.1); border-left:4px solid var(--error); color:#9a002a; display:block; }
+.feedback.info { background: var(--yogurt-light); border-left:4px solid var(--yogurt-mint); color: var(--yogurt-dark); display:block; }
+
+/* Reasoning reveal */
+.reasoning-reveal { margin-top:20px; border-radius:16px; overflow:hidden; display:none; }
+.reasoning-reveal.show { display:block; animation: fadeSlide 0.5s ease; }
+@keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.reasoning-header {
+  background: linear-gradient(135deg, var(--yogurt-dark), var(--yogurt-green));
+  padding:14px 20px; color:#fff; font-weight:700; font-size:0.92rem;
+  display:flex; align-items:center; gap:8px;
+}
+.reasoning-body { background: var(--yogurt-light); padding:18px 22px; }
+.reasoning-body p { color:#223; font-size:0.92rem; line-height:1.7; margin-bottom:8px; }
+.reasoning-body .formula {
+  font-family:'JetBrains Mono',monospace;
+  background:#fff; border-radius:8px; padding:10px 16px;
+  border-left:4px solid var(--yogurt-mint);
+  font-size:0.95rem; color: var(--yogurt-dark);
+  margin: 10px 0;
+}
+
+/* Progress bar */
+.progress-bar-wrap { max-width:820px; margin: 0 auto 12px; padding:0 16px; }
+.progress-bar { height:6px; background:#d8f8e8; border-radius:999px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg, var(--yogurt-mint), var(--yogurt-green)); border-radius:999px; width:0%; transition:width 0.5s ease; }
+.progress-label { font-size:0.8rem; color:#667; margin-bottom:6px; text-align:right; }
+
+/* Score card */
+.score-card { max-width:820px; margin:0 auto 40px; padding:0 16px; display:none; }
+.score-card.show { display:block; animation: fadeSlide 0.6s; }
+.score-inner {
+  background: linear-gradient(135deg, var(--yogurt-dark), var(--yogurt-green));
+  border-radius:24px; padding:36px; text-align:center; color:#fff;
+  position:relative; overflow:hidden;
+}
+.score-num { font-size:4rem; font-weight:900; color: var(--yogurt-mint); }
+.score-label { font-size:1.1rem; margin-top:4px; opacity:0.85; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-fallback">
+        <span style="font-size:2rem;">🥛</span>
+        <span>YAOURT</span>
+      </div>
+    </div>
+    <div class="header-title">
+      <h1>Optimisation du Bénéfice</h1>
+      <p>Fonction du Second Degré — Entreprise YaourtMada</p>
+    </div>
+  </div>
+</div>
+
+<!-- Intro -->
+<div class="intro-card">
+  <div class="badge">📊 Cas d'entreprise</div>
+  <p>L'entreprise <strong>YaourtMada</strong> produit et vend des yaourts. Une étude de marché a montré que le bénéfice journalier dépend de la quantité produite. Le comptable a modélisé ce bénéfice par une fonction du second degré.</p>
+  <div class="formula-box">
+    Bénéfice B(x) = <strong>-10x² + 600x - 5000</strong>
+    <br>
+    <span style="font-size:0.85rem; font-weight:400; opacity:0.8;">(x représente la quantité en litres, B(x) en Ariary)</span>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-bar-wrap">
+  <div class="progress-label" id="progressLabel">0 / 3 sections complétées</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+
+<!-- Section 1: Tableau -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num">1</div>
+      <h2>Calculer le bénéfice pour différentes quantités</h2>
+    </div>
+    <p style="margin-bottom:12px; color:#445; font-size:0.9rem;">Calculez le bénéfice pour les quantités suivantes (arrondir à l'entier le plus proche).</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Quantité x (litres)</th>
+            <th>Bénéfice B(x) (Ariary)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>10</strong></td>
+            <td><input class="input-cell" id="v10" type="text" placeholder="B(10) = ?"></td>
+          </tr>
+          <tr>
+            <td><strong>20</strong></td>
+            <td><input class="input-cell" id="v20" type="text" placeholder="B(20) = ?"></td>
+          </tr>
+          <tr>
+            <td><strong>30</strong></td>
+            <td><input class="input-cell" id="v30" type="text" placeholder="B(30) = ?"></td>
+          </tr>
+          <tr>
+            <td><strong>50</strong></td>
+            <td><input class="input-cell" id="v50" type="text" placeholder="B(50) = ?"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:18px;">
+      <button class="btn btn-primary" onclick="checkTable()">✓ Vérifier les calculs</button>
+    </div>
+    <div class="feedback" id="fb-table"></div>
+    <div class="reasoning-reveal" id="reason-table">
+      <div class="reasoning-header">💡 Détail des calculs</div>
+      <div class="reasoning-body">
+        <p>On remplace <strong>x</strong> par la valeur dans la formule B(x) = -10x² + 600x - 5000.</p>
+        <div class="formula">
+          B(10) = -10(10)² + 600(10) - 5000 = -1000 + 6000 - 5000 = <strong>0 Ariary</strong><br>
+          B(20) = -10(20)² + 600(20) - 5000 = -4000 + 12000 - 5000 = <strong>3000 Ariary</strong><br>
+          B(30) = -10(30)² + 600(30) - 5000 = -9000 + 18000 - 5000 = <strong>4000 Ariary</strong><br>
+          B(50) = -10(50)² + 600(50) - 5000 = -25000 + 30000 - 5000 = <strong>0 Ariary</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Observation -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num">2</div>
+      <h2>Analyse de la fonction</h2>
+    </div>
+
+    <div class="obs-group">
+      <label class="obs-label">💬 Quelle est la nature de la parabole représentant B(x) ?</label>
+      <div class="obs-select-wrap">
+        <select class="obs-select" id="obsPara">
+          <option value="">— Choisir —</option>
+          <option value="correct">Elle est orientée vers le bas (forme de dôme) car a = -10 < 0.</option>
+          <option value="wrong1">Elle est orientée vers le haut (forme de cuvette) car a = -10 < 0.</option>
+          <option value="wrong2">C'est une droite car il n'y a pas de x².</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="obs-group">
+      <label class="obs-label">💬 Que représente le sommet de cette parabole pour l'entreprise ?</label>
+      <div class="obs-select-wrap">
+        <select class="obs-select" id="obsMax">
+          <option value="">— Choisir —</option>
+          <option value="wrong1">Une perte maximale.</option>
+          <option value="correct">Le bénéfice maximal que l'entreprise peut réaliser.</option>
+          <option value="wrong2">Le seuil de rentabilité (bénéfice = 0).</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="checkObs()">✓ Valider l'analyse</button>
+    <div class="feedback" id="fb-obs"></div>
+    <div class="reasoning-reveal" id="reason-obs">
+      <div class="reasoning-header">💡 Interprétation économique</div>
+      <div class="reasoning-body">
+        <p>Comme le coefficient <strong>a est négatif (-10)</strong>, la parabole est orientée vers le bas. Cela signifie que la fonction admet un <strong>maximum</strong>.</p>
+        <p>Du point de vue économique, ce maximum correspond au <strong>bénéfice maximal</strong>. L'entreprise cherche donc les coordonnées de ce sommet pour savoir combien produire et combien elle gagnera.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Calcul du Max -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num">3</div>
+      <h2>Calcul du bénéfice maximal</h2>
+    </div>
+    
+    <p style="margin-bottom:16px; color:#445; font-size:0.9rem;">Utilisez la formule du sommet : x<sub>S</sub> = -b / (2a) pour trouver la quantité optimale.</p>
+
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:180px;">
+        <label class="obs-label">Quantité optimale x (litres) :</label>
+        <input class="input-cell" id="optX" type="text" placeholder="x = ?" style="width:100%;">
+      </div>
+      <div style="flex:1; min-width:180px;">
+        <label class="obs-label">Bénéfice maximal (Ariary) :</label>
+        <input class="input-cell" id="optY" type="text" placeholder="B(x) = ?" style="width:100%;">
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <button class="btn btn-gold" onclick="checkMax()">🎯 Trouver le maximum</button>
+    </div>
+    <div class="feedback" id="fb-max"></div>
+    <div class="reasoning-reveal" id="reason-max">
+      <div class="reasoning-header">💡 Solution pas à pas</div>
+      <div class="reasoning-body">
+        <p><strong>1. Identifier les coefficients :</strong> a = -10, b = 600, c = -5000.</p>
+        <p><strong>2. Calculer l'abscisse du sommet (x<sub>S</sub>) :</strong></p>
+        <div class="formula">
+          x<sub>S</sub> = -b / (2a) = -600 / (2 × -10) = -600 / -20 = <strong>30</strong>
+        </div>
+        <p>L'entreprise doit produire <strong>30 litres</strong> de yaourt.</p>
+        <p><strong>3. Calculer le bénéfice maximal (ordonnée) :</strong></p>
+        <div class="formula">
+          B(30) = -10(30)² + 600(30) - 5000<br>
+          B(30) = -9000 + 18000 - 5000<br>
+          B(30) = <strong>4000 Ariary</strong>
+        </div>
+        <p style="margin-top:10px; font-weight:600; color:var(--yogurt-dark);">✅ Conclusion : Pour maximiser son profit, YaourtMada doit produire 30 litres, ce qui lui rapportera 4000 Ariary de bénéfice par jour.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Score -->
+<div class="score-card" id="scoreCard">
+  <div class="score-inner">
+    <div class="score-num" id="scoreNum">0/3</div>
+    <div class="score-label">sections réussies</div>
+    <p style="margin-top:16px; opacity:0.85; font-size:0.95rem;" id="scoreMsg"></p>
+  </div>
+</div>
+
+<script>
+let scores = { table: false, obs: false, max: false };
+
+// Réponses attendues
+const tableAnswers = {
+  v10: 0,
+  v20: 3000,
+  v30: 4000,
+  v50: 0
+};
+
+function normalize(val) {
+  // Enlève les espaces et convertit en nombre
+  return parseInt(val.replace(/\s/g,''));
+}
+
+function checkTable() {
+  let allOk = true;
+  for(const [id, expected] of Object.entries(tableAnswers)) {
+    const el = document.getElementById(id);
+    const val = normalize(el.value);
+    if(val === expected) {
+      el.classList.remove('wrong'); el.classList.add('correct');
+    } else {
+      el.classList.remove('correct'); el.classList.add('wrong');
+      allOk = false;
+    }
+  }
+  const fb = document.getElementById('fb-table');
+  if(allOk) {
+    fb.className = 'feedback success';
+    fb.innerHTML = '✅ Excellent ! Les calculs sont justes. Observez bien les valeurs : le bénéfice monte puis redescend.';
+    document.getElementById('reason-table').classList.add('show');
+    scores.table = true; updateProgress();
+  } else {
+    fb.className = 'feedback error';
+    fb.innerHTML = '❌ Il y a des erreurs de calcul. Rappel : B(x) = -10x² + 600x - 5000.';
+  }
+}
+
+function checkObs() {
+  const selPara = document.getElementById('obsPara');
+  const selMax = document.getElementById('obsMax');
+  
+  const okPara = selPara.value === 'correct';
+  const okMax = selMax.value === 'correct';
+
+  selPara.classList.remove('correct','wrong');
+  selMax.classList.remove('correct','wrong');
+  
+  if(okPara) selPara.classList.add('correct'); else selPara.classList.add('wrong');
+  if(okMax) selMax.classList.add('correct'); else selMax.classList.add('wrong');
+
+  const fb = document.getElementById('fb-obs');
+  if(okPara && okMax) {
+    fb.className = 'feedback success';
+    fb.innerHTML = '✅ Parfait ! Vous avez bien identifié la forme de la fonction et son sens économique.';
+    document.getElementById('reason-obs').classList.add('show');
+    scores.obs = true; updateProgress();
+  } else {
+    fb.className = 'feedback error';
+    fb.innerHTML = '❌ Réfléchissez bien : si le chiffre devant x² est négatif, la parabole "s'ouvre" vers le bas (comme un dôme).';
+  }
+}
+
+function checkMax() {
+  const xVal = normalize(document.getElementById('optX').value);
+  const yVal = normalize(document.getElementById('optY').value);
+  
+  const okX = (xVal === 30);
+  const okY = (yVal === 4000);
+
+  const elX = document.getElementById('optX');
+  const elY = document.getElementById('optY');
+  
+  elX.classList.remove('correct','wrong');
+  elY.classList.remove('correct','wrong');
+  
+  if(okX) elX.classList.add('correct'); else elX.classList.add('wrong');
+  if(okY) elY.classList.add('correct'); else elY.classList.add('wrong');
+
+  const fb = document.getElementById('fb-max');
+  if(okX && okY) {
+    fb.className = 'feedback success';
+    fb.innerHTML = '🌟 Bravo ! Vous avez trouvé le point optimal de production.';
+    document.getElementById('reason-max').classList.add('show');
+    scores.max = true; updateProgress();
+    showScore();
+  } else {
+    fb.className = 'feedback error';
+    fb.innerHTML = '❌ Utilisez la formule x = -b / 2a. Ici b=600 et a=-10. Ensuite remplacez x dans B(x).';
+  }
+}
+
+function updateProgress() {
+  const count = Object.values(scores).filter(Boolean).length;
+  document.getElementById('progressLabel').textContent = `${count} / 3 sections complétées`;
+  document.getElementById('progressFill').style.width = (count / 3 * 100) + '%';
+}
+
+function showScore() {
+  const count = Object.values(scores).filter(Boolean).length;
+  const card = document.getElementById('scoreCard');
+  card.classList.add('show');
+  document.getElementById('scoreNum').textContent = count + '/3';
+  document.getElementById('scoreMsg').textContent = "L'optimisation est maîtrisée ! Vous savez maximiser un bénéfice.";
+  
+  // Scroll to score
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>
