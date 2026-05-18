@@ -476,31 +476,46 @@ const tableAnswers = {
 
 function normalize(val) {
   // Enlève les espaces et convertit en nombre
-  return parseInt(val.replace(/\s/g,''));
+  if (!val) return NaN;
+  return parseInt(val.toString().replace(/\s/g,''));
 }
 
 function checkTable() {
   let allOk = true;
+  
+  // 1. Vérifier les réponses et colorer les inputs
   for(const [id, expected] of Object.entries(tableAnswers)) {
     const el = document.getElementById(id);
     const val = normalize(el.value);
+    
+    // On réinitialise les classes
+    el.classList.remove('correct', 'wrong');
+    
     if(val === expected) {
-      el.classList.remove('wrong'); el.classList.add('correct');
+      el.classList.add('correct');
     } else {
-      el.classList.remove('correct'); el.classList.add('wrong');
+      el.classList.add('wrong');
       allOk = false;
     }
   }
+  
+  // 2. Afficher le feedback
   const fb = document.getElementById('fb-table');
   if(allOk) {
     fb.className = 'feedback success';
     fb.innerHTML = '✅ Excellent ! Les calculs sont justes. Observez bien les valeurs : le bénéfice monte puis redescend.';
-    document.getElementById('reason-table').classList.add('show');
-    scores.table = true; updateProgress();
+    scores.table = true; 
   } else {
     fb.className = 'feedback error';
-    fb.innerHTML = '❌ Il y a des erreurs de calcul. Rappel : B(x) = -10x² + 600x - 5000.';
+    fb.innerHTML = '❌ Certaines réponses sont incorrectes. Consultez la correction ci-dessous.';
+    // Même si c'est faux, on marque la section comme "vue" pour le score final si on veut, 
+    // mais ici on ne valide le score que si c'est juste.
   }
+  
+  // 3. IMPORTANT : On affiche TOUJOURS le raisonnement
+  document.getElementById('reason-table').classList.add('show');
+  
+  updateProgress();
 }
 
 function checkObs() {
@@ -510,22 +525,29 @@ function checkObs() {
   const okPara = selPara.value === 'correct';
   const okMax = selMax.value === 'correct';
 
+  // Nettoyage des classes
   selPara.classList.remove('correct','wrong');
   selMax.classList.remove('correct','wrong');
   
+  // Application des classes
   if(okPara) selPara.classList.add('correct'); else selPara.classList.add('wrong');
   if(okMax) selMax.classList.add('correct'); else selMax.classList.add('wrong');
 
   const fb = document.getElementById('fb-obs');
+  
   if(okPara && okMax) {
     fb.className = 'feedback success';
     fb.innerHTML = '✅ Parfait ! Vous avez bien identifié la forme de la fonction et son sens économique.';
-    document.getElementById('reason-obs').classList.add('show');
-    scores.obs = true; updateProgress();
+    scores.obs = true;
   } else {
     fb.className = 'feedback error';
-    fb.innerHTML = '❌ Réfléchissez bien : si le chiffre devant x² est négatif, la parabole "s'ouvre" vers le bas (comme un dôme).';
+    fb.innerHTML = '❌ Au moins une réponse est incorrecte. Voici l\'explication pour vous aider.';
   }
+  
+  // IMPORTANT : On affiche TOUJOURS le raisonnement
+  document.getElementById('reason-obs').classList.add('show');
+  
+  updateProgress();
 }
 
 function checkMax() {
@@ -545,16 +567,22 @@ function checkMax() {
   if(okY) elY.classList.add('correct'); else elY.classList.add('wrong');
 
   const fb = document.getElementById('fb-max');
+  
   if(okX && okY) {
     fb.className = 'feedback success';
     fb.innerHTML = '🌟 Bravo ! Vous avez trouvé le point optimal de production.';
-    document.getElementById('reason-max').classList.add('show');
-    scores.max = true; updateProgress();
-    showScore();
+    scores.max = true;
+    // On affiche le score final seulement si tout est réussi
+    setTimeout(showScore, 500); 
   } else {
     fb.className = 'feedback error';
-    fb.innerHTML = '❌ Utilisez la formule x = -b / 2a. Ici b=600 et a=-10. Ensuite remplacez x dans B(x).';
+    fb.innerHTML = '❌ Ce n\'est pas encore tout à fait ça. Utilisez la formule -b/2a et remplacez x dans B(x).';
   }
+  
+  // IMPORTANT : On affiche TOUJOURS le raisonnement
+  document.getElementById('reason-max').classList.add('show');
+  
+  updateProgress();
 }
 
 function updateProgress() {
