@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog & Conseils — EduPro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/global.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --navy: #0d2b56;
+      --gold: #ffa300;
+      --gold-dark: #cc8200;
+      --purple: #7C3AED;
+      --cyan: #06B6D4;
+      --green: #10B981;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f8f7f2;
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--navy);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(13,43,86,.25);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .logo {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .logo span { color: var(--gold); }
+    nav { display: flex; align-items: center; gap: .25rem; }
+    nav a {
+      color: rgba(255,255,255,.75);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .85rem;
+      padding: .4rem .9rem;
+      border-radius: .75rem;
+      transition: all .2s;
+    }
+    nav a:hover, nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--navy) !important;
+      margin-left: .5rem;
+      font-weight: 900 !important;
+    }
+    .nav-cta:hover { background: var(--gold-dark) !important; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      background: #fff;
+      border-bottom: 1px solid rgba(13,43,86,.08);
+      padding: .75rem 2rem;
+    }
+    .breadcrumb-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      color: rgba(13,43,86,.45);
+      font-weight: 700;
+    }
+    .breadcrumb-inner a { color: var(--navy); text-decoration: none; }
+    .breadcrumb-inner a:hover { color: var(--gold); }
+    .sep { opacity: .4; }
+
+    /* ── ARTICLE HERO ── */
+    .article-hero {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+    }
+    .article-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(13,43,86,.15) 0%, rgba(13,43,86,.75) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 2rem;
+      right: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .article-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 900;
+      padding: .35rem .9rem;
+      border-radius: 999px;
+      margin-bottom: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero-content h1 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: #fff;
+      line-height: 1.15;
+      text-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: .9rem;
+      font-size: .8rem;
+      color: rgba(255,255,255,.75);
+      font-weight: 700;
+    }
+    .hero-meta span { display: flex; align-items: center; gap: .35rem; }
+
+    /* ── ARTICLE BODY ── */
+    .article-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 3rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .article-layout { grid-template-columns: 1fr; }
+      .sidebar { order: 2; }
+    }
+
+    .article-body {
+      background: #fff;
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      box-shadow: 0 4px 24px rgba(13,43,86,.07);
+      border: 1px solid rgba(13,43,86,.06);
+    }
+    .article-body p {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(13,43,86,.8);
+      margin-bottom: 1.25rem;
+    }
+    .article-body h3 {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: var(--navy);
+      margin: 2rem 0 .75rem;
+    }
+    .article-body ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 1.25rem;
+    }
+    .article-body ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      color: rgba(13,43,86,.8);
+      line-height: 1.7;
+      margin-bottom: .75rem;
+      padding-left: .5rem;
+    }
+    .article-body ul li::before {
+      content: '→';
+      color: var(--gold);
+      font-weight: 900;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+    .quote-block {
+      background: linear-gradient(135deg, #fff8ed 0%, #fff3db 100%);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 1rem 1rem 0;
+      padding: 1.25rem 1.5rem;
+      margin: 2rem 0;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--navy);
+      line-height: 1.7;
+    }
+    .tip-box {
+      background: linear-gradient(135deg, #f0fdf9 0%, #e6f7f3 100%);
+      border: 1px solid rgba(16,185,129,.25);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .tip-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .tip-box p {
+      font-family: 'Nunito', sans-serif;
+      font-size: .9rem;
+      margin: 0;
+      color: rgba(13,43,86,.8);
+    }
+    .step-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: #f8f7f2;
+      border-radius: 1rem;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: .75rem;
+    }
+    .step-num {
+      background: var(--navy);
+      color: #fff;
+      font-weight: 900;
+      font-size: .8rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-card p { font-family: 'Nunito', sans-serif; font-size: .9rem; margin: 0; color: var(--navy); }
+
+    /* share bar */
+    .share-bar {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(13,43,86,.08);
+      flex-wrap: wrap;
+    }
+    .share-bar span { font-weight: 900; font-size: .85rem; color: rgba(13,43,86,.5); }
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .8rem;
+      font-weight: 900;
+      padding: .45rem 1rem;
+      border-radius: .75rem;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .share-btn.fb { background: #1877F2; color: #fff; }
+    .share-btn.tw { background: #000; color: #fff; }
+    .share-btn.wa { background: #25D366; color: #fff; }
+    .share-btn:hover { opacity: .85; transform: translateY(-1px); }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    .sidebar-card {
+      background: #fff;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(13,43,86,.07);
+      border: 1px solid rgba(13,43,86,.06);
+    }
+    .sidebar-title {
+      font-weight: 900;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(13,43,86,.45);
+      margin-bottom: 1rem;
+    }
+    .related-item {
+      display: flex;
+      gap: .85rem;
+      align-items: center;
+      padding: .6rem 0;
+      border-bottom: 1px solid rgba(13,43,86,.06);
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .related-item:last-child { border-bottom: none; }
+    .related-item:hover .related-text { color: var(--gold); }
+    .related-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: .65rem;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .related-text {
+      font-weight: 800;
+      font-size: .82rem;
+      color: var(--navy);
+      line-height: 1.35;
+      transition: color .2s;
+    }
+    .related-meta { font-size: .72rem; color: rgba(13,43,86,.4); font-weight: 700; margin-top: .25rem; }
+
+    .prof-card { text-align: center; }
+    .prof-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--gold);
+      margin: 0 auto .75rem;
+      display: block;
+    }
+    .prof-name { font-weight: 900; font-size: 1rem; color: var(--navy); }
+    .prof-sub { font-size: .8rem; color: rgba(13,43,86,.5); font-weight: 700; margin: .2rem 0 .75rem; }
+    .prof-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: #f4f0ff;
+      color: var(--purple);
+      font-size: .72rem;
+      font-weight: 900;
+      padding: .3rem .75rem;
+      border-radius: 999px;
+    }
+
+    .cta-card {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a3d73 100%);
+      color: #fff;
+      border-radius: 1.25rem;
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+    }
+    .cta-card h4 { font-weight: 900; font-size: 1.05rem; margin-bottom: .5rem; }
+    .cta-card p { font-size: .82rem; color: rgba(255,255,255,.65); margin-bottom: 1.25rem; line-height: 1.5; }
+    .cta-btn {
+      display: block;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 900;
+      font-size: .85rem;
+      padding: .75rem 1.5rem;
+      border-radius: .9rem;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .cta-btn:hover { background: var(--gold-dark); }
+
+    /* ── MORE ARTICLES ── */
+    .more-section {
+      background: #fff;
+      padding: 4rem 2rem;
+      border-top: 1px solid rgba(13,43,86,.06);
+    }
+    .more-inner { max-width: 1200px; margin: 0 auto; }
+    .more-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .more-header h2 { font-weight: 900; font-size: 1.5rem; color: var(--navy); }
+    .see-all {
+      font-weight: 900;
+      font-size: .85rem;
+      color: var(--navy);
+      text-decoration: none;
+      border: 1.5px solid rgba(13,43,86,.2);
+      padding: .4rem 1rem;
+      border-radius: .75rem;
+      transition: all .2s;
+    }
+    .see-all:hover { background: var(--navy); color: #fff; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } }
+    .mini-card {
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(13,43,86,.08);
+      box-shadow: 0 2px 12px rgba(13,43,86,.06);
+      transition: all .3s;
+      cursor: pointer;
+      background: #fff;
+      text-decoration: none;
+    }
+    .mini-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(13,43,86,.12); }
+    .mini-thumb { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .mini-body { padding: 1.1rem; }
+    .mini-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .7rem;
+      font-weight: 900;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      margin-bottom: .6rem;
+    }
+    .mini-title { font-weight: 900; font-size: .9rem; color: var(--navy); line-height: 1.35; margin-bottom: .5rem; }
+    .mini-meta { font-size: .72rem; color: rgba(13,43,86,.4); font-weight: 700; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.7);
+      padding: 3.5rem 2rem 1.5rem;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    .footer-brand .logo { margin-bottom: .75rem; }
+    .footer-brand p { font-size: .85rem; line-height: 1.6; }
+    .footer-col h5 { color: #fff; font-weight: 900; font-size: .85rem; margin-bottom: .85rem; letter-spacing: .04em; }
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,.55);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 700;
+      margin-bottom: .45rem;
+      transition: color .2s;
+    }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .78rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .footer-bottom a { color: rgba(255,255,255,.5); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--gold); }
+
+    /* ── PAGE TRANSITIONS ── */
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn .35s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .uline-gold {
+      position: relative;
+      display: inline-block;
+    }
+    .uline-gold::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -3px;
+      width: 100%; height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ HEADER ══════════════════════ -->
+ <script src="../../components/header.js" data-page="examens"></script>
+
+<!-- ══════════════════════ PAGE: ARTICLE 1 ══════════════════════ -->
+<div id="article-1" class="page active">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="#" onclick="showPage('home')">Accueil</a>
+      <span class="sep">›</span>
+      <a href="#" onclick="showPage('home')">Blog & Conseils</a>
+      <span class="sep">›</span>
+      <span>Mémorisation</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="article-hero">
+    <img src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=1200&q=85" alt="Mémorisation" />
+    <div class="hero-overlay"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;height:100%;">
+      <div class="hero-content">
+        <div class="article-tag">🧠 Mémorisation</div>
+        <h1>Comment avoir une bonne mémoire pour les mathématiques ?</h1>
+        <div class="hero-meta">
+          <span>✍️ Prof. Martin</span>
+          <span>⏱ 5 min de lecture</span>
+          <span>📅 12 mai 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="article-layout">
+
+    <!-- Main content -->
+    <main class="article-body">
+      <p><strong style="color:var(--gold)">Avoir une bonne mémoire en mathématiques</strong> ne se limite pas à retenir des formules par cœur, mais surtout à comprendre les concepts sous-jacents. C'est cette compréhension profonde qui permet à un élève de reconstruire une formule oubliée plutôt que de paniquer lors d'un examen.</p>
+
+      <p>Pour cela, il est utile de revoir régulièrement ses cours et de refaire des exercices pour renforcer ses acquis. La répétition espacée, technique scientifiquement validée, consiste à revoir une notion à des intervalles croissants : le lendemain, puis une semaine après, puis un mois après.</p>
+
+      <h3>1. Les fiches de résumé structurées</h3>
+      <p>Utiliser des fiches de résumé où l'on note les formules clés, les propriétés et les exemples concrets permet de structurer sa mémoire. Une bonne fiche ne dépasse pas une face A4 et contient uniquement l'essentiel.</p>
+
+      <div class="step-card"><div class="step-num">1</div><p><strong>Formule principale</strong> — écrite en grand, en couleur, clairement identifiable.</p></div>
+      <div class="step-card"><div class="step-num">2</div><p><strong>Cas particuliers</strong> — les exceptions et les conditions d'application.</p></div>
+      <div class="step-card"><div class="step-num">3</div><p><strong>Exemple résolu</strong> — au moins un exercice type avec la démarche.</p></div>
+
+      <h3>2. L'image mentale et les associations</h3>
+      <p>De plus, associer chaque notion mathématique à un schéma ou à une image mentale facilite la mémorisation. Le cerveau humain retient beaucoup mieux les informations visuelles. Dessinez systématiquement les figures géométriques, tracez les courbes de fonctions.</p>
+
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <p><strong>Astuce :</strong> Pour le théorème de Pythagore, visualisez un escalier en coupe. Pour les limites, imaginez un voyageur qui s'approche sans jamais arriver. Ces métaphores créent des ancrages durables.</p>
+      </div>
+
+      <h3>3. La pratique variée</h3>
+      <p>Ne faites pas uniquement des exercices du même type. Variez les contextes : géométrie analytique, problèmes de la vie réelle, épreuves des années précédentes. Cette variété oblige le cerveau à transférer les connaissances et renforce les connexions neuronales.</p>
+
+      <div class="quote-block">
+        "Pratiquer la résolution de problèmes variés stimule la réflexion et ancre durablement les connaissances mathématiques. Ce n'est pas le nombre d'heures qui compte, mais la qualité de l'engagement cognitif."
+        <br/><strong style="font-style:normal;font-size:.85rem;color:rgba(13,43,86,.6)">— Prof. Martin, 15 ans d'expérience</strong>
+      </div>
+
+      <h3>4. Le sommeil, allié invisible</h3>
+      <p>Des études montrent que le cerveau consolide les apprentissages pendant le sommeil, notamment en phase REM. Réviser 30 minutes avant de dormir puis reprendre le lendemain matin est bien plus efficace que de s'épuiser en une seule session.</p>
+
+      <ul>
+        <li>Dormez au moins 8 heures après une session de révision intensive.</li>
+        <li>Évitez les écrans dans l'heure précédant le coucher.</li>
+        <li>Tenez un petit journal de bord de vos progrès mathématiques.</li>
+      </ul>
+
+      <!-- Share -->
+      <div class="share-bar">
+        <span>Partager :</span>
+        <a class="share-btn fb" href="#">📘 Facebook</a>
+        <a class="share-btn tw" href="#">✕ Twitter</a>
+        <a class="share-btn wa" href="#">💬 WhatsApp</a>
+      </div>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card prof-card">
+        <img class="prof-avatar" src="https://i.pravatar.cc/150?img=12" alt="Prof. Martin" />
+        <div class="prof-name">Prof. Martin</div>
+        <div class="prof-sub">Mathématiques · Terminale</div>
+        <div class="prof-badge">⭐ 4.9 · 320 élèves</div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Articles connexes</div>
+        <a class="related-item" href="#" onclick="showPage('article-2')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Comment rédiger une fiche de résumé ?</div>
+            <div class="related-meta">Prof. Dubois · 7 min</div>
+          </div>
+        </a>
+        <a class="related-item" href="#" onclick="showPage('article-3')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Comment apprendre les maths efficacement ?</div>
+            <div class="related-meta">Prof. Leroy · 6 min</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>📚 Cours particuliers</h4>
+        <p>Progressez rapidement avec un professeur certifié adapté à votre niveau.</p>
+        <a class="cta-btn" href="#">Trouver un prof →</a>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- More articles -->
+  <div class="more-section">
+    <div class="more-inner">
+      <div class="more-header">
+        <h2>📖 Autres conseils de nos profs</h2>
+        <a class="see-all" href="#">Tous les articles →</a>
+      </div>
+      <div class="cards-grid">
+        <a class="mini-card" href="#" onclick="showPage('article-2')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#e0f7fa;color:var(--cyan)">📝 Méthode</div>
+            <div class="mini-title">Comment rédiger une fiche de résumé efficace ?</div>
+            <div class="mini-meta">Prof. Dubois · ⏱ 7 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-3')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#d1fae5;color:var(--green)">🎯 Stratégie</div>
+            <div class="mini-title">Comment apprendre les matières scientifiques ?</div>
+            <div class="mini-meta">Prof. Leroy · ⏱ 6 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-4')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#f4f0ff;color:var(--purple)">⏰ Organisation</div>
+            <div class="mini-title">Organiser son planning de révisions comme un pro</div>
+            <div class="mini-meta">Prof. Ndiaye · ⏱ 4 min</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /article-1 -->
+
+
+<!-- ══════════════════════ PAGE: ARTICLE 2 ══════════════════════ -->
+<div id="article-2" class="page">
+
+  <div class="breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="#" onclick="showPage('home')">Accueil</a>
+      <span class="sep">›</span>
+      <a href="#" onclick="showPage('home')">Blog & Conseils</a>
+      <span class="sep">›</span>
+      <span>Méthode de travail</span>
+    </div>
+  </div>
+
+  <div class="article-hero">
+    <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&q=85" alt="Méthode" />
+    <div class="hero-overlay"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;height:100%;">
+      <div class="hero-content">
+        <div class="article-tag" style="border-color:rgba(6,182,212,.4)">📝 Méthode de travail</div>
+        <h1>Comment rédiger une fiche de résumé efficace ?</h1>
+        <div class="hero-meta">
+          <span>✍️ Prof. Dubois</span>
+          <span>⏱ 7 min de lecture</span>
+          <span>📅 5 mai 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-layout">
+    <main class="article-body">
+      <p>Rédiger une fiche de résumé efficace est un <strong style="color:var(--gold)">excellent moyen d'organiser ses connaissances</strong> et de faciliter la révision. Contrairement à la prise de notes exhaustive, la fiche de résumé exige un travail de sélection et de reformulation qui en soi constitue déjà un acte d'apprentissage.</p>
+
+      <p>Beaucoup d'élèves commettent l'erreur de recopier leur cours mot à mot. Résultat : une fiche aussi dense que le manuel, aussi difficile à consulter. L'objectif d'une fiche est d'être lisible en 5 minutes chrono.</p>
+
+      <h3>Étape 1 — Identifier ce qui est vraiment essentiel</h3>
+      <div class="step-card"><div class="step-num">1</div><p>Lisez le chapitre entier une première fois <strong>sans rien noter</strong>.</p></div>
+      <div class="step-card"><div class="step-num">2</div><p>Identifiez les <strong>3 à 5 idées maîtresses</strong> du chapitre.</p></div>
+      <div class="step-card"><div class="step-num">3</div><p>Listez les définitions, formules et dates <strong>absolument incontournables</strong>.</p></div>
+
+      <h3>Étape 2 — Structurer visuellement</h3>
+      <p>Utilisez des titres et sous-titres hiérarchisés, des listes à puces courtes, et surtout laissez de l'espace blanc. Un bloc de texte compact est le pire ennemi de la mémorisation rapide.</p>
+
+      <div class="tip-box">
+        <div class="tip-icon">🎨</div>
+        <p><strong>Code couleur :</strong> une couleur par type d'information. Ex : rouge pour les définitions, bleu pour les formules, vert pour les exemples. Votre cerveau associera instantanément la couleur au type de contenu.</p>
+      </div>
+
+      <h3>Étape 3 — Reformuler avec vos propres mots</h3>
+      <p>Ne copiez jamais mot à mot. Reformuler une notion vous oblige à la comprendre vraiment. Si vous ne pouvez pas l'expliquer autrement, c'est le signe qu'elle n'est pas encore assimilée.</p>
+
+      <div class="quote-block">
+        "Une fiche bien conçue doit vous permettre de reconstruire l'essentiel d'un cours en 5 minutes la veille d'un examen. Si vous avez besoin de plus, la fiche est trop dense."
+        <br/><strong style="font-style:normal;font-size:.85rem;color:rgba(13,43,86,.6)">— Prof. Dubois</strong>
+      </div>
+
+      <h3>Étape 4 — Tester et corriger</h3>
+      <ul>
+        <li>Cachez la fiche et essayez de la reproduire de mémoire sur une feuille vierge.</li>
+        <li>Comparez et identifiez les lacunes.</li>
+        <li>Enrichissez la fiche uniquement des points oubliés.</li>
+        <li>Répétez l'opération 48 h plus tard.</li>
+      </ul>
+
+      <h3>Outils numériques vs papier</h3>
+      <p>Les deux approches ont leurs mérites. La fiche papier mobilise davantage la mémoire motrice (écrire à la main ancre mieux). Les outils numériques comme Notion ou Anki permettent la répétition espacée automatique et la recherche instantanée.</p>
+
+      <div class="share-bar">
+        <span>Partager :</span>
+        <a class="share-btn fb" href="#">📘 Facebook</a>
+        <a class="share-btn tw" href="#">✕ Twitter</a>
+        <a class="share-btn wa" href="#">💬 WhatsApp</a>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-card prof-card">
+        <img class="prof-avatar" src="https://i.pravatar.cc/150?img=47" alt="Prof. Dubois" />
+        <div class="prof-name">Prof. Dubois</div>
+        <div class="prof-sub">Français · Méthodologie</div>
+        <div class="prof-badge">⭐ 4.8 · 215 élèves</div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Articles connexes</div>
+        <a class="related-item" href="#" onclick="showPage('article-1')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Comment avoir une bonne mémoire ?</div>
+            <div class="related-meta">Prof. Martin · 5 min</div>
+          </div>
+        </a>
+        <a class="related-item" href="#" onclick="showPage('article-3')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Apprendre les matières scientifiques</div>
+            <div class="related-meta">Prof. Leroy · 6 min</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>📚 Cours particuliers</h4>
+        <p>Progressez rapidement avec un professeur certifié adapté à votre niveau.</p>
+        <a class="cta-btn" href="#">Trouver un prof →</a>
+      </div>
+    </aside>
+  </div>
+
+  <div class="more-section">
+    <div class="more-inner">
+      <div class="more-header">
+        <h2>📖 Autres conseils de nos profs</h2>
+        <a class="see-all" href="#">Tous les articles →</a>
+      </div>
+      <div class="cards-grid">
+        <a class="mini-card" href="#" onclick="showPage('article-1')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#f4f0ff;color:var(--purple)">🧠 Mémorisation</div>
+            <div class="mini-title">Comment avoir une bonne mémoire en maths ?</div>
+            <div class="mini-meta">Prof. Martin · ⏱ 5 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-3')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#d1fae5;color:var(--green)">🎯 Stratégie</div>
+            <div class="mini-title">Comment apprendre les matières scientifiques ?</div>
+            <div class="mini-meta">Prof. Leroy · ⏱ 6 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-4')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#fff8ed;color:var(--gold)">⏰ Organisation</div>
+            <div class="mini-title">Organiser son planning de révisions comme un pro</div>
+            <div class="mini-meta">Prof. Ndiaye · ⏱ 4 min</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /article-2 -->
+
+
+<!-- ══════════════════════ PAGE: ARTICLE 3 ══════════════════════ -->
+<div id="article-3" class="page">
+
+  <div class="breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="#" onclick="showPage('home')">Accueil</a>
+      <span class="sep">›</span>
+      <a href="#" onclick="showPage('home')">Blog & Conseils</a>
+      <span class="sep">›</span>
+      <span>Stratégie</span>
+    </div>
+  </div>
+
+  <div class="article-hero">
+    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=85" alt="Stratégie" />
+    <div class="hero-overlay"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;height:100%;">
+      <div class="hero-content">
+        <div class="article-tag" style="border-color:rgba(16,185,129,.4)">🎯 Stratégie</div>
+        <h1>Comment apprendre les matières scientifiques efficacement ?</h1>
+        <div class="hero-meta">
+          <span>✍️ Prof. Leroy</span>
+          <span>⏱ 6 min de lecture</span>
+          <span>📅 28 avril 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-layout">
+    <main class="article-body">
+      <p>Apprendre les matières scientifiques demande <strong style="color:var(--gold)">de la rigueur, de la méthode et de la pratique régulière</strong>. Contrairement aux idées reçues, les sciences ne sont pas réservées aux "surdoués" — elles s'apprivoisent avec une stratégie adaptée.</p>
+
+      <p>Il est important de bien comprendre les notions de base avant de passer à des concepts plus complexes. En physique-chimie comme en biologie, les connaissances s'articulent en pyramide : sans socle solide, tout s'effondre.</p>
+
+      <h3>Principe 1 — Toujours partir du concret</h3>
+      <p>Avant d'aborder les formules abstraites, cherchez l'exemple du quotidien. La loi de Newton ? Pensez à votre vélo qui freine. La photosynthèse ? Regardez une plante sur votre fenêtre. Cette ancrage dans le réel rend les concepts plus accessibles et durables.</p>
+
+      <div class="tip-box">
+        <div class="tip-icon">🔬</div>
+        <p><strong>Méthode concrète :</strong> Avant chaque nouveau chapitre, posez-vous la question : "Où est-ce que je vois ça dans la vie de tous les jours ?" Notez vos réponses avant même d'ouvrir le manuel.</p>
+      </div>
+
+      <h3>Principe 2 — Schématiser systématiquement</h3>
+      <p>Prendre des notes claires et organiser ses cours sous forme de schémas ou de tableaux facilite la compréhension. En sciences, une image bien construite vaut souvent mieux que trois paragraphes.</p>
+
+      <div class="step-card"><div class="step-num">1</div><p>Dessinez le mécanisme ou le phénomène <strong>à main levée</strong>.</p></div>
+      <div class="step-card"><div class="step-num">2</div><p>Légendez chaque élément avec vos propres mots.</p></div>
+      <div class="step-card"><div class="step-num">3</div><p>Annotez les <strong>relations de cause à effet</strong> avec des flèches.</p></div>
+
+      <h3>Principe 3 — L'exercice avant tout</h3>
+      <p>Faire des exercices régulièrement permet de consolider les acquis et de mieux appréhender les applications concrètes des notions. Visez au moins 60 % de votre temps de révision consacré à la pratique, pas à la relecture passive.</p>
+
+      <ul>
+        <li>Faites d'abord l'exercice sans regarder le cours.</li>
+        <li>Consultez le cours uniquement en cas de blocage complet.</li>
+        <li>Après correction, refaites l'exercice à blanc 24 h plus tard.</li>
+        <li>Variez les types d'exercices : QCM, calcul, rédaction de démarche.</li>
+      </ul>
+
+      <div class="quote-block">
+        "Ne pas hésiter à poser des questions, à échanger avec ses enseignants ou ses camarades aide à lever les incompréhensions et à progresser efficacement. La science est une conversation, pas un monologue."
+        <br/><strong style="font-style:normal;font-size:.85rem;color:rgba(13,43,86,.6)">— Prof. Leroy, agrégé de physique</strong>
+      </div>
+
+      <h3>Principe 4 — L'erreur comme outil</h3>
+      <p>Cessez de voir l'erreur comme une honte. En sciences, une erreur analysée est une leçon définitivement retenue. Tenez un "carnet d'erreurs" où vous notez chaque faute récurrente et sa correction. Relisez-le la veille de chaque examen.</p>
+
+      <h3>Principe 5 — La communauté d'apprentissage</h3>
+      <p>Former ou rejoindre un groupe de révision de 3 à 5 personnes multiplié les perspectives. Expliquer une notion à quelqu'un d'autre est le test ultime de votre compréhension. Si vous pouvez l'enseigner, vous le savez vraiment.</p>
+
+      <div class="share-bar">
+        <span>Partager :</span>
+        <a class="share-btn fb" href="#">📘 Facebook</a>
+        <a class="share-btn tw" href="#">✕ Twitter</a>
+        <a class="share-btn wa" href="#">💬 WhatsApp</a>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-card prof-card">
+        <img class="prof-avatar" src="https://i.pravatar.cc/150?img=33" alt="Prof. Leroy" />
+        <div class="prof-name">Prof. Leroy</div>
+        <div class="prof-sub">Physique-Chimie · Agrégé</div>
+        <div class="prof-badge">⭐ 4.9 · 410 élèves</div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Articles connexes</div>
+        <a class="related-item" href="#" onclick="showPage('article-1')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Comment avoir une bonne mémoire ?</div>
+            <div class="related-meta">Prof. Martin · 5 min</div>
+          </div>
+        </a>
+        <a class="related-item" href="#" onclick="showPage('article-2')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Rédiger une fiche de résumé efficace</div>
+            <div class="related-meta">Prof. Dubois · 7 min</div>
+          </div>
+        </a>
+        <a class="related-item" href="#" onclick="showPage('article-4')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Organiser son planning de révisions</div>
+            <div class="related-meta">Prof. Ndiaye · 4 min</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>📚 Cours particuliers</h4>
+        <p>Progressez rapidement avec un professeur certifié adapté à votre niveau.</p>
+        <a class="cta-btn" href="#">Trouver un prof →</a>
+      </div>
+    </aside>
+  </div>
+
+  <div class="more-section">
+    <div class="more-inner">
+      <div class="more-header">
+        <h2>📖 Autres conseils de nos profs</h2>
+        <a class="see-all" href="#">Tous les articles →</a>
+      </div>
+      <div class="cards-grid">
+        <a class="mini-card" href="#" onclick="showPage('article-1')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#f4f0ff;color:var(--purple)">🧠 Mémorisation</div>
+            <div class="mini-title">Comment avoir une bonne mémoire en maths ?</div>
+            <div class="mini-meta">Prof. Martin · ⏱ 5 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-2')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#e0f7fa;color:var(--cyan)">📝 Méthode</div>
+            <div class="mini-title">Comment rédiger une fiche de résumé ?</div>
+            <div class="mini-meta">Prof. Dubois · ⏱ 7 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-4')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#fff8ed;color:var(--gold)">⏰ Organisation</div>
+            <div class="mini-title">Organiser son planning de révisions comme un pro</div>
+            <div class="mini-meta">Prof. Ndiaye · ⏱ 4 min</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /article-3 -->
+
+
+<!-- ══════════════════════ PAGE: ARTICLE 4 (BONUS) ══════════════════════ -->
+<div id="article-4" class="page">
+
+  <div class="breadcrumb">
+    <div class="breadcrumb-inner">
+      <a href="#" onclick="showPage('home')">Accueil</a>
+      <span class="sep">›</span>
+      <a href="#" onclick="showPage('home')">Blog & Conseils</a>
+      <span class="sep">›</span>
+      <span>Organisation</span>
+    </div>
+  </div>
+
+  <div class="article-hero">
+    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=85" alt="Planning" />
+    <div class="hero-overlay"></div>
+    <div style="max-width:1200px;margin:0 auto;position:relative;height:100%;">
+      <div class="hero-content">
+        <div class="article-tag" style="border-color:rgba(255,163,0,.4)">⏰ Organisation</div>
+        <h1>Organiser son planning de révisions comme un pro</h1>
+        <div class="hero-meta">
+          <span>✍️ Prof. Ndiaye</span>
+          <span>⏱ 4 min de lecture</span>
+          <span>📅 20 avril 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="article-layout">
+    <main class="article-body">
+      <p>Un bon planning de révisions est <strong style="color:var(--gold)">la différence entre subir ses examens et les dominer</strong>. Trop d'élèves se lancent dans les révisions sans boussole, finissent épuisés la veille, et arrivent en examen avec un sentiment d'impréparation.</p>
+
+      <h3>Règle n°1 — Commencer tôt, très tôt</h3>
+      <p>Idéalement 6 à 8 semaines avant les examens. Cela peut sembler excessif, mais cela permet des sessions courtes et régulières plutôt qu'un marathon épuisant la dernière semaine.</p>
+
+      <div class="tip-box">
+        <div class="tip-icon">📅</div>
+        <p><strong>La règle du 3-2-1 :</strong> 3 semaines pour voir toutes les matières une fois, 2 semaines pour les points faibles, 1 semaine pour la révision légère et le repos actif.</p>
+      </div>
+
+      <h3>Règle n°2 — Prioriser avec la matrice d'urgence</h3>
+      <ul>
+        <li>Listez toutes vos matières et évaluez votre niveau sur 10.</li>
+        <li>Les matières avec note basse <strong>ET coefficient élevé</strong> sont prioritaires absolues.</li>
+        <li>Consacrez-leur 50 % de votre temps de révision.</li>
+        <li>Les matières maîtrisées n'ont besoin que d'un entretien minimal.</li>
+      </ul>
+
+      <h3>Règle n°3 — Créer des blocs de 45 minutes</h3>
+      <p>Le cerveau humain fonctionne par cycles d'attention. Une session de travail intensif de 45 minutes suivie d'une pause de 15 minutes est physiologiquement optimale. Évitez les marathons de 3 heures sans pause.</p>
+
+      <div class="step-card"><div class="step-num">1</div><p><strong>45 min</strong> de travail concentré, téléphone en mode avion.</p></div>
+      <div class="step-card"><div class="step-num">2</div><p><strong>15 min</strong> de pause active : marcher, s'étirer, boire de l'eau.</p></div>
+      <div class="step-card"><div class="step-num">3</div><p><strong>Répétez</strong> 3 à 4 fois, puis faites une vraie pause d'1h.</p></div>
+
+      <div class="quote-block">
+        "L'organisation est une compétence qui s'apprend. Les meilleurs élèves ne sont pas ceux qui travaillent le plus longtemps — ce sont ceux qui travaillent le plus intelligemment."
+        <br/><strong style="font-style:normal;font-size:.85rem;color:rgba(13,43,86,.6)">— Prof. Ndiaye</strong>
+      </div>
+
+      <h3>Règle n°4 — La veille de l'examen</h3>
+      <p>La veille, ne révisez pas plus de 2 heures. Relisez uniquement vos fiches de résumé, préparez votre matériel la nuit, dormez 8 heures. Le cerveau consolide les connaissances pendant le sommeil — c'est la meilleure révision qui soit.</p>
+
+      <div class="share-bar">
+        <span>Partager :</span>
+        <a class="share-btn fb" href="#">📘 Facebook</a>
+        <a class="share-btn tw" href="#">✕ Twitter</a>
+        <a class="share-btn wa" href="#">💬 WhatsApp</a>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-card prof-card">
+        <img class="prof-avatar" src="https://i.pravatar.cc/150?img=58" alt="Prof. Ndiaye" />
+        <div class="prof-name">Prof. Ndiaye</div>
+        <div class="prof-sub">Méthodologie · Orientation</div>
+        <div class="prof-badge">⭐ 4.7 · 180 élèves</div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Articles connexes</div>
+        <a class="related-item" href="#" onclick="showPage('article-1')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Comment avoir une bonne mémoire ?</div>
+            <div class="related-meta">Prof. Martin · 5 min</div>
+          </div>
+        </a>
+        <a class="related-item" href="#" onclick="showPage('article-2')">
+          <img class="related-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=120&q=80" alt="" />
+          <div>
+            <div class="related-text">Rédiger une fiche de résumé efficace</div>
+            <div class="related-meta">Prof. Dubois · 7 min</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="cta-card">
+        <h4>📚 Cours particuliers</h4>
+        <p>Progressez rapidement avec un professeur certifié adapté à votre niveau.</p>
+        <a class="cta-btn" href="#">Trouver un prof →</a>
+      </div>
+    </aside>
+  </div>
+
+  <div class="more-section">
+    <div class="more-inner">
+      <div class="more-header">
+        <h2>📖 Autres conseils de nos profs</h2>
+        <a class="see-all" href="#">Tous les articles →</a>
+      </div>
+      <div class="cards-grid">
+        <a class="mini-card" href="#" onclick="showPage('article-1')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#f4f0ff;color:var(--purple)">🧠 Mémorisation</div>
+            <div class="mini-title">Comment avoir une bonne mémoire en maths ?</div>
+            <div class="mini-meta">Prof. Martin · ⏱ 5 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-2')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#e0f7fa;color:var(--cyan)">📝 Méthode</div>
+            <div class="mini-title">Comment rédiger une fiche de résumé ?</div>
+            <div class="mini-meta">Prof. Dubois · ⏱ 7 min</div>
+          </div>
+        </a>
+        <a class="mini-card" href="#" onclick="showPage('article-3')">
+          <img class="mini-thumb" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="" />
+          <div class="mini-body">
+            <div class="mini-tag" style="background:#d1fae5;color:var(--green)">🎯 Stratégie</div>
+            <div class="mini-title">Comment apprendre les matières scientifiques ?</div>
+            <div class="mini-meta">Prof. Leroy · ⏱ 6 min</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /article-4 -->
+
+ <script src="../../components/footer.js" data-page="examens"></script>
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    if (id === 'home') {
+      // On a standalone file, just show article-1 as default
+      document.getElementById('article-1').classList.add('active');
+    } else {
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Wire up "Lire plus" buttons via data attributes if embedded in main site
+  document.querySelectorAll('[data-article]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      showPage('article-' + btn.dataset.article);
+    });
+  });
+</script>
+
+</body>
+</html>
