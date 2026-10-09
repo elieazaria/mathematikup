@@ -45,12 +45,14 @@ tailwind.config = {
 </head>
 <body class="min-h-screen text-bred">
 
-<header class="max-w-4xl mx-auto px-4 pt-8 text-center text-white">
-  <p class="text-sm tracking-widest uppercase opacity-80">Matematikup · Mathématiques</p>
-  <h1 class="text-3xl sm:text-4xl font-bold mt-1">Suites numériques</h1>
-  <p class="mt-1 opacity-90">Là où les ambitions rayonnent&nbsp;!</p>
+<header class="max-w-4xl mx-auto px-4 pt-6 text-center text-white">
+  <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+    <img src="logo-bred.png" alt="BRED Madagasikara – Banque Populaire" class="bg-white w-56 sm:w-64 shrink-0">
+    <h1 class="flex-1 text-2xl sm:text-4xl font-semibold leading-tight">Là où les ambitions<br>rayonnent&nbsp;!</h1>
+  </div>
+  <p class="mt-5 text-sm tracking-widest uppercase opacity-80">Matematikup · Suites numériques</p>
 
-  <nav class="mt-6 flex flex-wrap justify-center gap-2" role="tablist">
+  <nav class="mt-3 flex flex-wrap justify-center gap-2" role="tablist">
     <button class="tab-btn rounded-full px-5 py-2 font-semibold" role="tab" data-tab="exo" aria-selected="true">1 · Exercice</button>
     <button class="tab-btn rounded-full px-5 py-2 font-semibold" role="tab" data-tab="lecon" aria-selected="false">2 · Leçon</button>
     <button class="tab-btn rounded-full px-5 py-2 font-semibold" role="tab" data-tab="quiz" aria-selected="false">3 · Quiz final</button>
@@ -63,13 +65,7 @@ tailwind.config = {
 <section id="tab-exo" class="space-y-6">
 
   <div class="card p-6">
-    <div class="flex items-start gap-3">
-      <div class="shrink-0 w-14 h-14 rounded-xl bg-bred text-white flex items-center justify-center text-2xl font-bold">+×</div>
-      <div>
-        <h2 class="text-xl font-bold">Découverte : le logo</h2>
-        <p class="mt-2">Deux signes mathématiques apparaissent dans le logo de la banque <b>BRED Banque Populaire</b>. Selon vous, quelle idée la banque a-t-elle voulu transmettre en utilisant ces symboles&nbsp;?</p>
-      </div>
-    </div>
+    <p class="text-lg sm:text-xl leading-relaxed text-justify">Deux signes mathématiques apparaissent dans le logo ci-dessus. Selon vous, quelle idée la banque a-t-elle voulu transmettre en utilisant ces symboles&nbsp;?</p>
     <textarea class="field mt-3" rows="2" placeholder="Ta réponse…"></textarea>
     <button class="btn-ghost mt-3" data-reveal="r0">Voir une piste</button>
     <div id="r0" class="reveal">Le <b>+</b> évoque l'ajout régulier, la <b>croissance</b> ; le <b>×</b> évoque la <b>multiplication</b> de l'argent. La banque promet que votre épargne <b>progresse</b> et fait <b>fructifier</b> vos ambitions.</div>
@@ -269,7 +265,7 @@ tailwind.config = {
 
 </main>
 
-<footer class="text-center text-white/80 text-xs pb-8">Matematikup · ©2026 · Tél : +261 32 88 189 52</footer>
+<footer class="text-center text-white/80 text-xs pb-8">Matematikup · ©2025 · Tél : +261 32 88 189 52</footer>
 
 <script>
 // ---------- Maths rendering ----------
