@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matematikup — Apprends les maths autrement</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            coral:   { DEFAULT: '#FF5B3A', light: '#FF7A5E', dark: '#D9430A' },
+            violet:  { DEFAULT: '#6B3EFF', light: '#8B64FF', dark: '#4B22D9' },
+            amber:   { DEFAULT: '#FFB800', light: '#FFCC4D' },
+            ink:     { DEFAULT: '#0D0D1A', soft: '#1A1A2E' },
+            mist:    { DEFAULT: '#F4F2FF' },
+          },
+          borderRadius: { '4xl': '2rem', '5xl': '3rem' },
+          keyframes: {
+            'float-y': {
+              '0%,100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-14px)' },
+            },
+            'spin-slow': {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' },
+            },
+            'fade-up': {
+              '0%': { opacity: 0, transform: 'translateY(32px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            'pop': {
+              '0%': { transform: 'scale(0.85)', opacity: 0 },
+              '100%': { transform: 'scale(1)', opacity: 1 },
+            },
+            'ticker': {
+              '0%':   { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' },
+            },
+          },
+          animation: {
+            'float-y':   'float-y 4s ease-in-out infinite',
+            'float-y-d': 'float-y 5.5s ease-in-out infinite 1s',
+            'spin-slow':  'spin-slow 22s linear infinite',
+            'fade-up':   'fade-up .65s cubic-bezier(.22,.68,0,1.2) forwards',
+            'pop':       'pop .55s cubic-bezier(.22,.68,0,1.2) forwards',
+            'ticker':    'ticker 28s linear infinite',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #F4F2FF; color: #0D0D1A; overflow-x: hidden; }
+    h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: .45;
+    }
+
+    /* Blob bg */
+    .blob { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; }
+
+    /* Fade-up utility */
+    .will-fade { opacity: 0; }
+    .did-fade  { animation: fade-up .65s cubic-bezier(.22,.68,0,1.2) forwards; }
+
+    /* Card hover lift */
+    .card-lift { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-lift:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 24px 48px -8px rgba(107,62,255,.18); }
+
+    /* Ticker */
+    .ticker-wrap { overflow: hidden; white-space: nowrap; }
+    .ticker-inner { display: inline-flex; }
+
+    /* Nav blur */
+    nav { backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+
+    /* Progress bar */
+    .progress-fill { transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+
+    /* Star rating */
+    .star { color: #FFB800; }
+
+    /* Squiggle underline */
+    .squiggle {
+      text-decoration: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='6'%3E%3Cpath d='M0 3 Q5 0 10 3 Q15 6 20 3' stroke='%23FF5B3A' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-position: 0 100%;
+      background-size: 20px 6px;
+      padding-bottom: 8px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F4F2FF; }
+    ::-webkit-scrollbar-thumb { background: #6B3EFF; border-radius: 99px; }
+  </style>
+</head>
+<body class="relative">
+
+  <!-- ─── BACKGROUND BLOBS ─── -->
+  <div class="blob w-[600px] h-[600px] bg-violet/20 top-[-200px] right-[-200px] z-0"></div>
+  <div class="blob w-[400px] h-[400px] bg-coral/15 top-[40%] left-[-150px] z-0"></div>
+  <div class="blob w-[300px] h-[300px] bg-amber/20 bottom-[10%] right-[5%] z-0"></div>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav class="fixed top-0 w-full z-50 bg-mist/70 border-b border-violet/10 px-6 py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 bg-violet rounded-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+          <span class="text-white font-display font-bold text-lg">M</span>
+        </div>
+        <span class="font-display font-bold text-xl tracking-tight">Matematikup</span>
+      </a>
+
+      <!-- Links desktop -->
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="#features" class="hover:text-violet transition-colors">Fonctionnalités</a></li>
+        <li><a href="#courses"  class="hover:text-violet transition-colors">Cours</a></li>
+        <li><a href="#pricing"  class="hover:text-violet transition-colors">Tarifs</a></li>
+        <li><a href="#reviews"  class="hover:text-violet transition-colors">Avis</a></li>
+      </ul>
+
+      <!-- CTA + Burger -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="hidden md:block text-sm font-medium hover:text-violet transition-colors">Connexion</a>
+        <a href="#" class="bg-coral text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-coral-dark transition-colors shadow-md">
+          Commencer gratuitement
+        </a>
+        <!-- burger -->
+        <button id="burger" class="md:hidden w-9 h-9 flex flex-col justify-center gap-1.5 px-1">
+          <span class="block h-0.5 w-full bg-ink rounded-full transition-all" id="b1"></span>
+          <span class="block h-0.5 w-full bg-ink rounded-full transition-all" id="b2"></span>
+          <span class="block h-0.5 w-5  bg-ink rounded-full transition-all" id="b3"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-4 pt-4 pb-6 space-y-4 border-t border-violet/10 mt-3">
+      <a href="#features" class="block text-sm font-medium hover:text-violet">Fonctionnalités</a>
+      <a href="#courses"  class="block text-sm font-medium hover:text-violet">Cours</a>
+      <a href="#pricing"  class="block text-sm font-medium hover:text-violet">Tarifs</a>
+      <a href="#reviews"  class="block text-sm font-medium hover:text-violet">Avis</a>
+      <a href="#"         class="block text-sm font-medium hover:text-violet">Connexion</a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="relative pt-36 pb-24 px-6 overflow-hidden z-10">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
+      <!-- Left -->
+      <div class="will-fade" style="animation-delay:.05s">
+        <div class="inline-flex items-center gap-2 bg-white border border-violet/20 rounded-full px-4 py-1.5 text-xs font-semibold text-violet mb-6 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-coral inline-block animate-pulse"></span>
+          Plateforme e-learning gamifiée · 12 000+ élèves
+        </div>
+
+        <h1 class="font-display font-extrabold text-5xl md:text-6xl leading-[1.05] tracking-tight mb-6">
+          Les maths,<br/>
+          <span class="squiggle">enfin</span> fun &amp;<br/>
+          <span class="text-violet">accessibles.</span>
+        </h1>
+
+        <p class="text-ink/70 text-lg leading-relaxed mb-10 max-w-md">
+          Cours interactifs, défis gamifiés et soutien personnalisé pour les collégiens et lycéens. Progresse à ton rythme, gagne des XP, monte en niveau.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href="#" class="bg-violet text-white font-semibold px-7 py-3.5 rounded-full hover:bg-violet-dark transition-colors shadow-lg shadow-violet/30 flex items-center gap-2">
+            Essayer gratuitement
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <a href="#" class="bg-white border border-ink/10 text-ink font-semibold px-7 py-3.5 rounded-full hover:border-violet/40 transition-colors shadow-sm flex items-center gap-2">
+            <svg class="w-4 h-4 text-coral" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Voir la démo
+          </a>
+        </div>
+
+        <!-- Social proof -->
+        <div class="flex items-center gap-4 mt-10">
+          <div class="flex -space-x-2.5">
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Alice&backgroundColor=b6e3f4" class="w-9 h-9 rounded-full border-2 border-mist" alt=""/>
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Bob&backgroundColor=d1d4f9"   class="w-9 h-9 rounded-full border-2 border-mist" alt=""/>
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Carol&backgroundColor=ffdfbf" class="w-9 h-9 rounded-full border-2 border-mist" alt=""/>
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Dani&backgroundColor=c0aede"  class="w-9 h-9 rounded-full border-2 border-mist" alt=""/>
+          </div>
+          <div>
+            <div class="flex items-center gap-1 text-amber text-sm">
+              ★★★★★ <span class="text-ink/60 ml-1">4.9/5</span>
+            </div>
+            <p class="text-xs text-ink/50">+12 000 élèves satisfaits</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right — Dashboard mockup -->
+      <div class="relative flex justify-center will-fade" style="animation-delay:.25s">
+        <!-- Spinning ring -->
+        <div class="absolute w-[420px] h-[420px] rounded-full border-2 border-dashed border-violet/20 animate-spin-slow"></div>
+
+        <!-- Main card -->
+        <div class="relative z-10 bg-white rounded-4xl shadow-2xl shadow-violet/15 p-6 w-[340px] animate-float-y">
+          <!-- Top bar -->
+          <div class="flex items-center justify-between mb-5">
+            <div>
+              <p class="text-xs text-ink/40 font-medium">Bonjour, Sarah 👋</p>
+              <h3 class="font-display font-bold text-lg">Tableau de bord</h3>
+            </div>
+            <div class="w-10 h-10 rounded-2xl bg-violet/10 flex items-center justify-center">
+              <span class="text-xl">🏆</span>
+            </div>
+          </div>
+
+          <!-- XP Bar -->
+          <div class="mb-5">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="font-semibold">Niveau 12 · Géomètre</span>
+              <span class="text-ink/50">2 340 / 3 000 XP</span>
+            </div>
+            <div class="h-2.5 bg-mist rounded-full overflow-hidden">
+              <div class="progress-fill h-full bg-gradient-to-r from-violet to-coral rounded-full" style="width:0%" data-target="78"></div>
+            </div>
+          </div>
+
+          <!-- Stats row -->
+          <div class="grid grid-cols-3 gap-3 mb-5">
+            <div class="bg-violet/8 rounded-2xl p-3 text-center">
+              <p class="font-display font-bold text-2xl text-violet">24</p>
+              <p class="text-[10px] text-ink/50 font-medium">Cours</p>
+            </div>
+            <div class="bg-coral/8 rounded-2xl p-3 text-center">
+              <p class="font-display font-bold text-2xl text-coral">🔥 7</p>
+              <p class="text-[10px] text-ink/50 font-medium">Jours streak</p>
+            </div>
+            <div class="bg-amber/15 rounded-2xl p-3 text-center">
+              <p class="font-display font-bold text-2xl text-amber-DEFAULT">98%</p>
+              <p class="text-[10px] text-ink/50 font-medium">Précision</p>
+            </div>
+          </div>
+
+          <!-- Lesson in progress -->
+          <div class="bg-mist rounded-2xl p-4">
+            <p class="text-[10px] text-ink/40 font-semibold uppercase tracking-wider mb-2">En cours</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-coral/15 flex items-center justify-center text-xl flex-shrink-0">📐</div>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm truncate">Trigonométrie avancée</p>
+                <div class="h-1.5 bg-white rounded-full mt-1.5 overflow-hidden">
+                  <div class="progress-fill h-full bg-coral rounded-full" style="width:0%" data-target="60"></div>
+                </div>
+              </div>
+              <span class="text-xs text-ink/40 flex-shrink-0">60%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating badges -->
+        <div class="absolute top-6 -left-6 bg-white rounded-2xl shadow-xl px-4 py-2.5 animate-float-y-d z-20 flex items-center gap-2">
+          <span class="text-xl">🎯</span>
+          <div>
+            <p class="text-xs font-bold">Challenge réussi !</p>
+            <p class="text-[10px] text-ink/50">+120 XP gagnés</p>
+          </div>
+        </div>
+
+        <div class="absolute bottom-8 -right-4 bg-violet text-white rounded-2xl shadow-xl px-4 py-2.5 animate-float-y z-20 flex items-center gap-2" style="animation-delay:.8s">
+          <span class="text-xl">🥇</span>
+          <div>
+            <p class="text-xs font-bold">#1 cette semaine</p>
+            <p class="text-[10px] text-white/70">Classement national</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TICKER ─── -->
+  <div class="bg-violet py-3 overflow-hidden z-10 relative">
+    <div class="ticker-wrap">
+      <div class="ticker-inner animate-ticker gap-12 text-white/90 font-display font-semibold text-sm uppercase tracking-widest">
+        <span class="px-8">📐 Géométrie</span><span class="px-8">✦</span>
+        <span class="px-8">🔢 Algèbre</span><span class="px-8">✦</span>
+        <span class="px-8">📊 Statistiques</span><span class="px-8">✦</span>
+        <span class="px-8">📈 Fonctions</span><span class="px-8">✦</span>
+        <span class="px-8">🧮 Arithmétique</span><span class="px-8">✦</span>
+        <span class="px-8">🎯 Défis quotidiens</span><span class="px-8">✦</span>
+        <span class="px-8">🏆 Classements</span><span class="px-8">✦</span>
+        <!-- duplicate for seamless loop -->
+        <span class="px-8">📐 Géométrie</span><span class="px-8">✦</span>
+        <span class="px-8">🔢 Algèbre</span><span class="px-8">✦</span>
+        <span class="px-8">📊 Statistiques</span><span class="px-8">✦</span>
+        <span class="px-8">📈 Fonctions</span><span class="px-8">✦</span>
+        <span class="px-8">🧮 Arithmétique</span><span class="px-8">✦</span>
+        <span class="px-8">🎯 Défis quotidiens</span><span class="px-8">✦</span>
+        <span class="px-8">🏆 Classements</span><span class="px-8">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── FEATURES ─── -->
+  <section id="features" class="relative py-28 px-6 z-10">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 will-fade">
+        <span class="text-xs font-bold text-coral uppercase tracking-[.2em]">Pourquoi Matematikup ?</span>
+        <h2 class="font-display font-extrabold text-4xl md:text-5xl mt-3 mb-4">Apprendre différemment,<br/><span class="text-violet">progresser vraiment.</span></h2>
+        <p class="text-ink/60 max-w-md mx-auto">Une approche pédagogique basée sur la science de l'apprentissage, rendue addictive par la gamification.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="bg-white rounded-4xl p-7 card-lift will-fade" style="animation-delay:.1s">
+          <div class="w-14 h-14 bg-violet/10 rounded-2xl flex items-center justify-center text-3xl mb-5">🎮</div>
+          <h3 class="font-display font-bold text-xl mb-3">Apprentissage gamifié</h3>
+          <p class="text-ink/60 leading-relaxed text-sm">Gagne des XP, débloque des badges et monte dans le classement national. Chaque leçon est un mini-jeu.</p>
+          <div class="mt-5 flex gap-2 flex-wrap">
+            <span class="bg-violet/8 text-violet text-xs font-semibold px-3 py-1 rounded-full">XP & Niveaux</span>
+            <span class="bg-coral/8 text-coral text-xs font-semibold px-3 py-1 rounded-full">Badges</span>
+            <span class="bg-amber/20 text-amber-DEFAULT text-xs font-semibold px-3 py-1 rounded-full">Streaks 🔥</span>
+          </div>
+        </div>
+
+        <!-- Feature 2 — highlighted -->
+        <div class="bg-violet text-white rounded-4xl p-7 card-lift will-fade relative overflow-hidden" style="animation-delay:.2s">
+          <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full"></div>
+          <div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center text-3xl mb-5">🤖</div>
+          <h3 class="font-display font-bold text-xl mb-3">IA personnalisée</h3>
+          <p class="text-white/75 leading-relaxed text-sm">Notre IA adapte le contenu à ton niveau et identifie tes lacunes pour cibler exactement ce dont tu as besoin.</p>
+          <div class="mt-5 flex gap-2 flex-wrap">
+            <span class="bg-white/15 text-white text-xs font-semibold px-3 py-1 rounded-full">Parcours adaptatif</span>
+            <span class="bg-white/15 text-white text-xs font-semibold px-3 py-1 rounded-full">Diagnostics</span>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-white rounded-4xl p-7 card-lift will-fade" style="animation-delay:.3s">
+          <div class="w-14 h-14 bg-coral/10 rounded-2xl flex items-center justify-center text-3xl mb-5">👩‍🏫</div>
+          <h3 class="font-display font-bold text-xl mb-3">Soutien en direct</h3>
+          <p class="text-ink/60 leading-relaxed text-sm">Accède à des tuteurs experts 7j/7 via chat ou vidéo. Plus jamais bloqué sur un exercice.</p>
+          <div class="mt-5 flex gap-2 flex-wrap">
+            <span class="bg-violet/8 text-violet text-xs font-semibold px-3 py-1 rounded-full">Chat 24/7</span>
+            <span class="bg-coral/8 text-coral text-xs font-semibold px-3 py-1 rounded-full">Visio</span>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="bg-ink text-white rounded-4xl p-7 card-lift will-fade md:col-span-2" style="animation-delay:.15s">
+          <div class="grid sm:grid-cols-2 gap-6 items-center">
+            <div>
+              <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-3xl mb-5">📊</div>
+              <h3 class="font-display font-bold text-xl mb-3">Suivi détaillé</h3>
+              <p class="text-white/60 leading-relaxed text-sm">Graphiques de progression, temps d'étude, points forts & points faibles. Parents et élèves voient tout.</p>
+            </div>
+            <!-- Mini chart -->
+            <div class="bg-white/5 rounded-2xl p-4">
+              <p class="text-xs text-white/50 mb-3 font-semibold">Progression cette semaine</p>
+              <div class="flex items-end gap-2 h-20">
+                <div class="flex-1 bg-violet/60 rounded-t-lg" style="height:40%"></div>
+                <div class="flex-1 bg-violet/60 rounded-t-lg" style="height:60%"></div>
+                <div class="flex-1 bg-violet/60 rounded-t-lg" style="height:45%"></div>
+                <div class="flex-1 bg-violet rounded-t-lg" style="height:80%"></div>
+                <div class="flex-1 bg-coral rounded-t-lg relative" style="height:100%">
+                  <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-coral whitespace-nowrap">+32%</span>
+                </div>
+                <div class="flex-1 bg-violet/40 rounded-t-lg" style="height:72%"></div>
+                <div class="flex-1 bg-violet/40 rounded-t-lg" style="height:65%"></div>
+              </div>
+              <div class="flex justify-between text-[9px] text-white/30 mt-2">
+                <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="bg-amber/20 rounded-4xl p-7 card-lift will-fade" style="animation-delay:.35s">
+          <div class="w-14 h-14 bg-amber/30 rounded-2xl flex items-center justify-center text-3xl mb-5">🏆</div>
+          <h3 class="font-display font-bold text-xl mb-3">Tournois &amp; Défis</h3>
+          <p class="text-ink/60 leading-relaxed text-sm">Affronte tes camarades dans des tournois hebdomadaires. Gagne des récompenses réelles.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COURSES ─── -->
+  <section id="courses" class="py-28 px-6 bg-ink relative z-10 overflow-hidden">
+    <div class="blob w-[400px] h-[400px] bg-violet/20 top-[-100px] right-[-100px]"></div>
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 will-fade">
+        <div>
+          <span class="text-xs font-bold text-coral uppercase tracking-[.2em]">Catalogue</span>
+          <h2 class="font-display font-extrabold text-4xl md:text-5xl text-white mt-3">Nos cours populaires</h2>
+        </div>
+        <a href="#" class="text-violet font-semibold text-sm hover:underline flex items-center gap-1">
+          Voir tout le catalogue <span>→</span>
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Course cards -->
+        <div class="course-card bg-ink-soft rounded-4xl overflow-hidden card-lift will-fade border border-white/5" style="animation-delay:.1s">
+          <div class="h-36 bg-gradient-to-br from-violet to-violet-dark flex items-center justify-center text-6xl">📐</div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="bg-violet/20 text-violet text-xs font-semibold px-2.5 py-1 rounded-full">Lycée</span>
+              <span class="text-amber text-xs font-bold flex items-center gap-1">★ 4.9 <span class="text-white/40">(412)</span></span>
+            </div>
+            <h3 class="font-display font-bold text-white text-lg mb-1">Trigonométrie complète</h3>
+            <p class="text-white/50 text-xs mb-4">Cercle trigonométrique, sin, cos, tan, formules et applications.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-white/40 text-xs">24 leçons · 8h</span>
+              <a href="#" class="bg-violet text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-violet-light transition-colors">Commencer</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card bg-ink-soft rounded-4xl overflow-hidden card-lift will-fade border border-white/5" style="animation-delay:.2s">
+          <div class="h-36 bg-gradient-to-br from-coral to-coral-dark flex items-center justify-center text-6xl">📈</div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="bg-coral/20 text-coral text-xs font-semibold px-2.5 py-1 rounded-full">Terminale</span>
+              <span class="text-amber text-xs font-bold flex items-center gap-1">★ 4.8 <span class="text-white/40">(287)</span></span>
+            </div>
+            <h3 class="font-display font-bold text-white text-lg mb-1">Analyse &amp; Dérivées</h3>
+            <p class="text-white/50 text-xs mb-4">Limites, continuité, dérivation et applications aux problèmes réels.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-white/40 text-xs">32 leçons · 12h</span>
+              <a href="#" class="bg-coral text-white text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-coral-dark transition-colors">Commencer</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card bg-ink-soft rounded-4xl overflow-hidden card-lift will-fade border border-white/5" style="animation-delay:.3s">
+          <div class="h-36 bg-gradient-to-br from-amber to-amber-light flex items-center justify-center text-6xl">🔢</div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="bg-amber/20 text-amber-DEFAULT text-xs font-semibold px-2.5 py-1 rounded-full">Collège</span>
+              <span class="text-amber text-xs font-bold flex items-center gap-1">★ 4.9 <span class="text-white/40">(598)</span></span>
+            </div>
+            <h3 class="font-display font-bold text-white text-lg mb-1">Algèbre fondamentale</h3>
+            <p class="text-white/50 text-xs mb-4">Équations, inéquations, systèmes et polynômes du programme.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-white/40 text-xs">18 leçons · 6h</span>
+              <a href="#" class="bg-amber text-ink text-xs font-semibold px-4 py-1.5 rounded-full hover:bg-amber-light transition-colors">Commencer</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <section class="py-28 px-6 relative z-10">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16 will-fade">
+        <span class="text-xs font-bold text-violet uppercase tracking-[.2em]">Comment ça marche</span>
+        <h2 class="font-display font-extrabold text-4xl md:text-5xl mt-3">3 étapes vers<br/><span class="text-coral">l'excellence.</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 relative">
+        <!-- Connector line -->
+        <div class="hidden md:block absolute top-12 left-[20%] right-[20%] h-px bg-gradient-to-r from-violet via-coral to-amber z-0"></div>
+
+        <!-- Step 1 -->
+        <div class="relative text-center will-fade" style="animation-delay:.1s">
+          <div class="w-24 h-24 bg-white rounded-full shadow-xl mx-auto mb-6 flex items-center justify-center z-10 relative border-4 border-violet/20">
+            <span class="text-4xl">🎯</span>
+          </div>
+          <span class="absolute top-4 right-[calc(50%-16px)] font-display font-bold text-xs text-violet bg-violet/10 w-6 h-6 rounded-full flex items-center justify-center">1</span>
+          <h3 class="font-display font-bold text-xl mb-2">Diagnostic initial</h3>
+          <p class="text-ink/60 text-sm leading-relaxed">Réponds à 15 questions pour que l'IA évalue ton niveau et crée ton parcours sur mesure.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative text-center will-fade" style="animation-delay:.2s">
+          <div class="w-24 h-24 bg-white rounded-full shadow-xl mx-auto mb-6 flex items-center justify-center z-10 relative border-4 border-coral/20">
+            <span class="text-4xl">📚</span>
+          </div>
+          <span class="absolute top-4 right-[calc(50%-16px)] font-display font-bold text-xs text-coral bg-coral/10 w-6 h-6 rounded-full flex items-center justify-center">2</span>
+          <h3 class="font-display font-bold text-xl mb-2">Apprends &amp; joue</h3>
+          <p class="text-ink/60 text-sm leading-relaxed">Suis les cours interactifs, relève les défis quotidiens et gagne des XP à chaque étape franchie.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative text-center will-fade" style="animation-delay:.3s">
+          <div class="w-24 h-24 bg-white rounded-full shadow-xl mx-auto mb-6 flex items-center justify-center z-10 relative border-4 border-amber/20">
+            <span class="text-4xl">🚀</span>
+          </div>
+          <span class="absolute top-4 right-[calc(50%-16px)] font-display font-bold text-xs text-amber-DEFAULT bg-amber/15 w-6 h-6 rounded-full flex items-center justify-center">3</span>
+          <h3 class="font-display font-bold text-xl mb-2">Performe en cours</h3>
+          <p class="text-ink/60 text-sm leading-relaxed">Vois tes notes s'améliorer. En moyenne, nos élèves progressent de 2 points en 3 mois.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─── -->
+  <section class="py-20 px-6 bg-gradient-to-r from-violet to-violet-dark relative z-10 overflow-hidden">
+    <div class="blob w-[300px] h-[300px] bg-white/5 top-[-50px] left-[30%]"></div>
+    <div class="max-w-5xl mx-auto grid sm:grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+      <div class="will-fade" style="animation-delay:.05s">
+        <p class="font-display font-extrabold text-5xl" data-count="12000">0</p>
+        <p class="text-white/60 text-sm mt-1">Élèves actifs</p>
+      </div>
+      <div class="will-fade" style="animation-delay:.15s">
+        <p class="font-display font-extrabold text-5xl" data-count="150">0</p>
+        <p class="text-white/60 text-sm mt-1">Cours disponibles</p>
+      </div>
+      <div class="will-fade" style="animation-delay:.25s">
+        <p class="font-display font-extrabold text-5xl">4.9</p>
+        <p class="text-white/60 text-sm mt-1">Note moyenne ★</p>
+      </div>
+      <div class="will-fade" style="animation-delay:.35s">
+        <p class="font-display font-extrabold text-5xl">+2pts</p>
+        <p class="text-white/60 text-sm mt-1">Progression moy.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRICING ─── -->
+  <section id="pricing" class="py-28 px-6 relative z-10">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-16 will-fade">
+        <span class="text-xs font-bold text-coral uppercase tracking-[.2em]">Tarifs</span>
+        <h2 class="font-display font-extrabold text-4xl md:text-5xl mt-3 mb-4">Simple &amp; transparent.</h2>
+
+        <!-- Toggle -->
+        <div class="inline-flex bg-white border border-ink/10 rounded-full p-1 mt-4" id="billing-toggle">
+          <button id="btn-monthly" class="px-5 py-2 rounded-full text-sm font-semibold bg-ink text-white transition-all">Mensuel</button>
+          <button id="btn-yearly"  class="px-5 py-2 rounded-full text-sm font-semibold text-ink/60 transition-all">Annuel <span class="text-coral text-xs ml-1">-30%</span></button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Free -->
+        <div class="bg-white rounded-4xl p-8 border border-ink/8 card-lift will-fade" style="animation-delay:.1s">
+          <h3 class="font-display font-bold text-xl mb-1">Gratuit</h3>
+          <p class="text-ink/50 text-sm mb-6">Pour découvrir la plateforme</p>
+          <p class="font-display font-extrabold text-5xl mb-6">0€<span class="text-lg font-normal text-ink/40">/mois</span></p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> 5 cours gratuits</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Défis quotidiens</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Classement global</li>
+            <li class="flex items-center gap-2 text-ink/30"><span>✗</span> IA personnalisée</li>
+            <li class="flex items-center gap-2 text-ink/30"><span>✗</span> Tuteur en direct</li>
+          </ul>
+          <a href="#" class="block text-center border-2 border-ink/15 rounded-full py-3 text-sm font-semibold hover:border-violet hover:text-violet transition-colors">Commencer</a>
+        </div>
+
+        <!-- Pro — highlighted -->
+        <div class="bg-violet text-white rounded-4xl p-8 card-lift will-fade relative overflow-hidden shadow-2xl shadow-violet/30" style="animation-delay:.2s">
+          <div class="absolute -top-8 -right-8 w-32 h-32 bg-white/5 rounded-full"></div>
+          <div class="absolute top-4 right-4 bg-coral text-white text-xs font-bold px-3 py-1 rounded-full">Populaire</div>
+          <h3 class="font-display font-bold text-xl mb-1">Pro</h3>
+          <p class="text-white/60 text-sm mb-6">Pour progresser sérieusement</p>
+          <p class="font-display font-extrabold text-5xl mb-6">
+            <span id="price-pro">9.99</span>€<span class="text-lg font-normal text-white/50">/mois</span>
+          </p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-center gap-2"><span class="text-amber">✓</span> Tous les cours</li>
+            <li class="flex items-center gap-2"><span class="text-amber">✓</span> IA personnalisée</li>
+            <li class="flex items-center gap-2"><span class="text-amber">✓</span> Défis & tournois</li>
+            <li class="flex items-center gap-2"><span class="text-amber">✓</span> Rapports détaillés</li>
+            <li class="flex items-center gap-2 text-white/50"><span>✗</span> Tuteur en direct</li>
+          </ul>
+          <a href="#" class="block text-center bg-white text-violet rounded-full py-3 text-sm font-bold hover:bg-mist transition-colors">Choisir Pro</a>
+        </div>
+
+        <!-- Premium -->
+        <div class="bg-white rounded-4xl p-8 border border-ink/8 card-lift will-fade" style="animation-delay:.3s">
+          <h3 class="font-display font-bold text-xl mb-1">Premium</h3>
+          <p class="text-ink/50 text-sm mb-6">Avec soutien humain</p>
+          <p class="font-display font-extrabold text-5xl mb-6">
+            <span id="price-premium">19.99</span>€<span class="text-lg font-normal text-ink/40">/mois</span>
+          </p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Tout le plan Pro</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Tuteur dédié 7j/7</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Sessions visio</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Garantie résultats</li>
+            <li class="flex items-center gap-2"><span class="text-violet">✓</span> Accès famille</li>
+          </ul>
+          <a href="#" class="block text-center border-2 border-violet text-violet rounded-full py-3 text-sm font-semibold hover:bg-violet hover:text-white transition-colors">Choisir Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REVIEWS ─── -->
+  <section id="reviews" class="py-28 px-6 bg-ink relative z-10 overflow-hidden">
+    <div class="blob w-[350px] h-[350px] bg-coral/10 bottom-0 left-0"></div>
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-14 will-fade">
+        <span class="text-xs font-bold text-coral uppercase tracking-[.2em]">Témoignages</span>
+        <h2 class="font-display font-extrabold text-4xl md:text-5xl text-white mt-3">Ils ont adoré<br/><span class="text-violet">Matematikup.</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Review 1 -->
+        <div class="bg-ink-soft rounded-4xl p-6 border border-white/5 card-lift will-fade" style="animation-delay:.1s">
+          <div class="flex text-amber mb-4 text-sm">★★★★★</div>
+          <p class="text-white/70 text-sm leading-relaxed mb-5">"Avant Matematikup, je détestais les maths. Maintenant je fais des exercices le soir pour monter en niveau. Mon prof n'en revient pas."</p>
+          <div class="flex items-center gap-3">
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Lucas&backgroundColor=b6e3f4" class="w-10 h-10 rounded-full" alt=""/>
+            <div>
+              <p class="text-white font-semibold text-sm">Lucas M.</p>
+              <p class="text-white/40 text-xs">Terminale S, Lyon</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="bg-violet rounded-4xl p-6 card-lift will-fade" style="animation-delay:.2s">
+          <div class="flex text-amber mb-4 text-sm">★★★★★</div>
+          <p class="text-white/80 text-sm leading-relaxed mb-5">"Ma fille a pris 3 points en moyenne en un trimestre. L'interface est super attractive, elle y passe plus de temps qu'à regarder des vidéos !"</p>
+          <div class="flex items-center gap-3">
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Marie&backgroundColor=ffd5dc" class="w-10 h-10 rounded-full" alt=""/>
+            <div>
+              <p class="text-white font-semibold text-sm">Marie L.</p>
+              <p class="text-white/60 text-xs">Parent, Paris</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="bg-ink-soft rounded-4xl p-6 border border-white/5 card-lift will-fade" style="animation-delay:.3s">
+          <div class="flex text-amber mb-4 text-sm">★★★★★</div>
+          <p class="text-white/70 text-sm leading-relaxed mb-5">"Le système de classement m'a rendu ultra compétitif. Je fais la course avec mes amis chaque semaine. On apprend sans s'en rendre compte."</p>
+          <div class="flex items-center gap-3">
+            <img src="https://api.dicebear.com/8.x/thumbs/svg?seed=Thomas&backgroundColor=c0aede" class="w-10 h-10 rounded-full" alt=""/>
+            <div>
+              <p class="text-white font-semibold text-sm">Thomas R.</p>
+              <p class="text-white/40 text-xs">3ème, Bordeaux</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA BANNER ─── -->
+  <section class="py-28 px-6 relative z-10">
+    <div class="max-w-4xl mx-auto bg-gradient-to-br from-violet to-coral rounded-5xl p-14 text-center text-white shadow-2xl shadow-violet/25 relative overflow-hidden will-fade">
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-white/5 rounded-full"></div>
+      <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full"></div>
+      <span class="text-5xl block mb-4">🚀</span>
+      <h2 class="font-display font-extrabold text-4xl md:text-5xl mb-4">Prêt à décoller en maths ?</h2>
+      <p class="text-white/70 text-lg mb-10 max-w-md mx-auto">Rejoins 12 000 élèves qui progressent chaque jour. Commence gratuitement, sans carte bancaire.</p>
+      <a href="#" class="bg-white text-violet font-bold text-lg px-10 py-4 rounded-full hover:bg-mist transition-colors shadow-xl inline-block">
+        Créer mon compte gratuit ✨
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="bg-ink text-white/50 py-16 px-6 z-10 relative">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-10 mb-10">
+      <!-- Brand -->
+      <div class="md:col-span-1">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 bg-violet rounded-xl flex items-center justify-center">
+            <span class="text-white font-display font-bold">M</span>
+          </div>
+          <span class="font-display font-bold text-white text-lg">Matematikup</span>
+        </div>
+        <p class="text-xs leading-relaxed">La plateforme e-learning qui rend les maths addictives pour les collégiens et lycéens.</p>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4">Plateforme</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#" class="hover:text-white transition-colors">Fonctionnalités</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Cours</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Tarifs</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Pour les parents</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4">Entreprise</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#" class="hover:text-white transition-colors">À propos</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Presse</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Carrières</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-4">Légal</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="#" class="hover:text-white transition-colors">Conditions d'utilisation</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Confidentialité</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-white/8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <p>© 2025 Matematikup. Tous droits réservés.</p>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-white transition-colors">Twitter</a>
+        <a href="#" class="hover:text-white transition-colors">Instagram</a>
+        <a href="#" class="hover:text-white transition-colors">TikTok</a>
+        <a href="#" class="hover:text-white transition-colors">YouTube</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── JAVASCRIPT ─── -->
+  <script>
+    // ── Navbar scroll effect ──
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('shadow-lg', window.scrollY > 20);
+    });
+
+    // ── Mobile burger ──
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    burger.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // ── Intersection observer → fade-up ──
+    const faders = document.querySelectorAll('.will-fade');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('did-fade');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    faders.forEach(el => observer.observe(el));
+
+    // ── Progress bars ──
+    const progressObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bar = entry.target;
+          const target = bar.dataset.target;
+          setTimeout(() => { bar.style.width = target + '%'; }, 200);
+          progressObserver.unobserve(bar);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.progress-fill').forEach(el => progressObserver.observe(el));
+
+    // ── Counter animation ──
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const end = parseInt(el.dataset.count);
+        let start = 0;
+        const duration = 1800;
+        const step = end / (duration / 16);
+        const timer = setInterval(() => {
+          start = Math.min(start + step, end);
+          el.textContent = Math.floor(start).toLocaleString('fr-FR');
+          if (start >= end) clearInterval(timer);
+        }, 16);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+    // ── Billing toggle ──
+    const btnMonthly = document.getElementById('btn-monthly');
+    const btnYearly  = document.getElementById('btn-yearly');
+    const pricePro     = document.getElementById('price-pro');
+    const pricePremium = document.getElementById('price-premium');
+
+    const prices = { monthly: { pro: '9.99', premium: '19.99' }, yearly: { pro: '6.99', premium: '13.99' } };
+
+    function setBilling(mode) {
+      const isMonthly = mode === 'monthly';
+      btnMonthly.className = `px-5 py-2 rounded-full text-sm font-semibold transition-all ${isMonthly ? 'bg-ink text-white' : 'text-ink/60'}`;
+      btnYearly.className  = `px-5 py-2 rounded-full text-sm font-semibold transition-all ${!isMonthly ? 'bg-ink text-white' : 'text-ink/60'}`;
+      pricePro.textContent     = prices[mode].pro;
+      pricePremium.textContent = prices[mode].premium;
+    }
+
+    btnMonthly.addEventListener('click', () => setBilling('monthly'));
+    btnYearly.addEventListener('click',  () => setBilling('yearly'));
+
+    // ── Smooth scroll for anchor links ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
